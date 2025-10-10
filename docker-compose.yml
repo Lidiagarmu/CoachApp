@@ -3,7 +3,7 @@ services:
     build:
       context: ./symfony-backend
       dockerfile: ./docker/php/Dockerfile
-    container_name: symfony_backend
+    container_name: proyecto_daw_lidia_backend
     restart: unless-stopped
     working_dir: /var/www/app
     volumes:
@@ -36,7 +36,7 @@ services:
 
   db:
     image: postgres:13
-    container_name: symfony_postgres
+    container_name: proyecto_daw_lidia_postgres
     restart: always
     environment:
       POSTGRES_USER: symfony
@@ -55,7 +55,7 @@ services:
     build:
       context: ./angular-frontend
       dockerfile: Dockerfile
-    container_name: angular_frontend
+    container_name: proyecto_daw_lidia_frontend
     restart: always
     working_dir: /app
     volumes:
