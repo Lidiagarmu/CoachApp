@@ -32,6 +32,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
+    #[ORM\OneToOne(mappedBy: 'userAccount', cascade: ['persist', 'remove'])]
+    private ?CoachProfile $coachProfile = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -105,5 +108,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    public function getCoachProfile(): ?CoachProfile
+    {
+        return $this->coachProfile;
+    }
+
+    public function setCoachProfile(CoachProfile $coachProfile): static
+    {
+        // set the owning side of the relation if necessary
+        if ($coachProfile->getUserAccount() !== $this) {
+            $coachProfile->setUserAccount($this);
+        }
+
+        $this->coachProfile = $coachProfile;
+
+        return $this;
     }
 }
