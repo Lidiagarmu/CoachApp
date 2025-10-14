@@ -35,6 +35,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToOne(mappedBy: 'userAccount', cascade: ['persist', 'remove'])]
     private ?CoachProfile $coachProfile = null;
 
+    #[ORM\OneToOne(mappedBy: 'playerAccount', cascade: ['persist', 'remove'])]
+    private ?PlayerProfile $playerProfile = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -123,6 +126,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         $this->coachProfile = $coachProfile;
+
+        return $this;
+    }
+
+    public function getPlayerProfile(): ?PlayerProfile
+    {
+        return $this->playerProfile;
+    }
+
+    public function setPlayerProfile(PlayerProfile $playerProfile): static
+    {
+        // set the owning side of the relation if necessary
+        if ($playerProfile->getPlayerAccount() !== $this) {
+            $playerProfile->setPlayerAccount($this);
+        }
+
+        $this->playerProfile = $playerProfile;
 
         return $this;
     }
