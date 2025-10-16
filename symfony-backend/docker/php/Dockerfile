@@ -1,6 +1,6 @@
 ARG SYMFONY_PARAMS="MockApp"
 
-FROM php:8.2-apache
+FROM php:8.4-fpm
 
 RUN apt update && apt install -y \
     libicu-dev \

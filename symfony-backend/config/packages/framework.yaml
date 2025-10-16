@@ -3,10 +3,15 @@ framework:
     secret: '%env(APP_SECRET)%'
 
     # Note that the session will be started ONLY if you read or write from it.
-    session: true
+    session:
+        enabled: false  # o solo usar cookies si necesitas login con sesión
 
     #esi: true
     #fragments: true
+
+    form:
+        csrf_protection:
+            enabled: false  # ⚠️ Para APIs JWT, desactivar CSRF
 
 when@test:
     framework:
