@@ -13,6 +13,26 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/api/coach')]
 class CoachController extends AbstractController
 {
+
+    
+        #[Route('/info', name: 'coach_info', methods: ['GET'])]
+    public function info(): JsonResponse
+    {
+        $this->denyAccessUnlessGranted('ROLE_COACH');
+        
+        /** @var \App\Entity\User $user */
+        $user = $this->getUser();
+
+        return $this->json([
+            'id' => $user->getId(),
+            'email' => $user->getEmail(),
+            'roles' => $user->getRoles(),
+            'teamName' => $user->getCoachProfile()?->getTeamName(),
+            'yearsExperience' => $user->getCoachProfile()?->getYearsExperience()
+        ]);
+    }
+
+
     #[Route('/players', name: 'coach_players', methods: ['GET'])]
     public function listPlayers(EntityManagerInterface $em): JsonResponse
     {
