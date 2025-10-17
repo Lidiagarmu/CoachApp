@@ -1,6 +1,8 @@
 <?php
+
 namespace App\EventSubscriber;
 
+use App\Entity\User;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationSuccessEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Cookie;
@@ -14,22 +16,41 @@ class JWTSubscriber implements EventSubscriberInterface
         ];
     }
 
-    public function onAuthenticationSuccess(AuthenticationSuccessEvent $event)
+    public function onAuthenticationSuccess(AuthenticationSuccessEvent $event): void
     {
-        $token = $event->getData()['token'];
+        // Forzamos tipado a nuestra entidad User
+        /** @var User|null $user */
+        $user = $event->getUser();
 
-        // Crear cookie segura
-        $cookie = Cookie::create('jwt_token')
-            ->withValue($token)
-            ->withHttpOnly(true) // no accesible por JS
-            ->withSecure(false) // ⚠️ en desarrollo "false", en producción pon "true"
-            ->withSameSite('Lax')
-            ->withPath('/')
-            ->withExpires(new \DateTime('+1 hour'));
+        // Si no hay usuario, salimos
+        if (!$user instanceof User) {
+            return;
+        }
 
-        $event->getResponse()->headers->setCookie($cookie);
+        $data = $event->getData();
+        $response = $event->getResponse();
 
-        // También puedes eliminar el campo "token" del body si no quieres exponerlo
-        // unset($event->getData()['token']);
+        // Añadir info del usuario al body JSON
+        $data['user'] = [
+            'id' => $user->getId(),
+            'email' => $user->getEmail(),
+            'roles' => $user->getRoles(),
+        ];
+
+        $event->setData($data);
+
+        // Crear cookie JWT
+        $token = $data['token'] ?? null;
+        if ($token) {
+            $cookie = Cookie::create('jwt_token')
+                ->withValue($token)
+                ->withHttpOnly(true)
+                ->withSecure(false) // ⚠️ True en producción
+                ->withSameSite('Lax')
+                ->withPath('/')
+                ->withExpires(new \DateTime('+1 hour'));
+
+            $response->headers->setCookie($cookie);
+        }
     }
 }
