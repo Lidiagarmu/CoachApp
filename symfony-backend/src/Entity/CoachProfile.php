@@ -66,4 +66,16 @@ class CoachProfile
 
         return $this;
     }
+
+        public function getTeam(): ?Team
+    {
+        return $this->team;
+    }
+
+    public function setTeam(?Team $team): self
+    {
+        $this->team = $team;
+        return $this;
+    }
+
 }
