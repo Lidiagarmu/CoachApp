@@ -23,8 +23,24 @@ class PlayerProfile
     #[ORM\Column]
     private ?int $number = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $team = null;
+    #[ORM\ManyToOne(targetEntity: CoachProfile::class)]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?CoachProfile $coach = null;
+
+    #[ORM\ManyToOne(inversedBy: 'players', targetEntity: Team::class)]
+    private ?Team $team = null;
+
+    public function getCoach(): ?CoachProfile
+    {
+        return $this->coach;
+    }
+
+    public function setCoach(?CoachProfile $coach): static
+    {
+        $this->coach = $coach;
+        return $this;
+    }
+
 
     public function getId(): ?int
     {
@@ -72,10 +88,10 @@ class PlayerProfile
         return $this->team;
     }
 
-    public function setTeam(string $team): static
+    public function setTeam(?Team $team): self
     {
         $this->team = $team;
-
         return $this;
     }
+
 }

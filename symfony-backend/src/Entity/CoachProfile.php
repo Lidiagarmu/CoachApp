@@ -23,6 +23,9 @@ class CoachProfile
     #[ORM\Column]
     private ?int $yearsExperience = null;
 
+    #[ORM\OneToOne(mappedBy: 'coach', targetEntity: Team::class, cascade: ['persist'])]
+    private ?Team $team = null;
+    
     public function getId(): ?int
     {
         return $this->id;

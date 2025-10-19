@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Entity\CoachProfile;
 use App\Entity\PlayerProfile;
+use App\Entity\Team;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -20,62 +21,88 @@ class RegisterController extends AbstractController
         EntityManagerInterface $em,
         UserPasswordHasherInterface $passwordHasher
     ): JsonResponse {
-
-        // 1️⃣ Leer el cuerpo JSON
         $data = json_decode($request->getContent(), true);
 
         $email = $data['email'] ?? null;
         $plainPassword = $data['password'] ?? null;
-        $type = strtolower($data['type'] ?? ''); // coach o player
+        $type = strtolower($data['type'] ?? ''); // coach | player
+        $fullName = $data['fullName'] ?? null;
+        $nickname = $data['nickname'] ?? null;
+        $age = $data['age'] ?? null;
 
-        // 2️⃣ Validar campos
         if (!$email || !$plainPassword || !in_array($type, ['coach', 'player'])) {
-            return $this->json([
-                'error' => 'Email, password, and valid type ("coach" or "player") are required.'
-            ], 400);
+            return $this->json(['error' => 'Email, password, and valid type ("coach" or "player") are required.'], 400);
         }
 
-        // 3️⃣ Comprobar si el usuario ya existe
-        $existingUser = $em->getRepository(User::class)->findOneBy(['email' => $email]);
-        if ($existingUser) {
+        // Ya existe?
+        if ($em->getRepository(User::class)->findOneBy(['email' => $email])) {
             return $this->json(['error' => 'User already exists.'], 409);
         }
 
-        // 4️⃣ Crear usuario base
+        // Crear usuario base
         $user = new User();
-        $user->setEmail($email);
+        $user->setEmail($email)
+             ->setFullName($fullName)
+             ->setNickname($nickname)
+             ->setAge($age);
 
-        // 5️⃣ Asignar rol y crear perfil correspondiente
-        if ($type === 'coach') {
-            $user->setRoles(['ROLE_COACH']);
-            $profile = new CoachProfile();
-            $profile->setUserAccount($user);
-            $profile->setTeamName('Sin equipo');
-            $profile->setYearsExperience(0);
-            $em->persist($profile);
-        } else {
-            $user->setRoles(['ROLE_PLAYER']);
-            $profile = new PlayerProfile();
-            $profile->setPlayerAccount($user);
-            $profile->setPosition('Sin asignar');
-            $profile->setNumber(0);
-            $profile->setTeam('Sin equipo');
-            $em->persist($profile);
-        }
-
-        // 6️⃣ Hashear contraseña
+        // Hashear contraseña
         $hashedPassword = $passwordHasher->hashPassword($user, $plainPassword);
         $user->setPassword($hashedPassword);
 
-        // 7️⃣ Guardar en DB
+        // Si es coach
+        if ($type === 'coach') {
+            $user->setRoles(['ROLE_COACH']);
+
+            $profile = new CoachProfile();
+            $profile->setUserAccount($user);
+            $profile->setTeamName($data['teamName'] ?? 'Equipo sin nombre');
+            $profile->setYearsExperience($data['yearsExperience'] ?? 0);
+
+            // Crear equipo vinculado al coach
+            $team = new Team();
+            $team->setName($profile->getTeamName());
+            $team->setCoach($profile);
+            $profile->setTeam($team);
+
+            $em->persist($team);
+            $em->persist($profile);
+        }
+
+        // Si es player
+        if ($type === 'player') {
+            $user->setRoles(['ROLE_PLAYER']);
+            $teamId = $data['teamId'] ?? null;
+
+            if (!$teamId) {
+                return $this->json(['error' => 'teamId is required for players'], 400);
+            }
+
+            $team = $em->getRepository(Team::class)->find($teamId);
+            if (!$team) {
+                return $this->json(['error' => 'Team not found'], 404);
+            }
+
+            $profile = new PlayerProfile();
+            $profile->setPlayerAccount($user);
+            $profile->setPosition($data['position'] ?? 'Sin asignar');
+            $profile->setNumber($data['number'] ?? 0);
+            $profile->setTeam($team);
+
+            $team->addPlayer($profile);
+            $em->persist($profile);
+        }
+
         $em->persist($user);
         $em->flush();
 
-        // 8️⃣ Respuesta JSON
         return $this->json([
             'id' => $user->getId(),
             'email' => $user->getEmail(),
             'roles' => $user->getRoles(),
+            'fullName' => $user->getFullName(),
+            'nickname' => $user->getNickname(),
+            'age' => $user->getAge(),
             'type' => $type
         ], 201);
     }

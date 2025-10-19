@@ -20,23 +20,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 180)]
     private ?string $email = null;
 
-    /**
-     * @var list<string> The user roles
-     */
     #[ORM\Column]
     private array $roles = [];
 
-    /**
-     * @var string The hashed password
-     */
     #[ORM\Column]
     private ?string $password = null;
 
-    #[ORM\OneToOne(mappedBy: 'userAccount', cascade: ['persist', 'remove'])]
+    #[ORM\Column(length: 100)]
+    private ?string $fullName = null;
+
+    #[ORM\Column(length: 50, nullable: true)]
+    private ?string $nickname = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $age = null;
+
+    #[ORM\OneToOne(mappedBy: 'userAccount', targetEntity: CoachProfile::class, cascade: ['persist', 'remove'])]
     private ?CoachProfile $coachProfile = null;
 
-    #[ORM\OneToOne(mappedBy: 'playerAccount', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(mappedBy: 'playerAccount', targetEntity: PlayerProfile::class, cascade: ['persist', 'remove'])]
     private ?PlayerProfile $playerProfile = null;
+
+    // ============================================
+    // Getters & Setters base
+    // ============================================
 
     public function getId(): ?int
     {
@@ -51,81 +58,58 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setEmail(string $email): static
     {
         $this->email = $email;
-
         return $this;
     }
 
-    /**
-     * A visual identifier that represents this user.
-     *
-     * @see UserInterface
-     */
-    public function getUserIdentifier(): string
+    public function getFullName(): ?string
     {
-        return (string) $this->email;
+        return $this->fullName;
     }
 
-    /**
-     * @see UserInterface
-     *
-     * @return list<string>
-     */
-    public function getRoles(): array
+    public function setFullName(string $fullName): static
     {
-        $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
-
-        return array_unique($roles);
-    }
-
-    /**
-     * @param list<string> $roles
-     */
-    public function setRoles(array $roles): static
-    {
-        $this->roles = $roles;
-
+        $this->fullName = $fullName;
         return $this;
     }
 
-    /**
-     * @see PasswordAuthenticatedUserInterface
-     */
-    public function getPassword(): ?string
+    public function getNickname(): ?string
     {
-        return $this->password;
+        return $this->nickname;
     }
 
-    public function setPassword(string $password): static
+    public function setNickname(?string $nickname): static
     {
-        $this->password = $password;
-
+        $this->nickname = $nickname;
         return $this;
     }
 
-    /**
-     * @see UserInterface
-     */
-    public function eraseCredentials(): void
+    public function getAge(): ?int
     {
-        // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
+        return $this->age;
     }
+
+    public function setAge(?int $age): static
+    {
+        $this->age = $age;
+        return $this;
+    }
+
+    // ============================================
+    // Perfiles Coach y Player
+    // ============================================
 
     public function getCoachProfile(): ?CoachProfile
     {
         return $this->coachProfile;
     }
 
-    public function setCoachProfile(CoachProfile $coachProfile): static
+    public function setCoachProfile(?CoachProfile $coachProfile): static
     {
-        // set the owning side of the relation if necessary
-        if ($coachProfile->getUserAccount() !== $this) {
+        $this->coachProfile = $coachProfile;
+
+        if ($coachProfile && $coachProfile->getUserAccount() !== $this) {
             $coachProfile->setUserAccount($this);
         }
-
-        $this->coachProfile = $coachProfile;
 
         return $this;
     }
@@ -135,15 +119,52 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->playerProfile;
     }
 
-    public function setPlayerProfile(PlayerProfile $playerProfile): static
+    public function setPlayerProfile(?PlayerProfile $playerProfile): static
     {
-        // set the owning side of the relation if necessary
-        if ($playerProfile->getPlayerAccount() !== $this) {
+        $this->playerProfile = $playerProfile;
+
+        if ($playerProfile && $playerProfile->getPlayerAccount() !== $this) {
             $playerProfile->setPlayerAccount($this);
         }
 
-        $this->playerProfile = $playerProfile;
-
         return $this;
+    }
+
+    // ============================================
+    // Roles y seguridad
+    // ============================================
+
+    public function getUserIdentifier(): string
+    {
+        return (string) $this->email;
+    }
+
+    public function getRoles(): array
+    {
+        $roles = $this->roles;
+        $roles[] = 'ROLE_USER';
+        return array_unique($roles);
+    }
+
+    public function setRoles(array $roles): static
+    {
+        $this->roles = $roles;
+        return $this;
+    }
+
+    public function getPassword(): ?string
+    {
+        return $this->password;
+    }
+
+    public function setPassword(string $password): static
+    {
+        $this->password = $password;
+        return $this;
+    }
+
+    public function eraseCredentials(): void
+    {
+        // If you store any temporary, sensitive data on the user, clear it here
     }
 }
