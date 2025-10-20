@@ -6,3 +6,22 @@
 body {
   @apply min-h-screen bg-app-gradient text-secondary font-sans;
 }
+
+/* === Animación suave en inputs === */
+.input-animated {
+  transition:  ease-in-out;
+}
+
+.input-animated:hover {
+  transform: scale(1.02);
+  border-color: #78ffd6; /* primary */
+  box-shadow: 0 0 8px rgba(120, 255, 214, 0.4) ;
+}
+
+.input-animated:focus {
+  transform: scale(1.03);
+  border-color: #24243e; /* secondary */
+  box-shadow: 0 0 10px rgba(36, 36, 62, 0.5);
+  background-color: #f9fdfc; /* leve tono verdoso muy claro */
+}
+

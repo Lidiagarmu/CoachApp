@@ -17,6 +17,9 @@ export class RegisterComponent {
   errorMessage: string | null = null;
   showPassword = false; // ✅ Toggle para la contraseña
 
+  isDropdownOpen = false;
+  selectedType: string | null = null;
+
   constructor(private fb: FormBuilder, private auth: AuthService, private router: Router) {
     this.registerForm = this.fb.group({
       fullName: ['', Validators.required],
@@ -45,4 +48,13 @@ export class RegisterComponent {
       }
     });
   }
+
+
+  // función para desplegable en el input seleccionar el tipo de usuario
+  selectType(type: string) {
+    this.selectedType = type;
+    this.registerForm.get('type')?.setValue(type);
+    this.isDropdownOpen = false;
+  }
+
 }
