@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
@@ -55,6 +55,16 @@ export class RegisterComponent {
     this.selectedType = type;
     this.registerForm.get('type')?.setValue(type);
     this.isDropdownOpen = false;
+  }
+
+   // cierra el dropdown al hacer clic fuera
+  @HostListener('document:click', ['$event'])
+  onClickOutside(event: MouseEvent) {
+    const target = event.target as HTMLElement;
+    // Si el clic no ocurrió dentro del dropdown ni en el botón que lo abre
+    if (!target.closest('.dropdown-wrapper')) {
+      this.isDropdownOpen = false;
+    }
   }
 
 }
