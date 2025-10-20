@@ -1,3 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Fondo global del body */
+body {
+  @apply min-h-screen bg-app-gradient text-secondary font-sans;
+}
