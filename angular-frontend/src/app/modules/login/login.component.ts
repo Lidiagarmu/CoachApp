@@ -11,9 +11,11 @@ import { RouterModule } from '@angular/router';
   imports: [CommonModule, ReactiveFormsModule, RouterModule],
   templateUrl: './login.component.html'
 })
+
 export class LoginComponent {
   loginForm: FormGroup;
   errorMessage: string | null = null;
+  showPassword = false; // ✅ Añadido para toggle del ojo
 
   constructor(private fb: FormBuilder, private auth: AuthService, private router: Router) {
     this.loginForm = this.fb.group({

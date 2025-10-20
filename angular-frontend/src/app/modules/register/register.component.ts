@@ -11,9 +11,11 @@ import { RouterModule } from '@angular/router';
   imports: [CommonModule, ReactiveFormsModule, RouterModule],
   templateUrl: './register.component.html'
 })
+
 export class RegisterComponent {
   registerForm: FormGroup;
   errorMessage: string | null = null;
+  showPassword = false; // ✅ Toggle para la contraseña
 
   constructor(private fb: FormBuilder, private auth: AuthService, private router: Router) {
     this.registerForm = this.fb.group({
@@ -33,7 +35,6 @@ export class RegisterComponent {
     }
 
     const data = { ...this.registerForm.value };
-    // Convertir age null a undefined
     if (data.age === null) delete data.age;
 
     this.auth.register(data).subscribe({
