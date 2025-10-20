@@ -1,36 +1,47 @@
 import { Component } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [CommonModule, FormsModule],
-  templateUrl: './register.component.html',
+  imports: [CommonModule, ReactiveFormsModule, RouterModule],
+  templateUrl: './register.component.html'
 })
 export class RegisterComponent {
-  email = '';
-  password = '';
-  fullName = '';
-  nickname = '';
-  age: number | null = null;
-  type: 'coach' | 'player' = 'player';
+  registerForm: FormGroup;
+  errorMessage: string | null = null;
 
-  constructor(private auth: AuthService, private router: Router) {}
+  constructor(private fb: FormBuilder, private auth: AuthService, private router: Router) {
+    this.registerForm = this.fb.group({
+      fullName: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
+      nickname: [''],
+      age: [null],
+      type: ['player', Validators.required]
+    });
+  }
 
   register() {
-    this.auth.register({
-      email: this.email,
-      password: this.password,
-      fullName: this.fullName,
-      nickname: this.nickname,
-      age: this.age ?? undefined,
-      type: this.type
-    }).subscribe({
-      next: res => this.router.navigate(['/login']),
-      error: err => alert(err.error?.message || 'Register failed')
+    if (this.registerForm.invalid) {
+      this.errorMessage = 'Completa todos los campos correctamente';
+      return;
+    }
+
+    const data = { ...this.registerForm.value };
+    // Convertir age null a undefined
+    if (data.age === null) delete data.age;
+
+    this.auth.register(data).subscribe({
+      next: () => this.router.navigate(['/login']),
+      error: (err) => {
+        console.error('Register error', err);
+        this.errorMessage = err.error?.message || 'Error al registrarse';
+      }
     });
   }
 }

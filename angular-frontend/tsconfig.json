@@ -18,6 +18,12 @@
     "target": "ES2022",
     "module": "ES2022"
   },
+   "baseUrl": "src",
+    "paths": {
+      "@environments/*": ["environments/*"],
+      "@shared/*": ["app/shared/*"],
+      "@core/*": ["app/core/*"]
+    },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
     "strictInjectionParameters": true,
