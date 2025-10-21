@@ -1,7 +1,18 @@
-<!-- REGISTER COMPONENT -->
-<div class="min-h-screen flex items-center justify-center bg-app-gradient">
-  <div class="w-full max-w-md bg-darkbg rounded-2xl shadow-lg p-8">
-    <h2 class="text-3xl font-bold text-center text-primary mb-6">Registro</h2>
+<!-- REGISTER COMPONENT --><div class="min-h-screen flex flex-col lg:flex-row items-center justify-center bg-app-gradient">
+ 
+<!-- Imagen lateral opcional -->
+  <div class="hidden lg:flex lg:w-1/2 items-center justify-center p-8">
+    <img
+      src="assets/images/register-illustration.svg"
+      alt="Register illustration"
+      class="w-3/4 max-w-md animate-fadeIn"
+    />
+  </div>
+
+<!-- Formulario de registro -->
+<div class="w-full lg:w-1/2 flex justify-center p-4 sm:p-8">
+  <div class="w-full max-w-md bg-darkbg rounded-2xl shadow-lg p-6 sm:p-8 lg:p-10">
+    <h2 class="text-2xl sm:text-3xl font-bold text-center text-primary mb-6">Registro</h2>
 
     <form [formGroup]="registerForm" (ngSubmit)="register()" class="space-y-4">
       <!-- Nombre completo -->
@@ -12,10 +23,10 @@
           placeholder="Nombre completo"
           class="input-animated w-full pl-10 p-2 border border-primary rounded-lg 
                  focus:outline-none focus:ring-2 focus:ring-primary
-                 text-secondary placeholder-secondary"
+                 text-secondary placeholder-secondary text-sm md:text-base"
         />
         <svg
-          class="w-5 h-5 absolute left-3 top-2.5 text-secondary fill-current"
+          class="w-5 h-5 absolute left-3 top-2.5  text-secondary fill-current"
           viewBox="0 0 24 24"
         >
           <path
@@ -24,15 +35,15 @@
           />
         </svg>
       </div>
-            <!-- Nickname -->
+      <!-- Nickname -->
       <div class="relative">
         <input
           type="text"
           formControlName="nickname"
           placeholder="Nickname"
-          class="input-animated w-full pl-10 p-2 border border-primary rounded-lg 
+          class="input-animated w-full pl-10 p-2  border border-primary rounded-lg 
                  focus:outline-none focus:ring-2 focus:ring-primary
-                 text-secondary placeholder-secondary"
+                 text-secondary placeholder-secondary text-sm md:text-base"
         />
         <svg
           class="w-5 h-5 absolute left-3 top-2.5 text-secondary fill-current"
@@ -45,6 +56,9 @@
         </svg>
       </div>
 
+  <!-- Edad y Rol en grid -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
       <!-- Edad -->
       <div class="relative">
         <input
@@ -53,11 +67,11 @@
           placeholder="Edad"
           class="input-animated w-full pl-10 p-2 border border-primary rounded-lg 
                  focus:outline-none focus:ring-2 focus:ring-primary
-                 text-secondary placeholder-secondary"
+                 text-secondary placeholder-secondary text-sm md:text-base"
         />
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          class="w-5 h-5 absolute left-3 top-2.5 text-secondary"
+          class="w-5 h-5 absolute left-3 top-2.5  text-secondary"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -70,6 +84,7 @@
           />
         </svg>
       </div>
+      
 
     <!-- Tipo de usuario (dropdown personalizado) -->
     <div class="relative dropdown-wrapper" tabindex="0">
@@ -87,7 +102,7 @@
             'text-secondary': selectedType
           }"
         >
-          {{ selectedType ? (selectedType === 'player' ? 'Jugador' : 'Entrenador') : 'Selecciona tipo de usuario' }}
+          {{ selectedType ? (selectedType === 'player' ? 'Jugador' : 'Entrenador') : 'Rol' }}
         </span>
 
         <!-- Flecha animada -->
@@ -121,24 +136,26 @@
 
   </div>
 
-  <!-- Dropdown -->
-  <div
-    *ngIf="isDropdownOpen"
-    class="absolute z-10 w-full mt-1 bg-white border border-primary rounded-lg shadow-lg overflow-hidden animate-fadeIn"
-  >
-    <div
-      (click)="selectType('player')"
-      class="p-2 text-secondary hover:bg-primary hover:text-darkbg transition cursor-pointer"
-    >
-      Jugador
-    </div>
-    <div
-      (click)="selectType('coach')"
-      class="p-2 text-secondary hover:bg-primary hover:text-darkbg transition cursor-pointer"
-    >
-      Entrenador
-    </div>
-  </div>
+        <!-- Dropdown -->
+        <div
+          *ngIf="isDropdownOpen"
+          class="absolute z-10 w-full mt-1 bg-white border border-primary rounded-lg shadow-lg overflow-hidden animate-fadeIn"
+        >
+          <div
+            (click)="selectType('player')"
+            class="p-2 text-secondary hover:bg-primary hover:text-darkbg transition cursor-pointer"
+          >
+            Jugador
+          </div>
+          <div
+            (click)="selectType('coach')"
+            class="p-2 text-secondary hover:bg-primary hover:text-darkbg transition cursor-pointer"
+          >
+            Entrenador
+          </div>
+        </div>
+      </div>
+
 </div>
 
  
@@ -243,7 +260,7 @@
       <!-- Botón registro -->
       <button
         type="submit"
-        class="w-full py-2 rounded-lg bg-primary text-darkbg font-bold hover:bg-hover transition"
+        class="w-full py-2 md:py-3  rounded-lg bg-primary text-darkbg font-bold hover:bg-hover transition"
       >
         Registrarse
       </button>

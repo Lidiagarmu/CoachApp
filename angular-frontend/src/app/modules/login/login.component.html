@@ -1,7 +1,19 @@
 <!-- LOGIN COMPONENT -->
-<div class="min-h-screen flex items-center justify-center bg-app-gradient">
-  <div class="w-full max-w-md bg-darkbg rounded-2xl shadow-lg p-8">
-    <h2 class="text-3xl font-bold text-center text-primary mb-6">Iniciar sesión</h2>
+<div class="min-h-screen flex flex-col lg:flex-row items-center justify-center bg-app-gradient">
+ 
+  <!-- Imagen lateral opcional (solo visible en pantallas grandes) -->
+  <div class="hidden lg:flex lg:w-1/2 items-center justify-center p-8">
+    <img
+      src="assets/images/login-illustration.svg"
+      alt="Login illustration"
+      class="w-3/4 max-w-md animate-fadeIn"
+    />
+  </div>
+
+<!-- Formulario de inicio de sesión -->
+<div class="w-full lg:w-1/2 flex justify-center p-4 sm:p-8">
+  <div class="w-full max-w-md bg-darkbg rounded-2xl shadow-lg p-6 sm:p-8 lg:p-10">
+    <h2 class="text-2xl sm:text-3xl font-bold text-center text-primary mb-6">Iniciar sesión</h2>
 
     <form [formGroup]="loginForm" (ngSubmit)="login()" class="space-y-4">
 
@@ -11,9 +23,9 @@
           type="email"
           formControlName="email"
           placeholder="Correo electrónico"
-          class=" input-animated w-full pl-10 p-2 border border-primary rounded-lg 
+          class=" input-animated w-full pl-10 p-2 md:p-3  border border-primary rounded-lg 
                  focus:outline-none focus:ring-2 focus:ring-primary
-                 text-secondary placeholder-secondary"
+                 text-secondary placeholder-secondary text-sm md:text-base"
         />
         <!-- Icono de correo electrónico -->
        <svg
@@ -38,14 +50,14 @@
           [type]="showPassword ? 'text' : 'password'"
           formControlName="password"
           placeholder="Contraseña"
-          class="input-animated w-full pl-10 pr-10 p-2 border border-primary rounded-lg 
+          class="input-animated w-full pl-10 pr-10 p-2 md:p-3 border border-primary rounded-lg 
                  focus:outline-none focus:ring-2 focus:ring-primary
-                 text-secondary placeholder-secondary"
+                 text-secondary placeholder-secondary text-sm md:text-base"
         />
 
         <!-- Icono candado -->
         <svg
-          class="w-5 h-5 absolute left-3 top-2.5 text-secondary fill-current"
+          class="w-5 h-5 absolute left-3 top-2.5 md:top-3 text-secondary fill-current"
           viewBox="0 0 24 24"
         >
           <path
@@ -60,7 +72,7 @@
         <button
           type="button"
           (click)="showPassword = !showPassword"
-          class="absolute right-3 top-2.5 text-secondary hover:text-hover transition"
+          class="absolute right-3 top-2.5 md:top-3 text-secondary hover:text-hover transition"
         >
           <!-- Icono ojo cerrado -->
           <svg
@@ -107,7 +119,7 @@
       <!-- Botón -->
       <button
         type="submit"
-        class="w-full py-2 rounded-lg bg-primary text-darkbg font-bold hover:bg-hover transition"
+        class="w-full py-2 md:py-3 rounded-lg bg-primary text-darkbg font-bold hover:bg-hover transition"
       >
         Iniciar sesión
       </button>
