@@ -1,11 +1,14 @@
-<div class=" relative h-screen w-full overflow-hidden flex items-center justify-center bg-app-gradient">
+<section class="relative h-screen w-full overflow-hidden flex items-center justify-center bg-app-gradient">
   <!-- 🎥 Video de fondo -->
-  <video 
-    autoplay 
-    muted 
+  <video
+    #heroVideo
+    class="absolute top-0 left-0 w-full h-full object-cover z-0"
+    autoplay
+    muted
     loop
-    playsinline 
-    class="absolute top-0 left-0 w-full h-full object-cover z-0">
+    playsinline
+    preload="auto"
+  >
     <source src="videos/hero_fixed.mp4" type="video/mp4" />
     Tu navegador no soporta el video de fondo.
   </video>
@@ -14,30 +17,29 @@
   <div class="absolute top-0 left-0 w-full h-full bg-black bg-opacity-60 z-10"></div>
 
   <!-- 🧠 Contenido principal -->
-<div class="relative z-20 text-center text-white px-6">
+  <div class="relative z-20 text-center text-white px-6">
+    <h1 class="text-4xl md:text-6xl font-bold mb-6 text-primary">
+      Gestiona tu equipo y entrena como un profesional
+    </h1>
 
-        <h1 class="text-4xl md:text-6xl font-bold mb-6 text-primary">
-      Gestiona tu equipo y entrena como un profesional 
-        </h1>
-   
-        <p class="text-lg md:text-2xl mb-10 opacity-90">
-        Plataforma para entrenadores y jugadores: organiza, entrena y gana.
-        </p>
-    
+    <p class="text-lg md:text-2xl mb-10 opacity-90">
+      Plataforma para entrenadores y jugadores: organiza, entrena y gana.
+    </p>
 
     <div class="flex flex-col sm:flex-row justify-center gap-7 mt-20">
       <button
         (click)="goToLogin()"
-        class=" bg-primary text-darkbg font-bold hover:bg-hover py-3 px-8 rounded-xl transition"
-        >
+        class="bg-primary text-darkbg font-bold hover:bg-hover py-3 px-8 rounded-xl transition"
+      >
         Iniciar sesión
       </button>
 
       <button
         (click)="goToRegister()"
-        class="bg-transparent border border-primary text-primary hover:bg-white hover:text-black hover:border-white font-bold py-3 px-8 rounded-xl transition">
+        class="bg-transparent border border-primary text-primary hover:bg-white hover:text-black hover:border-white font-bold py-3 px-8 rounded-xl transition"
+      >
         Crear cuenta
       </button>
     </div>
   </div>
-</div>
+</section>
