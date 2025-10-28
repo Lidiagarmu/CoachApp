@@ -1,153 +1,153 @@
-<app-navbar></app-navbar>
-
-
+<!-- NAVBAR COMPONENT -->
+<app-navbar class="fixed top-0 left-0 w-full z-50"></app-navbar>
 
 
 <!-- LOGIN COMPONENT -->
-<div class="min-h-screen flex flex-col lg:flex-row items-center justify-center bg-app-gradient lg:gap-x-4">
+<main class="min-h-[calc(100vh-8rem)] flex flex-col lg:flex-row items-center justify-center bg-app-gradient pt-[4.5rem] pb-[3.5rem] lg:gap-x-4">
  
-  <!-- Imagen lateral opcional (solo visible en pantallas grandes) -->
-  <div class="hidden lg:flex lg:w-1/2 items-center justify-end pr-2">
-    <img
-      src="images/login.png"
-      alt="Login illustration"
-    class="w-64 h-80 sm:w-72 sm:h-96 lg:w-96 lg:h-[500px] xl:w-[420px] xl:h-[550px]
-           object-cover rounded-2xl shadow-xl shadow-black/70 animate-fade-in-left"
-    />
-  </div>
+    <!-- Imagen lateral opcional (solo visible en pantallas grandes) -->
+    <div class="hidden lg:flex lg:w-1/2 items-center justify-end pr-2">
+      <img
+        src="images/login.png"
+        alt="Login illustration"
+      class="w-64 h-80 sm:w-72 sm:h-96 lg:w-96 lg:h-[500px] xl:w-[420px] xl:h-[550px]
+            object-cover rounded-2xl shadow-xl shadow-black/70 animate-fade-in-left"
+      />
+    </div>
 
-<!-- Formulario de inicio de sesión -->
-<div class="w-full lg:w-1/2 flex justify-center lg:justify-start px-2 sm:px-4">
-  <div class="w-full max-w-md bg-darkbg rounded-2xl shadow-lg p-6 sm:p-8 lg:p-10">
-    <h2 class="text-2xl sm:text-3xl font-bold text-center text-primary mb-6">Iniciar sesión</h2>
+    <!-- Formulario de inicio de sesión -->
+    <div class="w-full lg:w-1/2 flex justify-center lg:justify-start px-2 sm:px-4">
+      <div class="w-full max-w-md bg-darkbg rounded-2xl shadow-lg p-6 sm:p-8 lg:p-10">
+        <h2 class="text-2xl sm:text-3xl font-bold text-center text-primary mb-6">Iniciar sesión</h2>
 
-    <form [formGroup]="loginForm" (ngSubmit)="login()" class="space-y-4">
+        <form [formGroup]="loginForm" (ngSubmit)="login()" class="space-y-4">
 
-      <!-- Correo electrónico -->
-      <div class="relative">
-        <input
-          type="email"
-          formControlName="email"
-          placeholder="Correo electrónico"
-          class=" input-animated w-full pl-10 p-2  border border-primary rounded-lg 
-                 focus:outline-none focus:ring-2 focus:ring-primary
-                 text-secondary placeholder-secondary text-sm md:text-base"
-        />
-        <!-- Icono de correo electrónico -->
-       <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="w-5 h-5 absolute left-3 top-2.5 text-secondary"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          stroke-width="2"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="M3 8l9 6 9-6M21 8v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z"
-          />
-        </svg>
-      </div>
-
-      <!-- Contraseña -->
-      <div class="relative">
-        <input
-          [type]="showPassword ? 'text' : 'password'"
-          formControlName="password"
-          placeholder="Contraseña"
-          class="input-animated w-full pl-10 pr-10 p-2  border border-primary rounded-lg 
-                 focus:outline-none focus:ring-2 focus:ring-primary
-                 text-secondary placeholder-secondary text-sm md:text-base"
-        />
-
-        <!-- Icono candado -->
-        <svg
-          class="w-5 h-5 absolute left-3 top-2.5 md:top-3 text-secondary fill-current"
-          viewBox="0 0 24 24"
-        >
-          <path
-            fill="currentColor"
-            fill-rule="evenodd"
-            d="M5 8a5 5 0 0110 0v2h1a1 1 0 011 1v7a1 1 0 01-1 1H4a1 1 0 01-1-1v-7a1 1 0 011-1h1V8zm2 0v2h6V8a3 3 0 00-6 0z"
-            clip-rule="evenodd"
-          />
-        </svg>
-
-        <!-- Botón mostrar/ocultar contraseña -->
-        <button
-          type="button"
-          (click)="showPassword = !showPassword"
-          class="absolute right-3 top-2.5 md:top-3 text-secondary hover:text-hover transition"
-        >
-          <!-- Icono ojo cerrado -->
+          <!-- Correo electrónico -->
+          <div class="relative">
+            <input
+              type="email"
+              formControlName="email"
+              placeholder="Correo electrónico"
+              class=" input-animated w-full pl-10 p-2  border border-primary rounded-lg 
+                    focus:outline-none focus:ring-2 focus:ring-primary
+                    text-secondary placeholder-secondary text-sm md:text-base"
+            />
+            <!-- Icono de correo electrónico -->
           <svg
-            *ngIf="!showPassword"
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-5 w-5 stroke-current"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
+              xmlns="http://www.w3.org/2000/svg"
+              class="w-5 h-5 absolute left-3 top-2.5 text-secondary"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
               stroke-width="2"
-              d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-            />
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-            />
-          </svg>
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M3 8l9 6 9-6M21 8v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z"
+              />
+            </svg>
+          </div>
 
-          <!-- Icono ojo abierto -->
-          <svg
-            *ngIf="showPassword"
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-5 w-5 stroke-current"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M13.875 18.825A10.05 10.05 0 0112 19c-4.477 0-8.268-2.943-9.542-7a10.05 10.05 0 011.661-3.052m1.477-1.477A9.955 9.955 0 0112 5c4.477 0 8.268 2.943 9.542 7a10.05 10.05 0 01-1.661 3.052M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+          <!-- Contraseña -->
+          <div class="relative">
+            <input
+              [type]="showPassword ? 'text' : 'password'"
+              formControlName="password"
+              placeholder="Contraseña"
+              class="input-animated w-full pl-10 pr-10 p-2  border border-primary rounded-lg 
+                    focus:outline-none focus:ring-2 focus:ring-primary
+                    text-secondary placeholder-secondary text-sm md:text-base"
             />
-          </svg>
-        </button>
+
+            <!-- Icono candado -->
+            <svg
+              class="w-5 h-5 absolute left-3 top-2.5 md:top-3 text-secondary fill-current"
+              viewBox="0 0 24 24"
+            >
+              <path
+                fill="currentColor"
+                fill-rule="evenodd"
+                d="M5 8a5 5 0 0110 0v2h1a1 1 0 011 1v7a1 1 0 01-1 1H4a1 1 0 01-1-1v-7a1 1 0 011-1h1V8zm2 0v2h6V8a3 3 0 00-6 0z"
+                clip-rule="evenodd"
+              />
+            </svg>
+
+            <!-- Botón mostrar/ocultar contraseña -->
+            <button
+              type="button"
+              (click)="showPassword = !showPassword"
+              class="absolute right-3 top-2.5 md:top-3 text-secondary hover:text-hover transition"
+            >
+              <!-- Icono ojo cerrado -->
+              <svg
+                *ngIf="!showPassword"
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5 stroke-current"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                />
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                />
+              </svg>
+
+              <!-- Icono ojo abierto -->
+              <svg
+                *ngIf="showPassword"
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5 stroke-current"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M13.875 18.825A10.05 10.05 0 0112 19c-4.477 0-8.268-2.943-9.542-7a10.05 10.05 0 011.661-3.052m1.477-1.477A9.955 9.955 0 0112 5c4.477 0 8.268 2.943 9.542 7a10.05 10.05 0 01-1.661 3.052M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                />
+              </svg>
+            </button>
+          </div>
+
+          <!-- Botón -->
+          <button
+            type="submit"
+            class="w-full py-2 md:py-3 rounded-lg bg-primary text-darkbg font-bold hover:bg-hover transition"
+          >
+            Iniciar sesión
+          </button>
+
+          <!-- Error -->
+          <p *ngIf="errorMessage" class="text-red-500 text-sm text-center">
+            {{ errorMessage }}
+          </p>
+        </form>
+
+        <!-- Registro -->
+        <p class="mt-4 text-center text-primary text-sm">
+          ¿No estás registrado?
+          <a
+            routerLink="/register"
+            class="font-medium hover:text-hover underline transition"
+          >
+            Regístrate
+          </a>
+        </p>
       </div>
-
-      <!-- Botón -->
-      <button
-        type="submit"
-        class="w-full py-2 md:py-3 rounded-lg bg-primary text-darkbg font-bold hover:bg-hover transition"
-      >
-        Iniciar sesión
-      </button>
-
-      <!-- Error -->
-      <p *ngIf="errorMessage" class="text-red-500 text-sm text-center">
-        {{ errorMessage }}
-      </p>
-    </form>
-
-    <!-- Registro -->
-    <p class="mt-4 text-center text-primary text-sm">
-      ¿No estás registrado?
-      <a
-        routerLink="/register"
-        class="font-medium hover:text-hover underline transition"
-      >
-        Regístrate
-      </a>
-    </p>
-  </div>
-</div>
+    </div>
+</main>
 
 
 
