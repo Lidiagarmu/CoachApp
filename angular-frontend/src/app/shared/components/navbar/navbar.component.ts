@@ -1,22 +1,30 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { CommonModule, NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-navbar',
-  templateUrl: './navbar.component.html'
+  standalone: true,
+  imports: [CommonModule, NgIf],
+  templateUrl: './navbar.component.html',
 })
-export class NavbarComponent {
-  @Input() showButtons: boolean = false;
+export class NavbarComponent implements OnInit {
+
+  @Input() showButton: boolean = false;
 
   constructor(private router: Router) {}
 
-  goHome() {
-    this.router.navigate(['/dashboard']); // Ajusta según ruta
+  ngOnInit(): void {
+    console.log('✅ Navbar inicializado, showButton =', this.showButton);
   }
 
   logout() {
-    // Aquí tu lógica de logout
-    localStorage.clear();
+    // 🧹 Limpieza general de datos de sesión
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    localStorage.removeItem('role');
+
+    // 🔁 Redirección al login
     this.router.navigate(['/login']);
   }
 }
