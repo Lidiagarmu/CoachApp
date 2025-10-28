@@ -1,0 +1,36 @@
+<nav class="bg-black w-full fixed top-0 left-0 z-50 shadow-md">
+  <div class="flex items-center justify-between px-6 py-4">
+    <!-- Logo -->
+    <div class="flex items-center gap-2 cursor-pointer">
+      <img 
+        src="/images/logo-coach-up.png" 
+        alt="Logo App" 
+        class="h-10 w-10 rounded-full bg-primary p-1 object-contain shadow-md"
+      />
+      <span class="text-primary font-bold text-xl">CoachUp</span>
+    </div>
+
+    <!-- Botones Home y Logout -->
+    <div class="flex items-center gap-4">
+      <ng-container *ngIf="showButtons">
+        <button 
+          (click)="goHome()" 
+          class="text-primary hover:text-white font-semibold transition duration-300"
+        >
+          Home
+        </button>
+        <button 
+          (click)="logout()" 
+          class="text-primary hover:text-white font-semibold transition duration-300"
+        >
+          Logout
+        </button>
+      </ng-container>
+    </div>
+  </div>
+
+  <!-- 🌈 Franja degradada fuera del navbar -->
+<div class="h-5 w-full bg-gradient-to-b from-black to-primary fixed top-[60px] left-0 z-40"></div>
+</nav>
+
+
