@@ -1,9 +1,10 @@
-<app-navbar [showButton]="true"></app-navbar>
+<!-- Navbar fijo arriba -->
+<app-navbar [showButton]="true" class="fixed top-0 left-0 w-full z-50"></app-navbar>
 
-
-
-<div class="p-6">
-  <h1 class="text-3xl font-bold mb-4">Admin Dashboard</h1>
-  <p>Bienvenido al panel de administración.</p>
-</div>
-
+<!-- Contenido principal centrado -->
+<main
+  class="min-h-[calc(100vh-8rem)] flex flex-col items-center justify-center bg-app-gradient pt-[4.5rem] pb-[3.5rem] text-center"
+>
+  <h1 class="text-3xl font-bold mb-4 text-black">Admin Dashboard</h1>
+  <p class="text-secondary text-lg">Bienvenido al panel de administración.</p>
+</main>
