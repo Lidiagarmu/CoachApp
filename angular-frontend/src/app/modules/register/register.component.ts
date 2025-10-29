@@ -5,11 +5,12 @@ import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { NavbarComponent } from '../../shared/components/navbar/navbar.component';
+import { BackButtonComponent } from '../../shared/components/back-button/back-button.component';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule, NavbarComponent],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule, NavbarComponent, BackButtonComponent],
   templateUrl: './register.component.html'
 })
 
