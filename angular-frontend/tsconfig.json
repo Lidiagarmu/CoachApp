@@ -22,7 +22,8 @@
     "paths": {
       "@environments/*": ["environments/*"],
       "@shared/*": ["app/shared/*"],
-      "@core/*": ["app/core/*"]
+      "@core/*": ["app/core/*"],
+      "@app/*": ["app/*"]
     },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

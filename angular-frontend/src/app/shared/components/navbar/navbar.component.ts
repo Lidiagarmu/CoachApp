@@ -2,6 +2,9 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule, NgIf } from '@angular/common';
 
+import { AuthService } from '../../../services/auth.service';
+
+
 @Component({
   selector: 'app-navbar',
   standalone: true,
@@ -12,19 +15,17 @@ export class NavbarComponent implements OnInit {
 
   @Input() showButton: boolean = false;
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {
     console.log('✅ Navbar inicializado, showButton =', this.showButton);
   }
 
   logout() {
-    // 🧹 Limpieza general de datos de sesión
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    localStorage.removeItem('role');
-
-    // 🔁 Redirección al login
-    this.router.navigate(['/login']);
+    this.authService.logout();          // usa método centralizado
+    this.router.navigate(['/login']);    // redirige al login
   }
 }
