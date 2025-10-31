@@ -17,6 +17,18 @@ if [[ "$1" == apache2* ]] || [ "$1" = 'php-fpm' ]; then
     fi
 fi
 
+ # PARA DEFAULT ADMIN USER CREATION
+cd /usr/src/app
+
+    echo "🗄️ Running database migrations..."
+    php bin/console doctrine:migrations:migrate --no-interaction || echo "⚠️ Migration failed or already up to date"
+
+    echo "👑 Creating default admin user (if not exists)..."
+    php bin/console app:create-admin || echo "⚠️ Admin creation failed or command not found"
+   
+
 echo "STARTING APACHE"
 
 exec "$@"
+
+
