@@ -35,4 +35,4 @@ RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 ENTRYPOINT ["docker-entrypoint.sh"]
 
-CMD sh -c "composer install;composer require nelmio/cors-bundle;php bin/console doctrine:database:create --if-not-exists;php bin/console doctrine:migrations:migrate --no-interaction;apache2-foreground"
+CMD sh -c "composer install; composer require nelmio/cors-bundle; php bin/console doctrine:database:create --if-not-exists; php bin/console doctrine:migrations:migrate --no-interaction; php bin/console app:create-admin --no-interaction; apache2-foreground"
