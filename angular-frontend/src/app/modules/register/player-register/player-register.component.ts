@@ -8,6 +8,7 @@ import { BackButtonComponent } from '../../../shared/components/back-button/back
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../environments/enviroment';
 
+
 @Component({
   selector: 'app-player-register',
   standalone: true,
