@@ -44,7 +44,7 @@ export class PlayerRegisterComponent implements OnInit {
       password: ['', [Validators.required, Validators.minLength(6)]],
       repeatPassword: ['', [Validators.required]],
       position: [''],
-      number: [0],
+      number: ['', [Validators.required, Validators.min(0), Validators.max(99)]], 
       teamId: [null]
     });
   }
