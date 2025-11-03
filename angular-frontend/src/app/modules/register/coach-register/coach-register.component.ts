@@ -7,7 +7,7 @@ import { environment } from '../../../../environments/enviroment';
 import { CommonModule } from '@angular/common';
 import { NavbarComponent } from '../../../shared/components/navbar/navbar.component';
 import { BackButtonComponent } from '../../../shared/components/back-button/back-button.component';
-import { ReactiveFormsModule } from '@angular/forms'; 
+import { ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-coach-register',
@@ -16,44 +16,81 @@ import { ReactiveFormsModule } from '@angular/forms';
   standalone: true
 })
 export class CoachRegisterComponent implements OnInit {
+  registerForm!: FormGroup;
+  teams: any[] = [];
   showPassword = false;
   showRepeatPassword = false;
-  passwordStrength = 0;
   errorMessage: string | null = null;
-  teams: any[] = [];
-  registerForm!: FormGroup;
 
-  constructor(private fb: FormBuilder, private auth: AuthService, private http: HttpClient, private router: Router) {
-    this.registerForm = this.fb.group({
-      fullName: ['', Validators.required],
-      nickname: [''],
-      age: [null],
-      teamName: [''],
-      createLater: [false],
-      yearsExperience: [0],
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
-      repeatPassword: ['', [Validators.required]]
-    });
+  // Estado de requisitos de contraseña
+  passwordRequirements = {
+    minLength: false,
+    uppercase: false,
+    lowercase: false,
+    number: false,
+    special: false
+  };
+
+  constructor(
+    private fb: FormBuilder,
+    private auth: AuthService,
+    private http: HttpClient,
+    private router: Router
+  ) {
+    this.registerForm = this.fb.group(
+      {
+        fullName: ['', [Validators.required, Validators.minLength(3)]],
+        nickname: [''],
+        age: [null, [Validators.min(18), Validators.max(99)]],
+        teamName: [''],
+        createLater: [false],
+        yearsExperience: [0, [Validators.min(0), Validators.max(60)]],
+        email: ['', [Validators.required, Validators.email]],
+        password: ['', [Validators.required, Validators.minLength(6)]],
+        repeatPassword: ['', [Validators.required]]
+      },
+      { validators: this.passwordsMatchValidator }
+    );
   }
 
   ngOnInit(): void {
+    // ✅ Cargar equipos
     this.http.get<any[]>(`${environment.apiUrl}/teams`).subscribe({
-      next: res => this.teams = res,
-      error: err => console.error('Error cargando equipos', err)
+      next: (res) => (this.teams = res),
+      error: (err) => console.error('Error cargando equipos', err)
+    });
+
+    // ✅ Escuchar cambios del checkbox “crear más tarde”
+    this.registerForm.get('createLater')?.valueChanges.subscribe((checked) => {
+      const teamNameControl = this.registerForm.get('teamName');
+      if (checked) {
+        teamNameControl?.disable(); // Desactiva el input
+        teamNameControl?.reset();   // Limpia su valor
+      } else {
+        teamNameControl?.enable();  // Reactiva si se desmarca
+      }
     });
   }
 
-  updatePasswordStrength() {
-    const value = this.registerForm.get('password')?.value || '';
-    let strength = 0;
-    if (/[A-Z]/.test(value)) strength += 25;
-    if (/[a-z]/.test(value)) strength += 25;
-    if (/[0-9]/.test(value)) strength += 25;
-    if (/[\W_]/.test(value)) strength += 25;
-    this.passwordStrength = strength;
+  // ✅ Verifica que ambas contraseñas coincidan
+  private passwordsMatchValidator(formGroup: FormGroup) {
+    const password = formGroup.get('password')?.value;
+    const repeatPassword = formGroup.get('repeatPassword')?.value;
+    return password === repeatPassword ? null : { passwordMismatch: true };
   }
 
+  // ✅ Actualiza la validación de los requisitos de contraseña
+  onPasswordChange(value: string) {
+    this.passwordRequirements = {
+      minLength: value.length >= 6,
+      uppercase: /[A-Z]/.test(value),
+      lowercase: /[a-z]/.test(value),
+      number: /[0-9]/.test(value),
+      special: /[\W_]/.test(value)
+    };
+  }
+
+  // ✅ Registro
   register() {
     if (this.registerForm.invalid) {
       this.errorMessage = 'Completa todos los campos correctamente.';
@@ -67,7 +104,9 @@ export class CoachRegisterComponent implements OnInit {
 
     this.auth.register(data).subscribe({
       next: () => this.router.navigate(['/login']),
-      error: err => this.errorMessage = err.error?.message || 'Error al registrarse'
+      error: (err) => {
+        this.errorMessage = err.error?.error || 'Error al registrarse';
+      }
     });
   }
 }

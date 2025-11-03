@@ -31,7 +31,7 @@
 
           <!-- Apodo -->
           <div class="relative">
-            <input type="text" formControlName="nickname" placeholder="Apodo"
+            <input type="text" formControlName="nickname" placeholder="Apodo (opcional)"
                   class="input-animated w-full pl-10 p-2 border border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-secondary placeholder-secondary" />
             
             <!-- SVG apodo -->
@@ -217,6 +217,9 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3l18 18"/>
               </svg>
             </button>
+            <p *ngIf="registerForm.errors?.['passwordMismatch']" class="text-red-500 text-sm text-center mt-2">
+              Las contraseñas no coinciden.
+            </p>
           </div>
 
 

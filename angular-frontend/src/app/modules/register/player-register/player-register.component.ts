@@ -46,7 +46,7 @@ export class PlayerRegisterComponent implements OnInit {
       position: [''],
       number: ['', [Validators.required, Validators.min(0), Validators.max(99)]], 
       teamId: [null]
-    });
+    },{ validators: this.passwordsMatchValidator }); // ✅ comprobación de contraseñas);
   }
 
   ngOnInit(): void {
@@ -100,6 +100,12 @@ selectPosition(pos: string) {
 clearPosition() {
   this.selectedPosition = null;
   this.registerForm.get('position')?.setValue('');
+}
+
+passwordsMatchValidator(formGroup: FormGroup) {
+  const password = formGroup.get('password')?.value;
+  const repeatPassword = formGroup.get('repeatPassword')?.value;
+  return password === repeatPassword ? null : { passwordMismatch: true };
 }
 
 }
