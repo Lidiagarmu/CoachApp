@@ -22,6 +22,18 @@ export class PlayerRegisterComponent implements OnInit {
   errorMessage: string | null = null;
   teams: any[] = [];
   registerForm!: FormGroup;
+  positions: string[] = ['POR','DFC','LI','LD','MC','MCD','MCO','EI','ED','DEL'];
+  selectedPosition: string | null = null;
+
+  passwordRequirements = {
+  minLength: false,
+  uppercase: false,
+  lowercase: false,
+  number: false,
+  special: false
+};
+
+
 
   constructor(private fb: FormBuilder, private auth: AuthService, private http: HttpClient, private router: Router) {
     this.registerForm = this.fb.group({
@@ -71,5 +83,24 @@ export class PlayerRegisterComponent implements OnInit {
       error: err => this.errorMessage = err.error?.message || 'Error al registrarse'
     });
   }
+
+  onPasswordChange(value: string) {
+  this.passwordRequirements.minLength = value.length >= 8;
+  this.passwordRequirements.uppercase = /[A-Z]/.test(value);
+  this.passwordRequirements.lowercase = /[a-z]/.test(value);
+  this.passwordRequirements.number = /[0-9]/.test(value);
+  this.passwordRequirements.special = /[!@#$%^&*(),.?":{}|<>]/.test(value);
+}
+
+selectPosition(pos: string) {
+  this.selectedPosition = pos;
+  this.registerForm.get('position')?.setValue(pos);
+}
+
+clearPosition() {
+  this.selectedPosition = null;
+  this.registerForm.get('position')?.setValue('');
+}
+
 }
 

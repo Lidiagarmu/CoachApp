@@ -4,12 +4,6 @@
 
   <app-back-button class="absolute top-[5.5rem] right-4 z-40"></app-back-button>
 
-  <!-- Imagen lateral opcional en escritorio -->
-  <div class="hidden lg:flex lg:w-1/2 items-center justify-end pr-4">
-    <img src="images/register-player.png"
-         alt="Registro Jugador"
-         class="w-80 h-80 lg:w-96 lg:h-[500px] object-cover rounded-2xl shadow-xl shadow-black/70 animate-fade-in-left"/>
-  </div>
 
   <!-- Formulario -->
   <div class="w-full lg:w-1/2 flex justify-center lg:justify-start px-2 sm:px-4">
@@ -18,93 +12,134 @@
 
       <form [formGroup]="registerForm" (ngSubmit)="register()" class="grid grid-cols-1 lg:grid-cols-2 gap-4">
 
-        <!-- Nombre completo -->
-        <input type="text" formControlName="fullName" placeholder="Nombre completo"
-               class="input-animated w-full p-2 border border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-secondary placeholder-secondary" />
+        <!-- Columna izsquierda -->
+        <div class="flex flex-col gap-4">
+          <input type="text" formControlName="fullName" placeholder="Nombre completo"
+                class="input-animated w-full p-2 border border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-secondary placeholder-secondary" />
 
-        <!-- Apodo -->
-        <input type="text" formControlName="nickname" placeholder="Apodo"
-               class="input-animated w-full p-2 border border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-secondary placeholder-secondary" />
+          <input type="text" formControlName="nickname" placeholder="Apodo"
+                class="input-animated w-full p-2 border border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-secondary placeholder-secondary" />
 
-        <!-- Edad -->
-        <input type="number" formControlName="age" placeholder="Edad"
-               class="input-animated w-full p-2 border border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-secondary placeholder-secondary" />
+          <input type="number" formControlName="age" placeholder="Edad"
+                class="input-animated w-full p-2 border border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-secondary placeholder-secondary" />
 
-        <!-- Posición -->
-        <input type="text" formControlName="position" placeholder="Posición"
-               class="input-animated w-full p-2 border border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-secondary placeholder-secondary" />
+         
+          <!-- Selección de posición -->
+          <div class="bg-darkbg p-4 rounded-2xl shadow-md flex flex-col gap-3">
+          
+          <div class="flex items-center gap-2">
+          <!-- SVG de escudo -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2L3 5v6c0 5.25 3.75 10.74 9 12 5.25-1.26 9-6.75 9-12V5l-9-3z"/>
+              </svg>
 
-        <!-- Número -->
-        <input type="number" formControlName="number" placeholder="Número"
-               class="input-animated w-full p-2 border border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-secondary placeholder-secondary" />
-
-        <!-- Equipo -->
-        <select formControlName="teamId"
-                class="w-full pl-3 p-2 border border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-secondary placeholder-secondary">
-          <option value="">Selecciona tu equipo</option>
-          <option *ngFor="let team of teams" [value]="team.id">{{ team.name }}</option>
-        </select>
-
-        <!-- Email -->
-        <input type="email" formControlName="email" placeholder="Correo electrónico"
-               class="input-animated w-full p-2 border border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-secondary placeholder-secondary" />
-
-        <!-- Contraseña -->
-        <div class="relative w-full">
-          <input [type]="showPassword ? 'text' : 'password'" formControlName="password" placeholder="Contraseña"
-                 class="input-animated w-full pl-10 pr-10 p-2 border border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-secondary placeholder-secondary"/>
-          <button type="button" (click)="showPassword = !showPassword"
-                  class="absolute right-3 top-2.5 md:top-3 text-secondary hover:text-hover transition">
-            <svg *ngIf="!showPassword" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M13.875 18.825A10.05 10.05 0 0112 19c-4.477 0-8.268-2.943-9.542-7a10.05 10.05 0 011.661-3.052M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-            </svg>
-            <svg *ngIf="showPassword" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M12 15a3 3 0 100-6 3 3 0 000 6z"/>
-            </svg>
-          </button>
-        </div>
-
-        <!-- Repetir contraseña -->
-        <div class="relative w-full">
-          <input [type]="showRepeatPassword ? 'text' : 'password'" formControlName="repeatPassword" placeholder="Repetir contraseña"
-                 class="input-animated w-full pl-10 pr-10 p-2 border border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-secondary placeholder-secondary"/>
-          <button type="button" (click)="showRepeatPassword = !showRepeatPassword"
-                  class="absolute right-3 top-2.5 md:top-3 text-secondary hover:text-hover transition">
-            <svg *ngIf="!showRepeatPassword" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M13.875 18.825A10.05 10.05 0 0112 19c-4.477 0-8.268-2.943-9.542-7a10.05 10.05 0 011.661-3.052M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-            </svg>
-            <svg *ngIf="showRepeatPassword" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M12 15a3 3 0 100-6 3 3 0 000 6z"/>
-            </svg>
-          </button>
-        </div>
-
-        <!-- Barra de progreso de contraseña -->
-        <div class="col-span-1 lg:col-span-2">
-          <div class="w-full bg-secondary/30 rounded-full h-2 mt-1">
-            <div [style.width.%]="passwordStrength" class="bg-primary h-2 rounded-full transition-all"></div>
+            <label class="text-white font-semibold text-lg">Selecciona tu posición</label>
           </div>
-          <p class="text-sm text-secondary mt-1">Seguridad de la contraseña</p>
+  
+          <div class="grid grid-cols-3 gap-3">
+            <!-- Botones de posiciones -->
+            <button 
+              type="button" 
+              *ngFor="let pos of positions"
+              (click)="selectPosition(pos)"
+              [disabled]="selectedPosition && selectedPosition !== pos"
+              [ngClass]="{
+                'bg-primary text-darkbg font-bold': selectedPosition === pos,
+                'bg-gray-500 text-gray-300 cursor-not-allowed': selectedPosition && selectedPosition !== pos,
+                'bg-gray-700 text-gray-200 hover:bg-gray-600 hover:text-white': !selectedPosition
+              }"
+              class="py-3 rounded-lg transition-all text-center font-medium shadow-sm"
+            >
+              {{ pos }}
+            </button>
+
+            <!-- Botón de limpiar-->
+            <button 
+              type="button" 
+              (click)="clearPosition()"
+              [disabled]="!selectedPosition"
+              class="col-span-2 py-3 rounded-lg bg-gray-600 text-white hover:bg-red-400 transition font-medium shadow-sm"
+            >
+              Quitar selección
+            </button>
+          </div>
         </div>
 
-        <!-- Botón de submit -->
-        <button type="submit"
-                class="col-span-1 lg:col-span-2 w-full py-2 md:py-3 rounded-lg bg-primary text-darkbg font-bold hover:bg-hover transition">
-          Registrarse
-        </button>
+      </div>
 
-        <!-- Mensaje de error -->
-        <p *ngIf="errorMessage" class="col-span-1 lg:col-span-2 text-red-500 text-sm text-center">{{ errorMessage }}</p>
+        <!-- Columna derecha -->
+        <div class="flex flex-col gap-4">
 
+
+          <input type="number" formControlName="number" placeholder="Dorsal"
+                class="input-animated w-full p-2 border border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-secondary placeholder-secondary" />
+       
+
+          <input type="email" formControlName="email" placeholder="Correo electrónico"
+                class="input-animated w-full p-2 border border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-secondary placeholder-secondary" />
+
+          <!-- Contraseña -->
+          <div class="relative">
+            <input 
+              [type]="showPassword ? 'text' : 'password'" 
+              formControlName="password" 
+              placeholder="Contraseña"
+              (input)="onPasswordChange($any($event.target).value)"
+              class="input-animated w-full pl-10 pr-10 p-2 border border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-secondary placeholder-secondary"
+            />
+            <button type="button" (click)="showPassword = !showPassword"
+                    class="absolute right-3 top-2.5 md:top-3 text-secondary hover:text-hover transition">
+              <!-- SVG ojos aquí -->
+            </button>
+          </div>
+
+          <!-- Requisitos de contraseña debajo del input -->
+          <ul class="text-sm text-gray-200 space-y-1 mt-2">
+            <li [class.text-green-500]="passwordRequirements.minLength" class="flex items-center justify-between">
+              Mínimo 8 caracteres
+              <span *ngIf="passwordRequirements.minLength" class="text-green-500 ml-2">✔</span>
+            </li>
+            <li [class.text-green-500]="passwordRequirements.uppercase" class="flex items-center justify-between">
+              Al menos una mayúscula
+              <span *ngIf="passwordRequirements.uppercase" class="text-green-500 ml-2">✔</span>
+            </li>
+            <li [class.text-green-500]="passwordRequirements.lowercase" class="flex items-center justify-between">
+              Al menos una minúscula
+              <span *ngIf="passwordRequirements.lowercase" class="text-green-500 ml-2">✔</span>
+            </li>
+            <li [class.text-green-500]="passwordRequirements.number" class="flex items-center justify-between">
+              Al menos un número
+              <span *ngIf="passwordRequirements.number" class="text-green-500 ml-2">✔</span>
+            </li>
+            <li [class.text-green-500]="passwordRequirements.special" class="flex items-center justify-between">
+              Al menos un carácter especial
+              <span *ngIf="passwordRequirements.special" class="text-green-500 ml-2">✔</span>
+            </li>
+          </ul>
+
+
+            <!-- Repetir contraseña -->
+            <div class="relative">
+              <input [type]="showRepeatPassword ? 'text' : 'password'" formControlName="repeatPassword" placeholder="Repetir contraseña"
+                    class="input-animated w-full pl-10 pr-10 p-2 border border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-secondary placeholder-secondary"/>
+              <button type="button" (click)="showRepeatPassword = !showRepeatPassword"
+                      class="absolute right-3 top-2.5 md:top-3 text-secondary hover:text-hover transition">
+                <!-- SVG ojos -->
+              </button>
+            </div>
+
+          
+          <button type="submit"
+                  class="mt-4 w-full py-2 md:py-3 rounded-lg bg-primary text-darkbg font-bold hover:bg-hover transition">
+            Registrarse
+          </button>
+
+          <p *ngIf="errorMessage" class="text-red-500 text-sm text-center mt-2">{{ errorMessage }}</p>
+        </div>
       </form>
+
+
+     
     </div>
   </div>
 </main>
