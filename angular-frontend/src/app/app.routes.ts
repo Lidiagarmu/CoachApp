@@ -2,6 +2,8 @@ import { Routes } from '@angular/router';
 import { HomeComponent } from './modules/home/home.component';
 import { LoginComponent } from './modules/login/login.component';
 import { RegisterComponent } from './modules/register/register.component';
+import { CoachRegisterComponent } from './modules/register/coach-register/coach-register.component';
+import { PlayerRegisterComponent } from './modules/register/player-register/player-register.component';
 import { CoachDashboardComponent } from './modules/coach-dashboard/coach-dashboard.component';
 import { PlayerDashboardComponent } from './modules/player-dashboard/player-dashboard.component';
 import { AdminDashboardComponent } from './modules/admin-dashboard/admin-dashboard.component';
@@ -12,6 +14,8 @@ export const routes: Routes = [
   { path: 'home', component: HomeComponent },          // home público
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
+  { path: 'register/coach', component: CoachRegisterComponent },
+  { path: 'register/player', component: PlayerRegisterComponent },
   { path: 'coach', component: CoachDashboardComponent, canActivate: [AuthGuard] },
   { path: 'player', component: PlayerDashboardComponent, canActivate: [AuthGuard] },
   { path: 'admin', component: AdminDashboardComponent, canActivate: [AuthGuard] },

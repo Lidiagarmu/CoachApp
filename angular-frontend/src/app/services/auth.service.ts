@@ -35,18 +35,21 @@ export class AuthService {
   }
 
   register(data: {
-    email: string;
-    password: string;
+    email: string | null | undefined;
+    password: string | null | undefined;
     type: string;
-    fullName?: string;
-    nickname?: string;
-    age?: number;
-    teamId?: number;
+    fullName?: string | null | undefined;
+    nickname?: string | null | undefined;
+    age?: number | null | undefined;
+    yearsExperience?: number | null | undefined;
+    teamName?: string | null | undefined;
+    teamId?: number | null | undefined;
   }): Observable<any> {
     const payload: any = { ...data };
     if (data.type === 'player') payload.teamId = data.teamId;
-    return this.http.post<any>(`${environment.apiUrl}/register`, data);
+    return this.http.post<any>(`${environment.apiUrl}/register`, payload);
   }
+
 
   getUser(): any {
     return this.user;
