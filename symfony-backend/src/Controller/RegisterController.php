@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Entity\CoachProfile;
 use App\Entity\PlayerProfile;
-use App\Entity\Team;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -31,12 +30,12 @@ class RegisterController extends AbstractController
         $age = $data['age'] ?? null;
 
         if (!$email || !$plainPassword || !in_array($type, ['coach', 'player'])) {
-            return $this->json(['error' => 'Email, password, and valid type ("coach" or "player") are required.'], 400);
+            return $this->json(['error' => 'Email, password y tipo de usuario ("coach" o "player") son obligatorios.'], 400);
         }
 
-        // Ya existe?
+        // Comprobar si ya existe
         if ($em->getRepository(User::class)->findOneBy(['email' => $email])) {
-            return $this->json(['error' => 'User already exists.'], 409);
+            return $this->json(['error' => 'El usuario ya existe.'], 409);
         }
 
         // Crear usuario base
@@ -56,40 +55,22 @@ class RegisterController extends AbstractController
 
             $profile = new CoachProfile();
             $profile->setUserAccount($user);
-            $profile->setTeamName($data['teamName'] ?? 'Equipo sin nombre');
             $profile->setYearsExperience($data['yearsExperience'] ?? 0);
+            $profile->setTeamName($data['teamName'] ?? null); // opcional
 
-            // Crear equipo vinculado al coach
-            $team = new Team();
-            $team->setName($profile->getTeamName());
-            $team->setCoach($profile);
-            $profile->setTeam($team);
-
-            $em->persist($team);
+            // ❌ Ya no se crea el Team aquí. El coach podrá hacerlo desde su panel.
             $em->persist($profile);
         }
 
         // Si es player
         if ($type === 'player') {
             $user->setRoles(['ROLE_PLAYER']);
-            $teamId = $data['teamId'] ?? null;
-
-            if (!$teamId) {
-                return $this->json(['error' => 'teamId is required for players'], 400);
-            }
-
-            $team = $em->getRepository(Team::class)->find($teamId);
-            if (!$team) {
-                return $this->json(['error' => 'Team not found'], 404);
-            }
 
             $profile = new PlayerProfile();
             $profile->setPlayerAccount($user);
             $profile->setPosition($data['position'] ?? 'Sin asignar');
             $profile->setNumber($data['number'] ?? 0);
-            $profile->setTeam($team);
-
-            $team->addPlayer($profile);
+            // ❌ No se asigna equipo al registrarse
             $em->persist($profile);
         }
 

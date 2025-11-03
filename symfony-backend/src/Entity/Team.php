@@ -23,66 +23,82 @@ class Team
     #[ORM\OneToMany(mappedBy: 'team', targetEntity: PlayerProfile::class)]
     private Collection $players;
 
-    public function __construct()
+    #[ORM\Column(type: 'datetime_immutable')]
+    private ?\DateTimeImmutable $createdAt = null;
+
+     #[ORM\PrePersist]
+    public function setCreatedAtValue(): void
     {
-        $this->players = new ArrayCollection();
-    }
-
-    // Getters y setters
-    
-    // src/Entity/Team.php
-
-public function getId(): ?int
-{
-    return $this->id;
-}
-
-public function getName(): ?string
-{
-    return $this->name;
-}
-
-public function setName(string $name): self
-{
-    $this->name = $name;
-    return $this;
-}
-
-public function getCoach(): ?CoachProfile
-{
-    return $this->coach;
-}
-
-public function setCoach(?CoachProfile $coach): self
-{
-    $this->coach = $coach;
-    return $this;
-}
-
-public function getPlayers(): Collection
-{
-    return $this->players;
-}
-
-public function addPlayer(PlayerProfile $player): self
-{
-    if (!$this->players->contains($player)) {
-        $this->players[] = $player;
-        $player->setTeam($this);
-    }
-
-    return $this;
-}
-
-public function removePlayer(PlayerProfile $player): self
-{
-    if ($this->players->removeElement($player)) {
-        if ($player->getTeam() === $this) {
-            $player->setTeam(null);
+        if ($this->createdAt === null) {
+            $this->createdAt = new \DateTimeImmutable();
         }
     }
 
-    return $this;
-}
+    public function __construct()
+    {
+        $this->players = new ArrayCollection();
+        $this->createdAt = new \DateTimeImmutable();
+    }
 
+    // ======================
+    // Getters / Setters
+    // ======================
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): self
+    {
+        $this->name = $name;
+        return $this;
+    }
+
+    public function getCoach(): ?CoachProfile
+    {
+        return $this->coach;
+    }
+
+    public function setCoach(?CoachProfile $coach): self
+    {
+        $this->coach = $coach;
+        return $this;
+    }
+
+    public function getPlayers(): Collection
+    {
+        return $this->players;
+    }
+
+    public function addPlayer(PlayerProfile $player): self
+    {
+        if (!$this->players->contains($player)) {
+            $this->players[] = $player;
+            $player->setTeam($this);
+        }
+
+        return $this;
+    }
+
+    public function removePlayer(PlayerProfile $player): self
+    {
+        if ($this->players->removeElement($player)) {
+            if ($player->getTeam() === $this) {
+                $player->setTeam(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
 }

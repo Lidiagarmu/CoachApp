@@ -74,8 +74,15 @@ class CoachProfile
 
     public function setTeam(?Team $team): self
     {
-        $this->team = $team;
+          // Evita bucles infinitos en Doctrine
+        if ($this->team !== $team) {
+            $this->team = $team;
+            if ($team && $team->getCoach() !== $this) {
+                $team->setCoach($this);
+            }
+        }
         return $this;
+    
     }
 
 }
