@@ -2,13 +2,12 @@
 
 namespace App\Controller;
 
-use App\Entity\User;
 use App\Entity\PlayerProfile;
 use App\Entity\CoachProfile;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/api/player')]
@@ -40,6 +39,7 @@ class PlayerController extends AbstractController
         /** @var \App\Entity\User $user */
         $user = $this->getUser();
 
+        // Obtener perfil del coach
         $coachProfile = $em->getRepository(CoachProfile::class)
             ->findOneBy(['userAccount' => $user]);
 
@@ -49,20 +49,26 @@ class PlayerController extends AbstractController
 
         $team = $coachProfile->getTeam();
 
-        $players = $em->getRepository(PlayerProfile::class)
-            ->createQueryBuilder('p')
-            ->leftJoin('p.team', 't')
-            ->where('t.id IS NULL OR t.id != :teamId')
-            ->setParameter('teamId', $team ? $team->getId() : 0)
-            ->getQuery()
-            ->getResult();
+        // Obtener jugadores que no estén en el equipo del coach
+        $qb = $em->getRepository(PlayerProfile::class)->createQueryBuilder('p')
+            ->leftJoin('p.team', 't');
+
+        if ($team) {
+            $qb->where('t.id IS NULL OR t.id != :teamId')
+               ->setParameter('teamId', $team->getId());
+        } else {
+            $qb->where('t.id IS NULL');
+        }
+
+        $players = $qb->getQuery()->getResult();
 
         $response = array_map(function (PlayerProfile $player) {
             return [
                 'id' => $player->getId(),
-                'fullName' => $player->getFullName(),
-                'nickname' => $player->getNickname(),
-                'age' => $player->getAge(),
+                'fullName' => $player->getPlayerAccount()->getFullName(),
+                'nickname' => $player->getPlayerAccount()->getNickname(),
+                'position' => $player->getPosition(),
+                'number' => $player->getNumber(),
             ];
         }, $players);
 
