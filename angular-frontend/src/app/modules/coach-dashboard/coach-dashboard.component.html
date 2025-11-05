@@ -1,38 +1,106 @@
 <!-- Navbar fijo arriba -->
 <app-navbar [showButton]="true" class="fixed top-0 left-0 w-full z-50"></app-navbar>
 
-<main
-  class="min-h-[calc(100vh-8rem)] flex flex-col items-center justify-start bg-app-gradient pt-[5rem] pb-[3.5rem] text-center w-full"
->
-  <h1 class="text-3xl font-bold mb-4 text-black">Coach Dashboard</h1>
-  <p class="text-secondary text-lg mb-6">Bienvenido al panel del coach.</p>
+<!-- Layout principal con sidebar -->
+<div class="flex pt-[5rem] min-h-screen bg-app-gradient text-black">
 
-  <h2 class="text-xl font-semibold mb-4">Jugadores disponibles</h2>
-  <table class="min-w-full border mb-6">
-    <thead>
-      <tr class="bg-gray-100">
-        <th class="p-2 border">Nombre</th>
-        <th class="p-2 border">Nickname</th>
-        <th class="p-2 border">Posición</th>
-        <th class="p-2 border">Número</th>
-        <th class="p-2 border">Acción</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let player of players">
-        <td class="p-2 border">{{ player.fullName }}</td>
-        <td class="p-2 border">{{ player.nickname }}</td>
-        <td class="p-2 border">{{ player.position }}</td>
-        <td class="p-2 border">{{ player.number }}</td>
-        <td class="p-2 border">
-          <button
-            (click)="invitePlayer(player.id)"
-            class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
-          >
-            Invitar
-          </button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</main>
+  <!-- Sidebar lateral -->
+  <aside class="w-64 bg-primary text-white flex flex-col shadow-xl fixed top-[5rem] left-0 bottom-0 z-40">
+    
+    <!-- 🔹 Panel de perfil dentro del sidebar -->
+    <div class="flex items-center gap-4 p-6 border-b border-primary/30">
+      <div
+        class="w-12 h-12 rounded-full bg-blue-500 text-white flex items-center justify-center text-lg font-bold shadow"
+      >
+        {{ nickname?.charAt(0)?.toUpperCase() || 'C' }}
+      </div>
+      <div>
+        <p class="text-xl font-semibold">{{ nickname || 'Coach' }}</p>
+        <p class="text-sm text-gray-200">{{ role }}</p>
+      </div>
+    </div>
+
+    <!-- Navegación -->
+    <nav class="flex-1 p-4 space-y-2 mt-4">
+      <button
+        (click)="activeTab = 'players'"
+        class="flex items-center gap-2 w-full text-left px-4 py-2 rounded-lg transition font-medium"
+        [ngClass]="{
+          'bg-white text-primary font-bold': activeTab === 'players',
+          'text-white hover:bg-primary/70': activeTab !== 'players'
+        }"
+      >
+        🧍‍♂️ <span>Jugadores disponibles</span>
+      </button>
+
+      <button
+        (click)="activeTab = 'events'"
+        class="flex items-center gap-2 w-full text-left px-4 py-2 rounded-lg transition font-medium"
+        [ngClass]="{
+          'bg-white text-primary font-bold': activeTab === 'events',
+          'text-white hover:bg-primary/70': activeTab !== 'events'
+        }"
+      >
+        🏆 <span>Eventos</span>
+      </button>
+
+      <button
+        (click)="activeTab = 'settings'"
+        class="flex items-center gap-2 w-full text-left px-4 py-2 rounded-lg transition font-medium"
+        [ngClass]="{
+          'bg-white text-primary font-bold': activeTab === 'settings',
+          'text-white hover:bg-primary/70': activeTab !== 'settings'
+        }"
+      >
+        ⚙️ <span>Ajustes</span>
+      </button>
+    </nav>
+  </aside>
+
+  <!-- Contenido principal -->
+  <main class="flex-1 ml-64 p-8 bg-white/70 rounded-tl-3xl shadow-inner min-h-[calc(100vh-5rem)]">
+
+    <!-- Contenido dinámico según pestaña -->
+    <section *ngIf="activeTab === 'players'" class="animate-fadeIn">
+      <h2 class="text-2xl font-bold mb-4 text-black">Jugadores disponibles</h2>
+      <table class="min-w-full border border-gray-300 rounded-lg overflow-hidden shadow">
+        <thead>
+          <tr class="bg-gray-100 text-left">
+            <th class="p-3 border">Nombre</th>
+            <th class="p-3 border">Nickname</th>
+            <th class="p-3 border">Posición</th>
+            <th class="p-3 border text-center">Número</th>
+            <th class="p-3 border text-center">Acción</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let player of players" class="hover:bg-gray-50 transition">
+            <td class="p-3 border">{{ player.fullName }}</td>
+            <td class="p-3 border">{{ player.nickname }}</td>
+            <td class="p-3 border">{{ player.position }}</td>
+            <td class="p-3 border text-center">{{ player.number }}</td>
+            <td class="p-3 border text-center">
+              <button
+                (click)="invitePlayer(player.id)"
+                class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 transition"
+              >
+                Invitar
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section *ngIf="activeTab === 'events'" class="animate-fadeIn">
+      <h2 class="text-2xl font-bold mb-4">🏆 Gestión de eventos</h2>
+      <p>Aquí podrás crear entrenamientos y partidos.</p>
+    </section>
+
+    <section *ngIf="activeTab === 'settings'" class="animate-fadeIn">
+      <h2 class="text-2xl font-bold mb-4">⚙️ Ajustes del perfil</h2>
+      <p>Próximamente podrás editar la información del coach.</p>
+    </section>
+
+  </main>
+</div>

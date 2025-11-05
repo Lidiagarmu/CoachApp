@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { NavbarComponent } from '../../shared/components/navbar/navbar.component';
 import { PlayerService, Player } from '../../services/player.service';
 import { TeamInvitationService } from '../../services/team-invitation.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-coach-dashboard',
@@ -12,14 +13,28 @@ import { TeamInvitationService } from '../../services/team-invitation.service';
 })
 export class CoachDashboardComponent implements OnInit {
   players: Player[] = [];
+  nickname: string = '';
+  fullName: string = '';
+  role: string = 'Entrenador';
+
+  activeTab: 'players' | 'events' | 'settings' = 'players';
+
 
   constructor(
     private playerService: PlayerService,
-    private invitationService: TeamInvitationService
+    private invitationService: TeamInvitationService,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
     this.loadPlayers();
+
+    const user = this.authService.getUser();
+    if (user) {
+      this.nickname = user.nickname || '';
+      this.fullName = user.fullName || '';
+      this.role = user.roles?.includes('ROLE_COACH') ? 'Entrenador' : 'Jugador';
+    }
   }
 
   loadPlayers() {
