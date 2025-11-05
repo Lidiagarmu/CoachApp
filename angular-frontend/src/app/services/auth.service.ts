@@ -52,8 +52,18 @@ export class AuthService {
 
 
   getUser(): any {
+    // Si ya tenemos user en memoria, lo devolvemos
+    if (this.user) return this.user;
+
+    // Si no, intentamos leerlo desde el JWT
+    const token = this.getToken();
+    if (!token) return null;
+
+    const decoded = this.decodeToken(token);
+    this.user = decoded; // lo guardamos en memoria
     return this.user;
   }
+
 
   logout() {
     this.cookies.delete('jwt_token', '/');

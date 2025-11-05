@@ -26,6 +26,7 @@ export class CoachDashboardComponent implements OnInit {
     private authService: AuthService
   ) {}
 
+
   ngOnInit() {
     this.loadPlayers();
 
