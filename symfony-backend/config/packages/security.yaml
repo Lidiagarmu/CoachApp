@@ -39,6 +39,7 @@ security:
         - { path: ^/api/login_check, roles: PUBLIC_ACCESS }
         - { path: ^/api/login, roles: PUBLIC_ACCESS }
         - { path: ^/api/register, roles: PUBLIC_ACCESS }
+        - { path: ^/api/player/available, roles: ROLE_COACH }
         - { path: ^/api/admin, roles: ROLE_ADMIN }
         - { path: ^/api/coach, roles: ROLE_COACH }
         - { path: ^/api/player, roles: ROLE_PLAYER }

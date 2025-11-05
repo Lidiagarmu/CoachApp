@@ -32,46 +32,42 @@ class PlayerController extends AbstractController
     // =========================================
     // NUEVO: listar jugadores disponibles para el coach
     // =========================================
-    #[Route('/available', name: 'get_available_players', methods: ['GET'])]
-    #[IsGranted('ROLE_COACH')]
-    public function getAvailablePlayers(EntityManagerInterface $em): JsonResponse
-    {
-        /** @var \App\Entity\User $user */
-        $user = $this->getUser();
+   #[Route('/available', name: 'get_available_players', methods: ['GET'])]
+#[IsGranted('ROLE_COACH')]
+public function getAvailablePlayers(EntityManagerInterface $em): JsonResponse
+{
+    /** @var \App\Entity\User $user */
+    $user = $this->getUser();
 
-        // Obtener perfil del coach
-        $coachProfile = $em->getRepository(CoachProfile::class)
-            ->findOneBy(['userAccount' => $user]);
+    // Obtener perfil del coach
+    $coachProfile = $em->getRepository(CoachProfile::class)
+        ->findOneBy(['userAccount' => $user]);
 
-        if (!$coachProfile) {
-            return $this->json(['error' => 'Perfil de entrenador no encontrado'], 404);
-        }
-
-        $team = $coachProfile->getTeam();
-
-        // Obtener jugadores que no estén en el equipo del coach
-        $qb = $em->getRepository(PlayerProfile::class)->createQueryBuilder('p')
-            ->leftJoin('p.team', 't');
-
-        if ($team) {
-            $qb->where('t.id IS NULL OR t.id != :teamId')
-               ->setParameter('teamId', $team->getId());
-        } else {
-            $qb->where('t.id IS NULL');
-        }
-
-        $players = $qb->getQuery()->getResult();
-
-        $response = array_map(function (PlayerProfile $player) {
-            return [
-                'id' => $player->getId(),
-                'fullName' => $player->getPlayerAccount()->getFullName(),
-                'nickname' => $player->getPlayerAccount()->getNickname(),
-                'position' => $player->getPosition(),
-                'number' => $player->getNumber(),
-            ];
-        }, $players);
-
-        return $this->json($response);
+    if (!$coachProfile) {
+        return $this->json(['error' => 'Perfil de entrenador no encontrado'], 404);
     }
+
+    // ✅ Solo jugadores sin equipo (no hace falta join)
+    $players = $em->getRepository(PlayerProfile::class)
+        ->createQueryBuilder('p')
+        ->where('p.team IS NULL')
+        ->getQuery()
+        ->getResult();
+
+    // Formatear respuesta
+    $response = array_map(function (PlayerProfile $player) {
+        $userAccount = $player->getPlayerAccount();
+        return [
+            'id' => $userAccount->getId(),
+            'fullName' => $userAccount->getFullName(),
+            'nickname' => $userAccount->getNickname(),
+            'position' => $player->getPosition(),
+            'number' => $player->getNumber(),
+        ];
+    }, $players);
+
+    return $this->json($response);
+}
+
+
 }

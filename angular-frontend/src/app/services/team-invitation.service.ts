@@ -13,7 +13,7 @@ export interface TeamInvitation {
   providedIn: 'root'
 })
 export class TeamInvitationService {
-  private apiUrl = '/api/invitations';
+  private apiUrl = 'http://localhost:8000/api/invitations';
 
   constructor(private http: HttpClient) {}
 

@@ -14,7 +14,8 @@ export interface Player {
   providedIn: 'root'
 })
 export class PlayerService {
-  private apiUrl = '/api/player';
+  private apiUrl = 'http://localhost:8000/api/player';
+
 
   constructor(private http: HttpClient) {}
 
