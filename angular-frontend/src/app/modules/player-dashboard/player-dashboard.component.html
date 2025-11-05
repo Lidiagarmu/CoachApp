@@ -1,10 +1,44 @@
 <!-- Navbar fijo arriba -->
 <app-navbar [showButton]="true" class="fixed top-0 left-0 w-full z-50"></app-navbar>
 
-<!-- Contenido principal centrado -->
 <main
-  class="min-h-[calc(100vh-8rem)] flex flex-col items-center justify-center bg-app-gradient pt-[4.5rem] pb-[3.5rem] text-center"
+  class="min-h-[calc(100vh-8rem)] flex flex-col items-center justify-start bg-app-gradient pt-[5rem] pb-[3.5rem] text-center w-full"
 >
   <h1 class="text-3xl font-bold mb-4 text-black">Player Dashboard</h1>
-  <p class="text-secondary text-lg">Bienvenido al panel del jugador.</p>
+  <p class="text-secondary text-lg mb-6">Bienvenido al panel del jugador.</p>
+
+  <h2 class="text-xl font-semibold mb-4">Invitaciones pendientes</h2>
+  <table class="min-w-full border">
+    <thead>
+      <tr class="bg-gray-100">
+        <th class="p-2 border">Equipo</th>
+        <th class="p-2 border">Estado</th>
+        <th class="p-2 border">Fecha</th>
+        <th class="p-2 border">Acción</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let inv of invitations">
+        <td class="p-2 border">{{ inv.team }}</td>
+        <td class="p-2 border">{{ inv.status }}</td>
+        <td class="p-2 border">{{ inv.createdAt }}</td>
+        <td class="p-2 border flex gap-2 justify-center">
+          <button
+            *ngIf="inv.status === 'pending'"
+            (click)="respond(inv.id,'accept')"
+            class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
+          >
+            Aceptar
+          </button>
+          <button
+            *ngIf="inv.status === 'pending'"
+            (click)="respond(inv.id,'reject')"
+            class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+          >
+            Rechazar
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </main>

@@ -1,10 +1,38 @@
 <!-- Navbar fijo arriba -->
 <app-navbar [showButton]="true" class="fixed top-0 left-0 w-full z-50"></app-navbar>
 
-<!-- Contenido principal centrado -->
 <main
-  class="min-h-[calc(100vh-8rem)] flex flex-col items-center justify-center bg-app-gradient pt-[4.5rem] pb-[3.5rem] text-center"
+  class="min-h-[calc(100vh-8rem)] flex flex-col items-center justify-start bg-app-gradient pt-[5rem] pb-[3.5rem] text-center w-full"
 >
   <h1 class="text-3xl font-bold mb-4 text-black">Coach Dashboard</h1>
-  <p class="text-secondary text-lg">Bienvenido al panel del coach.</p>
+  <p class="text-secondary text-lg mb-6">Bienvenido al panel del coach.</p>
+
+  <h2 class="text-xl font-semibold mb-4">Jugadores disponibles</h2>
+  <table class="min-w-full border mb-6">
+    <thead>
+      <tr class="bg-gray-100">
+        <th class="p-2 border">Nombre</th>
+        <th class="p-2 border">Nickname</th>
+        <th class="p-2 border">Posición</th>
+        <th class="p-2 border">Número</th>
+        <th class="p-2 border">Acción</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let player of players">
+        <td class="p-2 border">{{ player.fullName }}</td>
+        <td class="p-2 border">{{ player.nickname }}</td>
+        <td class="p-2 border">{{ player.position }}</td>
+        <td class="p-2 border">{{ player.number }}</td>
+        <td class="p-2 border">
+          <button
+            (click)="invitePlayer(player.id)"
+            class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
+          >
+            Invitar
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </main>
