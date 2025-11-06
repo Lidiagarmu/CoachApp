@@ -17,9 +17,10 @@ security:
             security: false
         
         public:
-            pattern: ^/api/(login|register)
-            stateless: true
+            pattern: ^/api/(login|register|team/available)
+            stateless: true  # <--- IMPORTANTE: cookies activas
             security: false
+
 
         # Login endpoint
         login:
@@ -41,12 +42,21 @@ security:
             jwt: ~
 
     access_control:
+        # Permitir preflight OPTIONS para cualquier ruta /api
+        - { path: ^/api, roles: PUBLIC_ACCESS, methods: [OPTIONS] }
+        
+        # Endpoints públicos
         - { path: ^/api/login_check, roles: PUBLIC_ACCESS }
         - { path: ^/api/register, roles: PUBLIC_ACCESS }
+        - { path: ^/api/team/available, roles: PUBLIC_ACCESS }
+
+        # Endpoints protegidos por roles
         - { path: ^/api/player/available, roles: ROLE_COACH }
         - { path: ^/api/admin, roles: ROLE_ADMIN }
         - { path: ^/api/coach, roles: ROLE_COACH }
         - { path: ^/api/player, roles: ROLE_PLAYER }
+
+        # Regla general para todo lo demás
         - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
 
 when@test:

@@ -133,4 +133,20 @@ class TeamController extends AbstractController
 
         return $this->json(['success' => 'Jugador añadido', 'playerId' => $player->getPlayerAccount()->getId()]);
     }
+
+
+    #[Route('/available', name: 'team_available', methods: ['GET'])]
+    public function getAvailableTeams(EntityManagerInterface $em): JsonResponse
+    {
+        $teams = $em->getRepository(Team::class)->findAll();
+
+        $response = array_map(fn(Team $team) => [
+            'id' => $team->getId(),
+            'name' => $team->getName(),
+            'shield' => $team->getShield()
+        ], $teams);
+
+        return $this->json($response);
+    }
+
 }
