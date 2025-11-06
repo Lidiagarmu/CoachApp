@@ -54,13 +54,13 @@ export class CoachRegisterComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // ✅ Cargar equipos
+    //  Cargar equipos
     this.http.get<any[]>(`${environment.apiUrl}/teams`).subscribe({
       next: (res) => (this.teams = res),
       error: (err) => console.error('Error cargando equipos', err)
     });
 
-    // ✅ Escuchar cambios del checkbox “crear más tarde”
+    //  Escuchar cambios del checkbox “crear más tarde”
     this.registerForm.get('createLater')?.valueChanges.subscribe((checked) => {
       const teamNameControl = this.registerForm.get('teamName');
       if (checked) {
@@ -72,14 +72,14 @@ export class CoachRegisterComponent implements OnInit {
     });
   }
 
-  // ✅ Verifica que ambas contraseñas coincidan
+  //  Verifica que ambas contraseñas coincidan
   private passwordsMatchValidator(formGroup: FormGroup) {
     const password = formGroup.get('password')?.value;
     const repeatPassword = formGroup.get('repeatPassword')?.value;
     return password === repeatPassword ? null : { passwordMismatch: true };
   }
 
-  // ✅ Actualiza la validación de los requisitos de contraseña
+  //  Actualiza la validación de los requisitos de contraseña
   onPasswordChange(value: string) {
     this.passwordRequirements = {
       minLength: value.length >= 6,
@@ -90,7 +90,7 @@ export class CoachRegisterComponent implements OnInit {
     };
   }
 
-  // ✅ Registro
+  //  Registro
   register() {
     if (this.registerForm.invalid) {
       this.errorMessage = 'Completa todos los campos correctamente.';
