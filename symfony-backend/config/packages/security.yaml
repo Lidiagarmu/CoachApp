@@ -15,6 +15,11 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
+        
+        public:
+            pattern: ^/api/(login|register)
+            stateless: true
+            security: false
 
         # Login endpoint
         login:
@@ -37,7 +42,6 @@ security:
 
     access_control:
         - { path: ^/api/login_check, roles: PUBLIC_ACCESS }
-        - { path: ^/api/login, roles: PUBLIC_ACCESS }
         - { path: ^/api/register, roles: PUBLIC_ACCESS }
         - { path: ^/api/player/available, roles: ROLE_COACH }
         - { path: ^/api/admin, roles: ROLE_ADMIN }

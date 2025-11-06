@@ -6,7 +6,12 @@ export const AuthInterceptor: HttpInterceptorFn = (req, next) => {
   const auth = inject(AuthService);
   const token = auth.getToken();
 
-  if (token) {
+  // Excluir rutas públicas donde NO se debe enviar el JWT
+  const isPublic =
+    req.url.includes('/login_check') ||
+    req.url.includes('/register');
+
+  if (token && !isPublic) {
     const cloned = req.clone({
       setHeaders: {
         Authorization: `Bearer ${token}`

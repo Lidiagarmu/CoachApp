@@ -14,8 +14,11 @@ class Team
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 100)]
+    #[ORM\Column(length: 100,  unique: true)]
     private ?string $name = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $shield = null;
 
     #[ORM\OneToOne(inversedBy: 'team', targetEntity: CoachProfile::class)]
     private ?CoachProfile $coach = null;
@@ -100,5 +103,19 @@ class Team
     public function getCreatedAt(): ?\DateTimeImmutable
     {
         return $this->createdAt;
+    }
+
+
+
+    public function getShield(): ?string
+    {
+        return $this->shield;
+    }
+
+
+    public function setShield(?string $shield): self
+    {
+        $this->shield = $shield;
+        return $this;
     }
 }
