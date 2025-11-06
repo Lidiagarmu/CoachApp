@@ -55,7 +55,7 @@ export class CoachRegisterComponent implements OnInit {
 
   ngOnInit(): void {
     //  Cargar equipos
-    this.http.get<any[]>(`${environment.apiUrl}/teams`).subscribe({
+    this.http.get<any[]>(`${environment.apiUrl}/team`).subscribe({
       next: (res) => (this.teams = res),
       error: (err) => console.error('Error cargando equipos', err)
     });
