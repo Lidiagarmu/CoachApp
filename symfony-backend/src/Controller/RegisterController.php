@@ -34,10 +34,17 @@ class RegisterController extends AbstractController
             return $this->json(['error' => 'Email, password y tipo de usuario ("coach" o "player") son obligatorios.'], 400);
         }
 
-        // Comprobar si ya existe
+        // Comprobar si ya existe email
         if ($em->getRepository(User::class)->findOneBy(['email' => $email])) {
-            return $this->json(['error' => 'El usuario ya existe.'], 409);
+            return $this->json(['error' => 'El email ya existe.'], 409);
         }
+
+        // Comprobar si ya existe nickname
+        if ($nickname && $em->getRepository(User::class)->findOneBy(['nickname' => $nickname])) {
+            return $this->json(['error' => 'El nickname ya está registrado.'], 409);
+        }
+
+
 
         // Crear usuario base
         $user = new User();
