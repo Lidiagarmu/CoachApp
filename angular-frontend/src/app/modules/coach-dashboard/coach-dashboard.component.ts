@@ -7,6 +7,7 @@ import { AuthService } from '../../services/auth.service';
 
 import { CoachTeamComponent } from './coach-team/coach-team.component';
 
+
 @Component({
   selector: 'app-coach-dashboard',
   standalone: true,

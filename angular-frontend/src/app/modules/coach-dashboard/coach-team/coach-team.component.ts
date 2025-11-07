@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { TeamService, Team } from '../../../services/team.service';
+import { TeamService, Team, Player } from '../../../services/team.service';
 
 @Component({
   selector: 'app-coach-team',
@@ -14,8 +14,10 @@ export class CoachTeamComponent implements OnInit {
   loading = false;
   error = '';
   success = '';
-  createForm = { name: '', shield: '' };
   editMode = false;
+
+  createForm = { name: '' };
+  selectedFile: File | null = null; // Para subida de escudo
 
   constructor(private teamService: TeamService) {}
 
@@ -23,6 +25,7 @@ export class CoachTeamComponent implements OnInit {
     this.loadTeam();
   }
 
+  // Cargar equipo existente
   loadTeam(): void {
     this.loading = true;
     this.teamService.getTeam().subscribe({
@@ -33,50 +36,79 @@ export class CoachTeamComponent implements OnInit {
       error: () => {
         this.team = null;
         this.loading = false;
-      },
+      }
     });
   }
 
+  // Capturar archivo seleccionado
+  onFileSelected(event: any): void {
+    const file = event.target.files[0];
+    if (file) this.selectedFile = file;
+  }
+
+  // Crear nuevo equipo
   createTeam(): void {
     this.error = '';
     this.success = '';
     this.loading = true;
-    this.teamService.createTeam(this.createForm).subscribe({
+
+    const formData = new FormData();
+    formData.append('name', this.createForm.name);
+    if (this.selectedFile) {
+      formData.append('shield', this.selectedFile);
+    }
+
+    this.teamService.createTeam(formData).subscribe({
       next: (res) => {
         this.team = res;
         this.loading = false;
         this.success = '✅ Equipo creado correctamente';
+        this.createForm.name = '';
+        this.selectedFile = null;
       },
       error: (err) => {
         this.error = err.error?.error || 'Error al crear el equipo';
         this.loading = false;
-      },
+      }
     });
   }
 
+  // Actualizar equipo existente
   updateTeam(): void {
     if (!this.team) return;
-    this.teamService.updateTeam(this.team.id, {
-      name: this.team.name,
-      shield: this.team.shield,
-    }).subscribe({
+
+    const formData = new FormData();
+    formData.append('name', this.team.name || '');
+    if (this.selectedFile) {
+      formData.append('shield', this.selectedFile);
+    }
+
+    this.teamService.updateTeam(this.team.id, formData).subscribe({
       next: () => {
         this.success = '✅ Cambios guardados';
         this.editMode = false;
+        this.selectedFile = null;
+        this.loadTeam(); // recargar equipo actualizado
       },
-      error: () => (this.error = 'Error al actualizar equipo'),
+      error: () => {
+        this.error = 'Error al actualizar equipo';
+      }
     });
   }
 
+  // Eliminar equipo
   deleteTeam(): void {
     if (!this.team) return;
     if (!confirm('¿Seguro que quieres eliminar este equipo?')) return;
+
     this.teamService.deleteTeam(this.team.id).subscribe({
       next: () => {
         this.team = null;
         this.success = '🗑️ Equipo eliminado';
       },
-      error: () => (this.error = 'Error al eliminar el equipo'),
+      error: () => {
+        this.error = 'Error al eliminar el equipo';
+      }
     });
   }
 }

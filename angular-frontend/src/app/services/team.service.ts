@@ -17,11 +17,12 @@ export interface Team {
 
 @Injectable({ providedIn: 'root' })
 export class TeamService {
-  private baseUrl = '/api/team';
+  private baseUrl = 'http://localhost:8000/api/team'; // host y puerto donde corre Symfony
 
   constructor(private http: HttpClient) {}
 
-  createTeam(data: { name: string; shield?: string }): Observable<Team> {
+  // Crear equipo con FormData (archivo escudo)
+  createTeam(data: FormData): Observable<Team> {
     return this.http.post<Team>(this.baseUrl, data);
   }
 
@@ -29,7 +30,8 @@ export class TeamService {
     return this.http.get<Team>(this.baseUrl);
   }
 
-  updateTeam(id: number, data: Partial<Team>): Observable<any> {
+  // Actualizar equipo con FormData (archivo escudo)
+  updateTeam(id: number, data: FormData): Observable<any> {
     return this.http.put(`${this.baseUrl}/${id}`, data);
   }
 
