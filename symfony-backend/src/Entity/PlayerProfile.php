@@ -83,7 +83,7 @@ class PlayerProfile
         return $this;
     }
 
-    public function getTeam(): ?string
+    public function getTeam(): ?Team
     {
         return $this->team;
     }

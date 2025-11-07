@@ -25,14 +25,19 @@ export class AuthService {
   }
 
   login(email: string, password: string): Observable<any> {
-    return this.http.post<any>(`${environment.apiUrl}/login_check`, { email, password }).pipe(
+    return this.http.post<any>(
+      `${environment.apiUrl}/login_check`,
+      { email, password },
+      { withCredentials: true } // ✅ Permite enviar cookies al backend
+    ).pipe(
       tap(res => {
         this.cookies.set('jwt_token', res.token, 1, '/', undefined, false, 'Lax');
-        const decoded: any = this.decodeToken(res.token); // ✅ Decodificación manual
+        const decoded: any = this.decodeToken(res.token); 
         this.user = decoded;
       })
     );
   }
+
 
   register(data: {
     email: string | null | undefined;
@@ -52,8 +57,18 @@ export class AuthService {
 
 
   getUser(): any {
+    // Si ya tenemos user en memoria, lo devolvemos
+    if (this.user) return this.user;
+
+    // Si no, intentamos leerlo desde el JWT
+    const token = this.getToken();
+    if (!token) return null;
+
+    const decoded = this.decodeToken(token);
+    this.user = decoded; // lo guardamos en memoria
     return this.user;
   }
+
 
   logout() {
     this.cookies.delete('jwt_token', '/');

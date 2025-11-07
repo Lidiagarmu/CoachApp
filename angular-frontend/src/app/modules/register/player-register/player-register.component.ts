@@ -51,7 +51,7 @@ export class PlayerRegisterComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.http.get<any[]>(`${environment.apiUrl}/teams`).subscribe({
+    this.http.get<any[]>(`${environment.apiUrl}/team//available`, { withCredentials: true }).subscribe({
       next: res => this.teams = res,
       error: err => console.error('Error cargando equipos', err)
     });

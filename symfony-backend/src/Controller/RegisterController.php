@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Entity\CoachProfile;
 use App\Entity\PlayerProfile;
+use App\Entity\Team;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -33,10 +34,17 @@ class RegisterController extends AbstractController
             return $this->json(['error' => 'Email, password y tipo de usuario ("coach" o "player") son obligatorios.'], 400);
         }
 
-        // Comprobar si ya existe
+        // Comprobar si ya existe email
         if ($em->getRepository(User::class)->findOneBy(['email' => $email])) {
-            return $this->json(['error' => 'El usuario ya existe.'], 409);
+            return $this->json(['error' => 'El email ya existe.'], 409);
         }
+
+        // Comprobar si ya existe nickname
+        if ($nickname && $em->getRepository(User::class)->findOneBy(['nickname' => $nickname])) {
+            return $this->json(['error' => 'El nickname ya está registrado.'], 409);
+        }
+
+
 
         // Crear usuario base
         $user = new User();
@@ -60,6 +68,14 @@ class RegisterController extends AbstractController
 
             // ❌ Ya no se crea el Team aquí. El coach podrá hacerlo desde su panel.
             $em->persist($profile);
+                
+            // Crear equipo solo si se envió un nombre
+                if (!empty($data['teamName'])) {
+                    $team = new Team();
+                    $team->setName($data['teamName']);
+                    $team->setCoach($profile);
+                    $em->persist($team);
+                 }
         }
 
         // Si es player

@@ -17,7 +17,7 @@ class CoachProfile
     #[ORM\JoinColumn(nullable: false)]
     private ?User $userAccount = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable:true)]
     private ?string $teamName = null;
 
     #[ORM\Column]
@@ -48,10 +48,9 @@ class CoachProfile
         return $this->teamName;
     }
 
-    public function setTeamName(string $teamName): static
+    public function setTeamName(?string $teamName): self
     {
         $this->teamName = $teamName;
-
         return $this;
     }
 
