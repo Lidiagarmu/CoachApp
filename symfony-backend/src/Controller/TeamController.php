@@ -104,6 +104,7 @@ class TeamController extends AbstractController
         ]);
     }
 
+    // método para añadir un jugador al equipo
     #[Route('/{id}/add-player', name: 'team_add_player', methods: ['POST'])]
     #[IsGranted('ROLE_COACH')]
     public function addPlayer(int $id, Request $request, EntityManagerInterface $em): JsonResponse
@@ -148,5 +149,126 @@ class TeamController extends AbstractController
 
         return $this->json($response);
     }
+
+     //método para permitir que el coach edite nombre o escudo del equipo
+    #[Route('/{id}', name: 'team_update', methods: ['PUT'])]
+    #[IsGranted('ROLE_COACH')]
+    public function updateTeam(int $id, Request $request, EntityManagerInterface $em): JsonResponse
+    {
+        $team = $em->getRepository(Team::class)->find($id);
+        if (!$team) {
+            return $this->json(['error' => 'Equipo no encontrado'], 404);
+        }
+
+        /** @var \App\Entity\User $user */
+        $user = $this->getUser();
+        $coachProfile = $em->getRepository(CoachProfile::class)
+            ->findOneBy(['userAccount' => $user]);
+
+        if ($team->getCoach() !== $coachProfile) {
+            return $this->json(['error' => 'No autorizado para editar este equipo'], 403);
+        }
+
+        $data = json_decode($request->getContent(), true);
+
+        if (!empty($data['name'])) {
+            $team->setName($data['name']);
+        }
+        if (!empty($data['shield'])) {
+            $team->setShield($data['shield']);
+        }
+
+        $em->flush();
+
+        return $this->json(['success' => true, 'message' => 'Equipo actualizado correctamente']);
+    }
+
+     //método para eliminar un equipo
+    #[Route('/{id}', name: 'team_delete', methods: ['DELETE'])]
+    #[IsGranted('ROLE_COACH')]
+    public function deleteTeam(int $id, EntityManagerInterface $em): JsonResponse
+    {
+        $team = $em->getRepository(Team::class)->find($id);
+        if (!$team) {
+            return $this->json(['error' => 'Equipo no encontrado'], 404);
+        }
+
+        /** @var \App\Entity\User $user */
+        $user = $this->getUser();
+        $coachProfile = $em->getRepository(CoachProfile::class)
+            ->findOneBy(['userAccount' => $user]);
+
+        if ($team->getCoach() !== $coachProfile) {
+            return $this->json(['error' => 'No autorizado para eliminar este equipo'], 403);
+        }
+
+        // Eliminar referencias de jugadores
+        foreach ($team->getPlayers() as $player) {
+            $player->setTeam(null);
+        }
+
+        $em->remove($team);
+        $em->flush();
+
+        return $this->json(['success' => true, 'message' => 'Equipo eliminado correctamente']);
+    }
+
+
+    //método para eliminar un jugador del equipo
+    #[Route('/{id}/remove-player', name: 'team_remove_player', methods: ['PATCH'])]
+    #[IsGranted('ROLE_COACH')]
+    public function removePlayer(int $id, Request $request, EntityManagerInterface $em): JsonResponse
+    {
+        $team = $em->getRepository(Team::class)->find($id);
+        if (!$team) {
+            return $this->json(['error' => 'Equipo no encontrado'], 404);
+        }
+
+        $data = json_decode($request->getContent(), true);
+        if (empty($data['playerId'])) {
+            return $this->json(['error' => 'Se requiere playerId'], 400);
+        }
+
+        $player = $em->getRepository(PlayerProfile::class)->find($data['playerId']);
+        if (!$player) {
+            return $this->json(['error' => 'Jugador no encontrado'], 404);
+        }
+
+        if ($player->getTeam() !== $team) {
+            return $this->json(['error' => 'El jugador no pertenece a este equipo'], 400);
+        }
+
+        $team->removePlayer($player);
+        $em->flush();
+
+        return $this->json(['success' => true, 'message' => 'Jugador eliminado del equipo']);
+    }
+
+
+    // método para Oçbtener info de un equipo por ID, útil para admin/debug
+    #[Route('/{id}', name: 'team_get_by_id', methods: ['GET'])]
+    #[IsGranted('ROLE_ADMIN')]
+    public function getTeamById(int $id, EntityManagerInterface $em): JsonResponse
+    {
+        $team = $em->getRepository(Team::class)->find($id);
+        if (!$team) {
+            return $this->json(['error' => 'Equipo no encontrado'], 404);
+        }
+
+        return $this->json([
+            'id' => $team->getId(),
+            'name' => $team->getName(),
+            'shield' => $team->getShield(),
+            'coach' => $team->getCoach()?->getUserAccount()?->getFullName(),
+            'players' => array_map(fn(PlayerProfile $p) => [
+                'id' => $p->getId(),
+                'name' => $p->getPlayerAccount()->getFullName()
+            ], $team->getPlayers()->toArray())
+        ]);
+    }
+
+
+
+
 
 }
