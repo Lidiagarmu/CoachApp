@@ -67,3 +67,62 @@ docker compose down -v
 ⚠️ **Advertencia:** Esto eliminará todos los datos almacenados en la base de datos PostgreSQL. ⚠️ 
 
 ---
+
+## Estructura de la aplicación
+
+APP
+│
+├── HomeComponent
+├── LoginComponent
+├── RegisterComponent
+│   ├── CoachRegisterComponent
+│   └── PlayerRegisterComponent
+│
+└── DASHBOARDS
+     
+     1️⃣ COACH DASHBOARD (ruta: /coach-dashboard)
+     ├─ Sidebar (visible fijo)
+     │   ├─ Equipo -> CoachTeamComponent
+     │   │     ├─ Crear Equipo (formulario)
+     │   │     └─ Info Equipo + Plantilla jugadores (TeamService)
+     │   ├─ Jugadores -> CoachPlayersComponent
+     │   │     ├─ Lista jugadores sin equipo (PlayerService)
+     │   │     └─ Botón Invitar (TeamInvitationService)
+     │   ├─ Eventos -> CoachEventsComponent
+     │   │     ├─ Trainings -> CoachTrainingsComponent (EventService)
+     │   │     └─ Matches -> CoachMatchesComponent (EventService)
+     │   └─ Ajustes -> CoachSettingsComponent
+     │           ├─ Editar info coach
+     │           ├─ Editar info equipo (escudo, nombre)
+     │           └─ Eliminar equipo / eliminar jugador
+     └─ Contenido derecho del dashboard
+           └─ Carga dinámica según botón del sidebar
+
+     -------------------------------
+     2️⃣ PLAYER DASHBOARD (ruta: /player-dashboard)
+     ├─ Sidebar (visible fijo)
+     │   ├─ Equipo -> PlayerTeamComponent
+     │   │     ├─ Invitaciones pendientes (TeamInvitationService)
+     │   │     ├─ Aceptar/Rechazar invitaciones
+     │   │     └─ Info equipo o mensaje "No tienes equipo"
+     │   ├─ Eventos -> PlayerEventsComponent
+     │   │     ├─ Trainings -> PlayerTrainingsComponent (EventService)
+     │   │     └─ Matches -> PlayerMatchesComponent (EventService)
+     │   └─ Ajustes -> PlayerSettingsComponent
+     │           ├─ Editar info usuario (nombre, foto, dorsal)
+     │           └─ Abandonar equipo (TeamService)
+     └─ Contenido derecho del dashboard
+           └─ Carga dinámica según botón del sidebar
+
+     -------------------------------
+     3️⃣ ADMIN DASHBOARD (ruta: /admin-dashboard)
+     ├─ Sidebar (visible fijo)
+     │   ├─ Usuarios -> AdminUsersComponent (UserService)
+     │   │     ├─ Coaches
+     │   │     ├─ Players
+     │   │     └─ Eliminar usuarios
+     │   └─ Equipos -> AdminTeamsComponent (TeamService)
+     │           └─ Lista de equipos
+     └─ Contenido derecho del dashboard
+           └─ Carga dinámica según botón del sidebar
+
