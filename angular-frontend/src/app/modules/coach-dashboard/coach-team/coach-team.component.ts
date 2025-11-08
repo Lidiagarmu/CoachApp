@@ -40,11 +40,11 @@ export class CoachTeamComponent implements OnInit {
     });
   }
 
-  // Capturar archivo seleccionado
-  onFileSelected(event: any): void {
-    const file = event.target.files[0];
-    if (file) this.selectedFile = file;
-  }
+onFileSelected(event: any): void {
+  const file = event.target.files?.[0];
+    this.selectedFile = file;
+}
+
 
   // Crear nuevo equipo
   createTeam(): void {
@@ -57,6 +57,8 @@ export class CoachTeamComponent implements OnInit {
     if (this.selectedFile) {
       formData.append('shield', this.selectedFile);
     }
+    console.log('🟢 Archivo seleccionado antes de enviar:', this.selectedFile);
+
 
     this.teamService.createTeam(formData).subscribe({
       next: (res) => {

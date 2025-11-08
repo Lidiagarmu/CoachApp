@@ -28,80 +28,61 @@ class TeamController extends AbstractController
         }
     }
 
-    #[Route('', name: 'team_create', methods: ['POST'])]
-#[IsGranted('ROLE_COACH')]
-public function createTeam(Request $request, EntityManagerInterface $em, SluggerInterface $slugger): JsonResponse
-{
-    /** @var \App\Entity\User $user */
-    $user = $this->getUser();
-    $coachProfile = $em->getRepository(CoachProfile::class)
-        ->findOneBy(['userAccount' => $user]);
+   #[Route('', name: 'team_create', methods: ['POST'])]
+    #[IsGranted('ROLE_COACH')]
+    public function createTeam(Request $request, EntityManagerInterface $em, SluggerInterface $slugger): JsonResponse
+    {
+        /** @var \App\Entity\User $user */
+        $user = $this->getUser();
+        $coachProfile = $em->getRepository(CoachProfile::class)
+            ->findOneBy(['userAccount' => $user]);
 
-    if (!$coachProfile) {
-        return $this->json(['error' => 'Perfil de entrenador no encontrado'], 404);
-    }
-
-    // Obtener nombre del equipo desde FormData
-    $name = $request->request->get('name');
-    if (!$name || !is_string($name)) {
-        return $this->json(['error' => 'Nombre de equipo requerido'], 400);
-    }
-
-    // Verificar nombre único
-    $existingTeam = $em->getRepository(Team::class)->findOneBy(['name' => $name]);
-    if ($existingTeam) {
-        return $this->json(['error' => 'Nombre de equipo ya existe'], 400);
-    }
-
-    $team = new Team();
-    $team->setName($name);
-    $team->setCoach($coachProfile);
-
-    // Manejo del escudo como archivo
-    $shieldFile = $request->files->get('shield');
-    if ($shieldFile) {
-        if (!$shieldFile->isValid()) {
-            return $this->json(['error' => 'Archivo de escudo no válido'], 400);
+        if (!$coachProfile) {
+            return $this->json(['error' => 'Perfil de entrenador no encontrado'], 404);
         }
 
-        $originalFilename = pathinfo($shieldFile->getClientOriginalName(), PATHINFO_FILENAME);
-        $safeFilename = $slugger->slug($originalFilename);
-        $newFilename = $safeFilename.'-'.uniqid().'.'.$shieldFile->guessExtension();
-
-        // Subir archivo a public/uploads/shields
-        try {
-            $shieldFile->move($this->uploadDir, $newFilename);
-            $team->setShield('/uploads/shields/'.$newFilename);
-        } catch (FileException $e) {
-            return $this->json(['error' => 'Error al subir la imagen'], 500);
+        $name = $request->request->get('name');
+        if (!$name) {
+            return $this->json(['error' => 'Nombre de equipo requerido'], 400);
         }
-    }
 
-    // Si vienen IDs de jugadores (opcional)
-    $playerIds = $request->request->all('playerIds'); // devuelve array vacío si no existen
-    if (!empty($playerIds) && is_array($playerIds)) {
-        foreach ($playerIds as $playerId) {
-            $player = $em->getRepository(PlayerProfile::class)->find($playerId);
-            if ($player && $player->getTeam() === null) {
-                $team->addPlayer($player);
+        // Validar nombre único
+        $existingTeam = $em->getRepository(Team::class)->findOneBy(['name' => $name]);
+        if ($existingTeam) {
+            return $this->json(['error' => 'Nombre de equipo ya existe'], 400);
+        }
+
+        $team = new Team();
+        $team->setName($name);
+        $team->setCoach($coachProfile);
+
+        // Manejo del escudo
+        $shieldFile = $request->files->get('shield');
+        if ($shieldFile) {
+            $originalFilename = pathinfo($shieldFile->getClientOriginalName(), PATHINFO_FILENAME);
+            $safeFilename = $slugger->slug($originalFilename);
+            $newFilename = $safeFilename.'-'.uniqid().'.'.$shieldFile->guessExtension();
+
+            try {
+                $shieldFile->move($this->uploadDir, $newFilename);
+                // URL completa accesible desde Angular
+                $fullUrl = $request->getSchemeAndHttpHost().'/uploads/shields/'.$newFilename;
+                $team->setShield($fullUrl);
+            } catch (FileException $e) {
+                return $this->json(['error' => 'Error al subir la imagen'], 500);
             }
         }
+
+        $em->persist($team);
+        $em->flush();
+
+        return $this->json([
+            'id' => $team->getId(),
+            'name' => $team->getName(),
+            'shield' => $team->getShield(),
+            'players' => []
+        ]);
     }
-
-    $em->persist($team);
-    $em->flush();
-
-    return $this->json([
-        'id' => $team->getId(),
-        'name' => $team->getName(),
-        'shield' => $team->getShield(),
-        'players' => array_map(fn($p) => [
-            'id' => $p->getPlayerAccount()->getId(),
-            'fullName' => $p->getPlayerAccount()->getFullName(),
-            'nickname' => $p->getPlayerAccount()->getNickname()
-        ], $team->getPlayers()->toArray())
-    ]);
-}
 
 
 
@@ -183,7 +164,7 @@ public function createTeam(Request $request, EntityManagerInterface $em, Slugger
     }
 
     //método para permitir que el coach edite nombre o escudo del equipo
-    #[Route('/{id}', name: 'team_update', methods: ['PUT'])]
+    #[Route('/{id}', name: 'team_update', methods: ['POST', 'PUT'])]
     #[IsGranted('ROLE_COACH')]
     public function updateTeam(int $id, Request $request, EntityManagerInterface $em, SluggerInterface $slugger): JsonResponse
     {
@@ -206,6 +187,7 @@ public function createTeam(Request $request, EntityManagerInterface $em, Slugger
             $team->setName($name);
         }
 
+        // Si se subió un nuevo escudo
         $shieldFile = $request->files->get('shield');
         if ($shieldFile) {
             $originalFilename = pathinfo($shieldFile->getClientOriginalName(), PATHINFO_FILENAME);
@@ -214,7 +196,9 @@ public function createTeam(Request $request, EntityManagerInterface $em, Slugger
 
             try {
                 $shieldFile->move($this->uploadDir, $newFilename);
-                $team->setShield('/uploads/shields/'.$newFilename);
+                // URL completa accesible desde el frontend
+                $fullUrl = $request->getSchemeAndHttpHost().'/uploads/shields/'.$newFilename;
+                $team->setShield($fullUrl);
             } catch (FileException $e) {
                 return $this->json(['error' => 'Error al subir la imagen'], 500);
             }
@@ -222,8 +206,22 @@ public function createTeam(Request $request, EntityManagerInterface $em, Slugger
 
         $em->flush();
 
-        return $this->json(['success' => true, 'message' => 'Equipo actualizado correctamente']);
+        return $this->json([
+            'success' => true,
+            'message' => 'Equipo actualizado correctamente',
+            'team' => [
+                'id' => $team->getId(),
+                'name' => $team->getName(),
+                'shield' => $team->getShield(),
+                'players' => array_map(fn($p) => [
+                    'id' => $p->getPlayerAccount()->getId(),
+                    'fullName' => $p->getPlayerAccount()->getFullName(),
+                    'nickname' => $p->getPlayerAccount()->getNickname()
+                ], $team->getPlayers()->toArray())
+            ]
+        ]);
     }
+
 
     //método para eliminar un equipo
     #[Route('/{id}', name: 'team_delete', methods: ['DELETE'])]

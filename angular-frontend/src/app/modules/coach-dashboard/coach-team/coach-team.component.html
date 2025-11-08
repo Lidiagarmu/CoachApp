@@ -1,5 +1,5 @@
 <div class="p-8 animate-fadeIn">
-  <h2 class="text-3xl font-bold mb-6 text-gray-800">⚽ Mi Equipo</h2>
+  <h2 class="text-3xl font-bold mb-6 text-gray-800"> Mi Equipo</h2>
 
   <!-- Loader -->
   <div *ngIf="loading" class="text-gray-500">Cargando información...</div>
@@ -8,8 +8,11 @@
   <div *ngIf="team && !loading" class="bg-white/80 p-6 rounded-2xl shadow-md border border-gray-200 space-y-6">
     <!-- Header equipo -->
     <div class="flex items-center gap-4">
-      <img *ngIf="team.shield" [src]="team.shield" alt="Escudo"
-           class="w-20 h-20 rounded-full border shadow" />
+     
+        <img [src]="team.shield || '/images/default-shield.jpg'" 
+          alt="Escudo del equipo"
+          class="w-20 h-20 rounded-full border shadow object-cover" />
+
       <div>
         <h3 class="text-2xl font-semibold">{{ team.name }}</h3>
         <p class="text-gray-600">{{ team.players?.length || 0 }} jugadores</p>
@@ -19,11 +22,11 @@
     <!-- Acciones -->
     <div class="flex gap-3">
       <button (click)="editMode = !editMode"
-              class="px-4 py-2 rounded-lg bg-primary text-white hover:bg-primary/80 transition">
+              class="px-4 py-2 rounded-lg bg-primary text-black hover:bg-primary/80 transition">
         {{ editMode ? 'Cancelar' : 'Editar equipo' }}
       </button>
       <button (click)="deleteTeam()"
-              class="px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 transition">
+              class="px-4 py-2 rounded-lg bg-red-400 text-black hover:bg-red-700 transition">
         Eliminar equipo
       </button>
     </div>

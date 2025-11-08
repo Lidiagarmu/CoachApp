@@ -32,7 +32,7 @@ export class TeamService {
 
   // Actualizar equipo con FormData (archivo escudo)
   updateTeam(id: number, data: FormData): Observable<any> {
-    return this.http.put(`${this.baseUrl}/${id}`, data);
+    return this.http.post(`${this.baseUrl}/${id}`, data);
   }
 
   deleteTeam(id: number): Observable<any> {
