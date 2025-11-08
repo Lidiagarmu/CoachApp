@@ -6,18 +6,24 @@
 
   <!-- Equipo existente -->
   <div *ngIf="team && !loading" class="bg-white/80 p-6 rounded-2xl shadow-md border border-gray-200 space-y-6">
-    <!-- Header equipo -->
-    <div class="flex items-center gap-4">
-     
-        <img [src]="team.shield || '/images/default-shield.jpg'" 
-          alt="Escudo del equipo"
-          class="w-20 h-20 rounded-full border shadow object-cover" />
+      <!-- Header equipo -->
+      <div class="flex items-center gap-4">
+      
+            <!-- Contenedor del escudo -->
+            <div class="relative w-24 h-24 rounded-full border shadow bg-white flex items-center justify-center overflow-hidden">
+              <img
+                [src]="team.shield || '/images/default-shield.jpg'"
+                alt="Escudo del equipo"
+                class="absolute inset-0 w-full h-full object-contain p-2"
+              />
+            </div>
 
-      <div>
-        <h3 class="text-2xl font-semibold">{{ team.name }}</h3>
-        <p class="text-gray-600">{{ team.players?.length || 0 }} jugadores</p>
+            <!--Team name + num of players-->
+            <div>
+              <h3 class="text-2xl font-semibold">{{ team.name }}</h3>
+              <p class="text-gray-600">{{ team.players?.length || 0 }} jugadores</p>
+            </div>
       </div>
-    </div>
 
     <!-- Acciones -->
     <div class="flex gap-3">
