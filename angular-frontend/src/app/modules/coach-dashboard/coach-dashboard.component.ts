@@ -29,7 +29,7 @@ export class CoachDashboardComponent implements OnInit {
   ngOnInit(): void {
     const user = this.authService.getUser();
     if (user) {
-      this.nickname = user.nickname || '';
+      this.nickname = user.nickname|| '';
       this.fullName = user.fullName || '';
       this.role = user.roles?.includes('ROLE_COACH') ? 'Entrenador' : 'Jugador';
     }

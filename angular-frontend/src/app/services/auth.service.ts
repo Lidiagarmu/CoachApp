@@ -1,44 +1,44 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, tap } from 'rxjs';
+import { Observable, tap, switchMap, of } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
 import { environment } from '../../environments/enviroment';
+import { User } from '../interfaces/user.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private user: any = null;
+  private user: User | null = null;
 
   constructor(private http: HttpClient, private cookies: CookieService) {}
 
   // Función helper para decodificar JWT sin librerías
   private decodeToken(token: string): any {
     try {
-      const payload = token.split('.')[1];        // Parte del payload
-      const decodedPayload = atob(payload);      // Decodifica base64
-      return JSON.parse(decodedPayload);         // Devuelve objeto JS
+      const payload = token.split('.')[1];
+      const decodedPayload = atob(payload);
+      return JSON.parse(decodedPayload);
     } catch (e) {
       console.error('Error decoding token', e);
       return null;
     }
   }
 
-  login(email: string, password: string): Observable<any> {
-    return this.http.post<any>(
+  // 🔹 Login y obtener usuario completo
+  login(email: string, password: string): Observable<User> {
+    return this.http.post<{ token: string }>(
       `${environment.apiUrl}/login_check`,
       { email, password },
-      { withCredentials: true } // ✅ Permite enviar cookies al backend
+      { withCredentials: true }
     ).pipe(
-      tap(res => {
-        this.cookies.set('jwt_token', res.token, 1, '/', undefined, false, 'Lax');
-        const decoded: any = this.decodeToken(res.token); 
-        this.user = decoded;
-      })
+      tap(res => this.cookies.set('jwt_token', res.token, 1, '/', undefined, false, 'Lax')),
+      switchMap(() => this.http.get<User>(`${environment.apiUrl}/me`, { withCredentials: true })),
+      tap(user => this.user = user)
     );
   }
 
-
+  // 🔹 Registrar usuario
   register(data: {
     email: string | null | undefined;
     password: string | null | undefined;
@@ -55,26 +55,34 @@ export class AuthService {
     return this.http.post<any>(`${environment.apiUrl}/register`, payload);
   }
 
-
-  getUser(): any {
-    // Si ya tenemos user en memoria, lo devolvemos
+  // 🔹 Obtener usuario en memoria o desde token
+  getUser(): User | null {
     if (this.user) return this.user;
 
-    // Si no, intentamos leerlo desde el JWT
     const token = this.getToken();
     if (!token) return null;
 
     const decoded = this.decodeToken(token);
-    this.user = decoded; // lo guardamos en memoria
+    if (!decoded) return null;
+
+    // ⚡ Solo se puede obtener el nickname si lo incluimos en el JWT
+    this.user = {
+      id: decoded.id ?? 0,
+      email: decoded.username ?? '',
+      nickname: decoded.nickname ?? '',
+      fullName: decoded.fullName ?? '',
+      roles: decoded.roles ?? []
+    };
     return this.user;
   }
 
-
+  // 🔹 Logout
   logout() {
     this.cookies.delete('jwt_token', '/');
     this.user = null;
   }
 
+  // 🔹 Obtener token
   getToken(): string | null {
     return this.cookies.get('jwt_token') || null;
   }
