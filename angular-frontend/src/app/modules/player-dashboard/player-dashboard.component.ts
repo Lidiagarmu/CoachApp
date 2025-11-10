@@ -30,7 +30,7 @@ export class PlayerDashboardComponent implements OnInit {
       this.nickname = user.nickname || '';
       this.fullName = user.fullName || '';
       this.role = 'Jugador';
-      this.profilePhoto = user.profilePhoto || null;
+
     }
 
     this.loadInvitations();

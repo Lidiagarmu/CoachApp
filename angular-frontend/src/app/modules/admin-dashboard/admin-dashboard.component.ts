@@ -25,7 +25,6 @@ export class AdminDashboardComponent implements OnInit {
       this.nickname = user.nickname || '';
       this.fullName = user.fullName || '';
       this.role = 'Administrador';
-      this.profilePhoto = user.profilePhoto || null;
     }
   }
 
