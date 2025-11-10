@@ -6,7 +6,7 @@ import { TeamInvitationService } from '../../services/team-invitation.service';
 import { AuthService } from '../../services/auth.service';
 
 import { CoachTeamComponent } from './coach-team/coach-team.component';
-
+import { CoachPlayersComponent } from './coach-players/coach-players.component';
 
 @Component({
   selector: 'app-coach-dashboard',
@@ -14,7 +14,8 @@ import { CoachTeamComponent } from './coach-team/coach-team.component';
   imports: [
     CommonModule,
     NavbarComponent,
-    CoachTeamComponent
+    CoachTeamComponent,
+    CoachPlayersComponent
   ],
   templateUrl: './coach-dashboard.component.html',
 })
