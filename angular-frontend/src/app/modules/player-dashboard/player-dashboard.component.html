@@ -1,44 +1,137 @@
 <!-- Navbar fijo arriba -->
 <app-navbar [showButton]="true" class="fixed top-0 left-0 w-full z-50"></app-navbar>
 
-<main
-  class="min-h-[calc(100vh-8rem)] flex flex-col items-center justify-start bg-app-gradient pt-[5rem] pb-[3.5rem] text-center w-full"
->
-  <h1 class="text-3xl font-bold mb-4 text-black">Player Dashboard</h1>
-  <p class="text-secondary text-lg mb-6">Bienvenido al panel del jugador.</p>
+<!-- Layout principal -->
+<div class="flex pt-[5rem] min-h-screen bg-app-gradient text-black">
 
-  <h2 class="text-xl font-semibold mb-4">Invitaciones pendientes</h2>
-  <table class="min-w-full border">
-    <thead>
-      <tr class="bg-gray-100">
-        <th class="p-2 border">Equipo</th>
-        <th class="p-2 border">Estado</th>
-        <th class="p-2 border">Fecha</th>
-        <th class="p-2 border">Acción</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let inv of invitations">
-        <td class="p-2 border">{{ inv.team }}</td>
-        <td class="p-2 border">{{ inv.status }}</td>
-        <td class="p-2 border">{{ inv.createdAt }}</td>
-        <td class="p-2 border flex gap-2 justify-center">
-          <button
-            *ngIf="inv.status === 'pending'"
-            (click)="respond(inv.id,'accept')"
-            class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
-          >
-            Aceptar
-          </button>
-          <button
-            *ngIf="inv.status === 'pending'"
-            (click)="respond(inv.id,'reject')"
-            class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
-          >
-            Rechazar
-          </button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</main>
+  <!-- Sidebar -->
+  <aside class="w-64 bg-primary text-white flex flex-col shadow-xl fixed top-[5rem] left-0 bottom-0 z-40">
+
+    <!-- Perfil jugador -->
+    <div class="flex items-center gap-4 p-6 border-b border-primary/30">
+      <div
+        class="w-12 h-12 rounded-full bg-white text-black flex items-center justify-center text-lg font-bold shadow overflow-hidden"
+      >
+        <ng-container *ngIf="profilePhoto; else initials">
+          <img [src]="profilePhoto" alt="Foto perfil" class="w-full h-full object-cover" />
+        </ng-container>
+        <ng-template #initials>
+          {{ nickname?.charAt(0)?.toUpperCase() || 'J' }}
+        </ng-template>
+      </div>
+      <div>
+        <p class="text-xl text-black font-semibold">{{ nickname || 'Jugador' }}</p>
+        <p class="text-sm text-gray-500">{{ role }}</p>
+      </div>
+    </div>
+
+    <!-- Navegación -->
+    <nav class="flex-1 p-4 space-y-2 mt-4">
+      <!-- EQUIPO -->
+      <button
+        (click)="openTab('team')"
+        class="flex items-center gap-2 w-full text-left px-4 py-2 rounded-lg transition font-medium"
+        [ngClass]="{
+          'bg-gray-100 text-black font-bold': activeTab === 'team',
+          'text-white hover:bg-primary/70': activeTab !== 'team'
+        }"
+      >
+        <svg class="w-5 h-5 text-black" fill="currentColor" viewBox="0 0 24 24">
+          <path
+            d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z"
+          />
+        </svg>
+        <span class="text-black">Equipo</span>
+      </button>
+
+      <!-- EVENTOS -->
+      <button
+        (click)="openTab('events')"
+        class="flex items-center gap-2 w-full text-left px-4 py-2 rounded-lg transition font-medium"
+        [ngClass]="{
+          'bg-gray-100 text-black font-bold': activeTab === 'events',
+          'text-white hover:bg-primary/70': activeTab !== 'events'
+        }"
+      >
+        <svg class="w-5 h-5 text-black" fill="currentColor" viewBox="0 0 24 24">
+          <path
+            d="M19 4h-1V2h-2v2H8V2H6v2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z"
+          />
+        </svg>
+        <span class="text-black">Eventos</span>
+      </button>
+
+      <!-- AJUSTES -->
+      <button
+        (click)="openTab('settings')"
+        class="flex items-center gap-2 w-full text-left px-4 py-2 rounded-lg transition font-medium"
+        [ngClass]="{
+          'bg-gray-100 text-black font-bold': activeTab === 'settings',
+          'text-white hover:bg-primary/70': activeTab !== 'settings'
+        }"
+      >
+        <svg class="w-5 h-5 text-black" fill="currentColor" viewBox="0 0 24 24">
+          <path
+            d="M19.4 12.9c.04-.3.06-.6.06-.9s-.02-.6-.06-.9l2.11-1.65a.5.5 0 0 0 .12-.64l-2-3.46a.5.5 0 0 0-.61-.22l-2.49 1a6.97 6.97 0 0 0-1.56-.9l-.38-2.65a.5.5 0 0 0-.5-.42h-4a.5.5 0 0 0-.5.42l-.38 2.65c-.57.22-1.11.52-1.56.9l-2.49-1a.5.5 0 0 0-.61.22l-2 3.46a.5.5 0 0 0 .12.64l2.11 1.65c-.04.3-.06.6-.06.9s.02.6.06.9l-2.11 1.65a.5.5 0 0 0-.12.64l2 3.46c.14.24.44.34.69.22l2.49-1c.45.38.99.68 1.56.9l.38 2.65c.05.26.26.42.5.42h4c.24 0 .45-.16.5-.42l.38-2.65c.57-.22 1.11-.52 1.56-.9l2.49 1c.25.12.55.02.69-.22l2-3.46a.5.5 0 0 0-.12-.64l-2.11-1.65zM12 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7z"
+          />
+        </svg>
+        <span class="text-black">Ajustes</span>
+      </button>
+    </nav>
+  </aside>
+
+  <!-- Contenido dinámico -->
+  <main class="flex-1 ml-64 p-8 bg-white/70 rounded-tl-3xl shadow-inner min-h-[calc(100vh-5rem)]">
+    
+    <!-- EQUIPO -->
+    <section *ngIf="activeTab === 'team'" class="animate-fadeIn">
+      <h2 class="text-2xl font-semibold mb-4">Invitaciones pendientes</h2>
+      <table class="min-w-full border bg-white rounded-xl overflow-hidden shadow-md">
+        <thead>
+          <tr class="bg-gray-100">
+            <th class="p-3 border">Equipo</th>
+            <th class="p-3 border">Estado</th>
+            <th class="p-3 border">Fecha</th>
+            <th class="p-3 border">Acción</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let inv of invitations">
+            <td class="p-2 border">{{ inv.team }}</td>
+            <td class="p-2 border">{{ inv.status }}</td>
+            <td class="p-2 border">{{ inv.createdAt | date }}</td>
+            <td class="p-2 border flex gap-2 justify-center">
+              <button
+                *ngIf="inv.status === 'pending'"
+                (click)="respond(inv.id,'accept')"
+                class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
+              >
+                Aceptar
+              </button>
+              <button
+                *ngIf="inv.status === 'pending'"
+                (click)="respond(inv.id,'reject')"
+                class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+              >
+                Rechazar
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- EVENTOS -->
+    <section *ngIf="activeTab === 'events'" class="animate-fadeIn">
+      <h2 class="text-2xl font-semibold mb-4">Próximos eventos</h2>
+      <p class="text-gray-600">Aquí aparecerán tus entrenamientos y partidos.</p>
+    </section>
+
+    <!-- AJUSTES -->
+    <section *ngIf="activeTab === 'settings'" class="animate-fadeIn">
+      <h2 class="text-2xl font-semibold mb-4">Ajustes del jugador</h2>
+      <p class="text-gray-600">Desde aquí podrás actualizar tu perfil o abandonar tu equipo.</p>
+    </section>
+
+  </main>
+</div>
