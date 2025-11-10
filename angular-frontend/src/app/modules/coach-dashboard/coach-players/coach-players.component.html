@@ -1,0 +1,73 @@
+<div class="p-8 animate-fadeIn">
+  <h2 class="text-3xl font-bold mb-6 text-gray-800">Jugadores disponibles</h2>
+
+  <!-- Loader -->
+  <div *ngIf="loading" class="text-gray-500">Cargando jugadores...</div>
+
+  <!-- Error -->
+  <div *ngIf="error" class="text-red-500 mb-4">{{ error }}</div>
+
+  <!-- Sin jugadores -->
+  <div
+    *ngIf="!loading && players.length === 0"
+    class="bg-white/80 border border-gray-200 rounded-2xl shadow-md p-6 text-center text-gray-600"
+  >
+    No hay jugadores disponibles en este momento.
+  </div>
+
+  <!-- Lista jugadores -->
+  <div
+    *ngIf="!loading && players.length > 0"
+    class="bg-white/80 border border-gray-200 rounded-2xl shadow-md p-6 space-y-4"
+  >
+    <div class="overflow-x-auto">
+      <table class="min-w-full border rounded-lg overflow-hidden">
+        <thead>
+          <tr class="bg-gray-100 text-center">
+            <th class="p-3 border font-medium text-gray-700">Nombre completo</th>
+            <th class="p-3 border font-medium text-gray-700">Apodo</th>
+            <th class="p-3 border font-medium text-gray-700">Dorsal</th>
+            <th class="p-3 border font-medium text-gray-700 text-center">Acciones</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr
+            *ngFor="let player of players"
+            class="hover:bg-gray-50 transition duration-150"
+          >
+
+            <!-- Nombre -->
+            <td class="p-3 border text-gray-800 font-medium">
+              {{ player.fullName || 'Jugador sin nombre' }}
+            </td>
+
+            <!-- Nickname -->
+            <td class="p-3 border text-gray-600">
+              {{ player.nickname || '—' }}
+            </td>
+
+            <!-- Dorsal -->
+            <td class="p-3 border text-gray-600 text-center">
+              {{ player.number || '—' }}
+            </td>
+
+            <!-- Acciones -->
+            <td class="p-3 border text-center">
+              <button
+                (click)="invitePlayer(player.id)"
+                class="bg-primary hover:bg-primary/80 text-black px-4 py-2 rounded-lg text-sm transition"
+              >
+                Invitar
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Mensajes -->
+  <p *ngIf="success" class="text-green-600 mt-4 font-medium">{{ success }}</p>
+  <p *ngIf="error" class="text-red-500 mt-4 font-medium">{{ error }}</p>
+</div>
