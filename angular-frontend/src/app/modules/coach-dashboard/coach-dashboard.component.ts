@@ -1,10 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NavbarComponent } from '../../shared/components/navbar/navbar.component';
-import { PlayerService, Player } from '../../services/player.service';
-import { TeamInvitationService } from '../../services/team-invitation.service';
 import { AuthService } from '../../services/auth.service';
-
 import { CoachTeamComponent } from './coach-team/coach-team.component';
 import { CoachPlayersComponent } from './coach-players/coach-players.component';
 
@@ -15,28 +12,21 @@ import { CoachPlayersComponent } from './coach-players/coach-players.component';
     CommonModule,
     NavbarComponent,
     CoachTeamComponent,
-    CoachPlayersComponent
+    CoachPlayersComponent,
   ],
   templateUrl: './coach-dashboard.component.html',
 })
 export class CoachDashboardComponent implements OnInit {
-  players: Player[] = [];
   nickname: string | null = null;
   fullName: string = '';
   role: string = 'Entrenador';
 
-  // 🔹 Ahora incluimos 'team' aunque la sección esté comentada, no da error
-  activeTab: 'team' | 'players' | 'events' | 'settings' = 'players';
+  // 🔹 Controla la pestaña activa
+  activeTab: 'team' | 'players' | 'events' | 'settings' = 'team';
 
-  constructor(
-    private playerService: PlayerService,
-    private invitationService: TeamInvitationService,
-    private authService: AuthService
-  ) {}
+  constructor(private authService: AuthService) {}
 
   ngOnInit(): void {
-    this.loadPlayers();
-
     const user = this.authService.getUser();
     if (user) {
       this.nickname = user.nickname || '';
@@ -45,34 +35,8 @@ export class CoachDashboardComponent implements OnInit {
     }
   }
 
-  loadPlayers(): void {
-    this.playerService.getAvailablePlayers().subscribe({
-      next: (res) => (this.players = res),
-      error: (err) => console.error('Error al cargar jugadores', err),
-    });
-  }
-
-  invitePlayer(playerId: number): void {
-    this.invitationService.createInvitation(playerId).subscribe({
-      next: () => {
-        alert('✅ Invitación enviada correctamente');
-        this.loadPlayers(); // refresca lista
-      },
-      error: (err) =>
-        alert(err.error?.error || '❌ Error al enviar invitación'),
-    });
-  }
-
-  // 🔹 Métodos de placeholder (ya listos para futuro uso)
-  openTeamView(): void {
-    this.activeTab = 'team';
-  }
-
-  openEventsView(): void {
-    this.activeTab = 'events';
-  }
-
-  openSettingsView(): void {
-    this.activeTab = 'settings';
+  // 🔹 Navegación entre secciones
+  openTab(tab: 'team' | 'players' | 'events' | 'settings'): void {
+    this.activeTab = tab;
   }
 }

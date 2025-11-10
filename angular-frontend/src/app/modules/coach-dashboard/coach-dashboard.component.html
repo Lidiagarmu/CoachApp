@@ -6,12 +6,10 @@
 
   <!-- Sidebar -->
   <aside class="w-64 bg-primary text-white flex flex-col shadow-xl fixed top-[5rem] left-0 bottom-0 z-40">
-    
+
     <!-- Perfil Coach -->
     <div class="flex items-center gap-4 p-6 border-b border-primary/30">
-      <div
-        class="w-12 h-12 rounded-full bg-blue-500 text-black flex items-center justify-center text-lg font-bold shadow"
-      >
+      <div class="w-12 h-12 rounded-full bg-blue-500 text-black flex items-center justify-center text-lg font-bold shadow">
         {{ nickname?.charAt(0)?.toUpperCase() || 'C' }}
       </div>
       <div>
@@ -22,10 +20,8 @@
 
     <!-- Navegación -->
     <nav class="flex-1 p-4 space-y-2 mt-4">
-
-      <!-- Equipo -->
       <button
-        (click)="activeTab = 'team'"
+        (click)="openTab('team')"
         class="flex items-center gap-2 w-full text-left px-4 py-2 rounded-lg transition font-medium"
         [ngClass]="{
           'bg-gray-100 text-black font-bold': activeTab === 'team',
@@ -38,9 +34,8 @@
         <span class="text-black">Equipo</span>
       </button>
 
-      <!-- Jugadores -->
       <button
-        (click)="activeTab = 'players'"
+        (click)="openTab('players')"
         class="flex items-center gap-2 w-full text-left px-4 py-2 rounded-lg transition font-medium"
         [ngClass]="{
           'bg-gray-100 text-black font-bold': activeTab === 'players',
@@ -53,9 +48,8 @@
         <span class="text-black">Jugadores</span>
       </button>
 
-      <!-- Eventos -->
       <button
-        (click)="activeTab = 'events'"
+        (click)="openTab('events')"
         class="flex items-center gap-2 w-full text-left px-4 py-2 rounded-lg transition font-medium"
         [ngClass]="{
           'bg-gray-100 text-black font-bold': activeTab === 'events',
@@ -68,9 +62,8 @@
         <span class="text-black">Eventos</span>
       </button>
 
-      <!-- Ajustes -->
       <button
-        (click)="activeTab = 'settings'"
+        (click)="openTab('settings')"
         class="flex items-center gap-2 w-full text-left px-4 py-2 rounded-lg transition font-medium"
         [ngClass]="{
           'bg-gray-100 text-black font-bold': activeTab === 'settings',
@@ -87,29 +80,14 @@
 
   <!-- Contenido dinámico -->
   <main class="flex-1 ml-64 p-8 bg-white/70 rounded-tl-3xl shadow-inner min-h-[calc(100vh-5rem)]">
-    
-  
+
     <section *ngIf="activeTab === 'team'" class="animate-fadeIn">
-     <app-coach-team></app-coach-team>
+      <app-coach-team></app-coach-team>
     </section>
 
-
-   <section *ngIf="activeTab === 'players'" class="animate-fadeIn">
+    <section *ngIf="activeTab === 'players'" class="animate-fadeIn">
       <app-coach-players></app-coach-players>
     </section>
-
-   <!-- <section *ngIf="activeTab === 'events'" class="animate-fadeIn">
-      <app-coach-events></app-coach-events>
-    </section>
-
-    <section *ngIf="activeTab === 'settings'" class="animate-fadeIn">
-      <app-coach-settings></app-coach-settings>
-    </section>
-
-    -->
-
-  
-
 
   </main>
 </div>
