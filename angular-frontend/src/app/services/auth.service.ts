@@ -76,6 +76,13 @@ export class AuthService {
     return this.user;
   }
 
+  // AuthService
+  fetchUserFromApi(): Observable<User> {
+    return this.http.get<User>(`${environment.apiUrl}/me`, { withCredentials: true }).pipe(
+      tap(user => this.user = user) // guarda el usuario en memoria
+    );
+  }
+
   // 🔹 Logout
   logout() {
     this.cookies.delete('jwt_token', '/');

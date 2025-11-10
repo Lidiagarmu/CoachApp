@@ -24,16 +24,19 @@ export class PlayerDashboardComponent implements OnInit {
     private invitationService: TeamInvitationService
   ) {}
 
+
   ngOnInit(): void {
-    const user = this.authService.getUser();
-    if (user) {
-      this.nickname = user.nickname || '';
-      this.fullName = user.fullName || '';
-      this.role = 'Jugador';
-
-    }
-
-    this.loadInvitations();
+    this.authService.fetchUserFromApi().subscribe({
+      next: user => {
+        this.nickname = user.nickname || '';
+        this.fullName = user.fullName || '';
+        this.role = user.roles?.includes('ROLE_COACH') ? 'Entrenador' : 'Jugador';
+      },
+      error: () => {
+        // Opcional: manejar error, logout si token inválido
+        this.authService.logout();
+      }
+    });
   }
 
   openTab(tab: 'team' | 'events' | 'settings') {

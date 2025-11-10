@@ -26,14 +26,22 @@ export class CoachDashboardComponent implements OnInit {
 
   constructor(private authService: AuthService) {}
 
-  ngOnInit(): void {
-    const user = this.authService.getUser();
-    if (user) {
-      this.nickname = user.nickname|| '';
+ngOnInit(): void {
+  this.authService.fetchUserFromApi().subscribe({
+    next: user => {
+      this.nickname = user.nickname || '';
       this.fullName = user.fullName || '';
       this.role = user.roles?.includes('ROLE_COACH') ? 'Entrenador' : 'Jugador';
+    },
+    error: () => {
+      // Opcional: manejar error, logout si token inválido
+      this.authService.logout();
     }
-  }
+  });
+}
+
+
+
 
   // 🔹 Navegación entre secciones
   openTab(tab: 'team' | 'players' | 'events' | 'settings'): void {

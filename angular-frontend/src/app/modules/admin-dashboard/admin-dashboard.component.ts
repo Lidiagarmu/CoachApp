@@ -20,12 +20,17 @@ export class AdminDashboardComponent implements OnInit {
   constructor(private authService: AuthService) {}
 
   ngOnInit(): void {
-    const user = this.authService.getUser();
-    if (user) {
-      this.nickname = user.nickname || '';
-      this.fullName = user.fullName || '';
-      this.role = 'Administrador';
-    }
+    this.authService.fetchUserFromApi().subscribe({
+      next: user => {
+        this.nickname = user.nickname || '';
+        this.fullName = user.fullName || '';
+        this.role = user.roles?.includes('ROLE_COACH') ? 'Entrenador' : 'Jugador';
+      },
+      error: () => {
+        // Opcional: manejar error, logout si token inválido
+        this.authService.logout();
+      }
+    });
   }
 
   openTab(tab: 'players' | 'coaches' | 'teams' | 'settings'): void {
