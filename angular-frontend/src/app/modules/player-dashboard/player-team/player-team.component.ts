@@ -12,7 +12,8 @@ export class PlayerTeamComponent implements OnInit {
   invitations: any[] = [];
   loading = false;
   error: string | null = null;
-  selectedInvitation: any = null; // Para el modal
+  selectedInvitation: any = null;
+  showAutoModal = false;
 
   constructor(private invitationService: TeamInvitationService) {}
 
@@ -26,9 +27,11 @@ export class PlayerTeamComponent implements OnInit {
 
     this.invitationService.getPlayerInvitations().subscribe({
       next: (res) => {
-        this.invitations = res.filter(inv => inv.status === 'pending');
+        this.invitations = res.filter((inv) => inv.status === 'pending');
         this.loading = false;
+
       },
+
       error: (err) => {
         this.loading = false;
         this.error = 'Error al cargar invitaciones.';
@@ -37,12 +40,16 @@ export class PlayerTeamComponent implements OnInit {
     });
   }
 
-  openInvitation(inv: any): void {
+    showInvitation(inv: any): void {
     this.selectedInvitation = inv;
+    this.showAutoModal = true;
   }
+
+  
 
   closeModal(): void {
     this.selectedInvitation = null;
+    this.showAutoModal = false;
   }
 
   respond(action: 'accept' | 'reject'): void {
@@ -50,8 +57,8 @@ export class PlayerTeamComponent implements OnInit {
 
     this.invitationService.respondInvitation(this.selectedInvitation.id, action).subscribe({
       next: (res) => {
-        alert(res.message);
         this.selectedInvitation = null;
+        this.showAutoModal = false;
         this.loadInvitations();
       },
       error: (err) => {

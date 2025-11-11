@@ -2,12 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NavbarComponent } from '../../shared/components/navbar/navbar.component';
 import { AuthService } from '../../services/auth.service';
-import { TeamInvitationService, TeamInvitation } from '../../services/team-invitation.service';
+import { TeamInvitationService} from '../../services/team-invitation.service';
+import { PlayerTeamComponent } from './player-team/player-team.component';
 
 @Component({
   selector: 'app-player-dashboard',
   standalone: true,
-  imports: [CommonModule, NavbarComponent],
+  imports: [CommonModule, NavbarComponent, PlayerTeamComponent],
   templateUrl: './player-dashboard.component.html',
 })
 export class PlayerDashboardComponent implements OnInit {
@@ -17,7 +18,6 @@ export class PlayerDashboardComponent implements OnInit {
   profilePhoto: string | null = null;
 
   activeTab: 'team' | 'events' | 'settings' = 'team';
-  invitations: TeamInvitation[] = [];
 
   constructor(
     private authService: AuthService,
@@ -43,21 +43,6 @@ export class PlayerDashboardComponent implements OnInit {
     this.activeTab = tab;
   }
 
-  loadInvitations() {
-    this.invitationService.getPlayerInvitations().subscribe({
-      next: (res) => (this.invitations = res),
-      error: (err) => console.error(err),
-    });
-  }
 
-  respond(id: number, action: 'accept' | 'reject') {
-    this.invitationService.respondInvitation(id, action).subscribe({
-      next: () => {
-        alert(`Invitación ${action} correctamente`);
-        this.loadInvitations();
-      },
-      error: (err) =>
-        alert(err.error?.error || 'Error al responder invitación'),
-    });
-  }
+
 }

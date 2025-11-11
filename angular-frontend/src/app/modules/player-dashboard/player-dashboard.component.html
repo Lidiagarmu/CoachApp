@@ -27,6 +27,7 @@
 
     <!-- Navegación -->
     <nav class="flex-1 p-4 space-y-2 mt-4">
+      
       <!-- EQUIPO -->
       <button
         (click)="openTab('team')"
@@ -84,42 +85,11 @@
   <main class="flex-1 ml-64 p-8 bg-white/70 rounded-tl-3xl shadow-inner min-h-[calc(100vh-5rem)]">
     
     <!-- EQUIPO -->
-    <section *ngIf="activeTab === 'team'" class="animate-fadeIn">
-      <h2 class="text-2xl font-semibold mb-4">Invitaciones pendientes</h2>
-      <table class="min-w-full border bg-white rounded-xl overflow-hidden shadow-md">
-        <thead>
-          <tr class="bg-gray-100">
-            <th class="p-3 border">Equipo</th>
-            <th class="p-3 border">Estado</th>
-            <th class="p-3 border">Fecha</th>
-            <th class="p-3 border">Acción</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let inv of invitations">
-            <td class="p-2 border">{{ inv.team }}</td>
-            <td class="p-2 border">{{ inv.status }}</td>
-            <td class="p-2 border">{{ inv.createdAt | date }}</td>
-            <td class="p-2 border flex gap-2 justify-center">
-              <button
-                *ngIf="inv.status === 'pending'"
-                (click)="respond(inv.id,'accept')"
-                class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
-              >
-                Aceptar
-              </button>
-              <button
-                *ngIf="inv.status === 'pending'"
-                (click)="respond(inv.id,'reject')"
-                class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
-              >
-                Rechazar
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+     <section *ngIf="activeTab === 'team'" class="animate-fadeIn">
+       <app-player-team></app-player-team>
     </section>
+
+
 
     <!-- EVENTOS -->
     <section *ngIf="activeTab === 'events'" class="animate-fadeIn">

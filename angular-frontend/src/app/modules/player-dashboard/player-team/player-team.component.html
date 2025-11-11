@@ -1,65 +1,38 @@
 <div class="p-8 animate-fadeIn">
   <h2 class="text-3xl font-bold mb-6 text-gray-800">Mi equipo</h2>
 
-  <!-- Loader -->
-  <div *ngIf="loading" class="text-gray-500">Cargando invitaciones...</div>
-
-  <!-- Error -->
-  <div *ngIf="error" class="text-red-500 mb-4">{{ error }}</div>
-
-  <!-- Sin invitaciones -->
+  <!-- Aviso superior -->
   <div
-    *ngIf="!loading && invitations.length === 0"
-    class="bg-white/80 border border-gray-200 rounded-2xl shadow-md p-6 text-center text-gray-600"
+    *ngIf="invitations.length > 0"
+    class="bg-yellow-100 border border-yellow-300 text-yellow-800 px-4 py-3 rounded-lg mb-4 flex justify-between items-center"
   >
-    No tienes invitaciones pendientes.
-  </div>
-
-  <!-- Lista invitaciones -->
-  <div
-    *ngIf="!loading && invitations.length > 0"
-    class="bg-white/80 border border-gray-200 rounded-2xl shadow-md p-6 space-y-4"
-  >
-    <div class="overflow-x-auto">
-      <table class="min-w-full border rounded-lg overflow-hidden">
-        <thead>
-          <tr class="bg-gray-100 text-center">
-            <th class="p-3 border font-medium text-gray-700">Equipo</th>
-            <th class="p-3 border font-medium text-gray-700">Fecha</th>
-            <th class="p-3 border font-medium text-gray-700">Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr
-            *ngFor="let inv of invitations"
-            class="hover:bg-gray-50 transition duration-150"
-          >
-            <td class="p-3 border text-gray-800 font-medium text-center">
-              {{ inv.team }}
-            </td>
-            <td class="p-3 border text-gray-600 text-center">
-              {{ inv.createdAt }}
-            </td>
-            <td class="p-3 border text-center">
-              <button
-                (click)="openInvitation(inv)"
-                class="bg-primary hover:bg-primary/80 text-black px-4 py-2 rounded-lg text-sm transition"
-              >
-                Ver
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+    <span>
+      ⚽ Tienes {{ invitations.length }} invitación{{ invitations.length > 1 ? 'es' : '' }} pendiente{{ invitations.length > 1 ? 's' : '' }}.
+    </span>
+    <button
+      class="bg-gray-300 hover:bg-yellow-400 text-black px-3 py-1 rounded"
+      (click)="showInvitation(invitations[0])"
+    >
+      Mostrar
+    </button>
   </div>
 
   <!-- Modal -->
   <div
-    *ngIf="selectedInvitation"
+    *ngIf="showAutoModal && selectedInvitation"
     class="fixed inset-0 bg-black/40 flex items-center justify-center"
   >
-    <div class="bg-white rounded-2xl shadow-lg p-6 w-96 text-center">
+    <div class="bg-white rounded-2xl shadow-lg p-6 w-96 text-center relative animate-fadeIn">
+      
+      <!-- X en la esquina superior derecha -->
+      <button
+        (click)="closeModal()"
+        class="absolute top-2 right-4 text-gray-500 hover:text-gray-700 text-lg font-bold"
+        aria-label="Cerrar"
+      >
+        ✕
+      </button>
+
       <h3 class="text-xl font-bold mb-4">Invitación de equipo</h3>
       <p class="text-gray-700 mb-6">
         El equipo <b>{{ selectedInvitation.team }}</b> te ha invitado a unirte.
@@ -80,12 +53,6 @@
         </button>
       </div>
 
-      <button
-        (click)="closeModal()"
-        class="block mt-4 text-gray-500 hover:text-gray-700 text-sm mx-auto"
-      >
-        Cancelar
-      </button>
     </div>
   </div>
 </div>
