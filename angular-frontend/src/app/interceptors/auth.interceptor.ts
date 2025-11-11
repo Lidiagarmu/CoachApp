@@ -11,14 +11,24 @@ export const AuthInterceptor: HttpInterceptorFn = (req, next) => {
     req.url.includes('/login_check') ||
     req.url.includes('/register');
 
+
+  let cloned = req;
+
+  // 👉 Siempre incluir cookies en TODAS las peticiones (importante para Symfony con sesión/JWT cookie)
+  cloned = cloned.clone({
+    withCredentials: true
+  });
+
+
+   // 👉 Si hay token (modo Bearer) y no es una ruta pública, añadimos header
   if (token && !isPublic) {
-    const cloned = req.clone({
+    cloned = cloned.clone({
       setHeaders: {
         Authorization: `Bearer ${token}`
       }
     });
-    return next(cloned);
   }
 
-  return next(req);
+  return next(cloned);
+  
 };

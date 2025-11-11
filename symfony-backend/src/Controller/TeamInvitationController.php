@@ -61,6 +61,8 @@ class TeamInvitationController extends AbstractController
         $invitation->setTeam($team);
         $invitation->setPlayer($playerProfile);
         $invitation->setStatus('pending');
+        $invitation->setCoach($coachProfile);
+
     
 
         $em->persist($invitation);
@@ -78,6 +80,7 @@ class TeamInvitationController extends AbstractController
     {
         /** @var User $user */
         $user = $this->getUser();
+         /** @var EntityManagerInterface $em */
         $playerProfile = $em->getRepository(PlayerProfile::class)->findOneBy(['playerAccount' => $user]);
 
         if (!$playerProfile) {
@@ -102,13 +105,17 @@ class TeamInvitationController extends AbstractController
     #[IsGranted('ROLE_PLAYER')]
     public function respondInvitation(int $id, Request $request, EntityManagerInterface $em): JsonResponse
     {
+        /** @var Request $request */
         $data = json_decode($request->getContent(), true);
         $action = strtolower($data['action'] ?? ''); // accept | reject
 
         /** @var User $user */
         $user = $this->getUser();
+         /** @var EntityManagerInterface $em */
         $playerProfile = $em->getRepository(PlayerProfile::class)->findOneBy(['playerAccount' => $user]);
 
+
+        /** @var int $id */
         $invitation = $em->getRepository(TeamInvitation::class)->find($id);
 
         if (!$invitation || $invitation->getPlayer()->getId() !== $playerProfile->getId()) {
