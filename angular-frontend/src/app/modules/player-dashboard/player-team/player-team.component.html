@@ -1,9 +1,24 @@
 <div class="p-8 animate-fadeIn">
   <h2 class="text-3xl font-bold mb-6 text-gray-800">Mi equipo</h2>
 
-  <!-- Aviso superior -->
+  <!-- Si el jugador ya pertenece a un equipo -->
+  <div *ngIf="playerTeam" class="bg-white border border-gray-200 rounded-2xl shadow-md p-6 mb-4">
+    <h3 class="text-2xl font-semibold mb-2">Equipo actual</h3>
+    <p class="text-gray-700 mb-4">
+      Nombre: <b>{{ playerTeam.name }}</b>
+    </p>
+    <p class="text-gray-700 mb-4">
+      Entrenador: <b>{{ playerTeam.coachName }}</b>
+    </p>
+    <p class="text-gray-700 mb-4">
+      Jugadores: <b>{{ playerTeam.players?.length || 0 }}</b>
+    </p>
+    <!-- Puedes añadir más info del equipo aquí -->
+  </div>
+
+  <!-- Aviso de invitaciones pendientes -->
   <div
-    *ngIf="invitations.length > 0"
+    *ngIf="invitations.length > 0 && !playerTeam"
     class="bg-yellow-100 border border-yellow-300 text-yellow-800 px-4 py-3 rounded-lg mb-4 flex justify-between items-center"
   >
     <span>
@@ -17,13 +32,13 @@
     </button>
   </div>
 
-  <!-- Modal -->
+  <!-- Modal de invitación -->
   <div
     *ngIf="showAutoModal && selectedInvitation"
-    class="fixed inset-0 bg-black/40 flex items-center justify-center"
+    class="fixed inset-0 bg-black/40 flex items-center justify-center z-50"
   >
     <div class="bg-white rounded-2xl shadow-lg p-6 w-96 text-center relative animate-fadeIn">
-      
+
       <!-- X en la esquina superior derecha -->
       <button
         (click)="closeModal()"
@@ -54,5 +69,13 @@
       </div>
 
     </div>
+  </div>
+
+  <!-- Mensaje cuando no hay invitaciones y no tiene equipo -->
+  <div
+    *ngIf="!playerTeam && invitations.length === 0"
+    class="bg-white/80 border border-gray-200 rounded-2xl shadow-md p-6 text-center text-gray-600"
+  >
+    No tienes invitaciones pendientes.
   </div>
 </div>

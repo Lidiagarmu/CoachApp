@@ -31,4 +31,9 @@ export class TeamInvitationService {
   respondInvitation(id: number, action: 'accept' | 'reject'): Observable<any> {
     return this.http.patch(`${this.apiUrl}/${id}/respond`, { action }, { withCredentials: true });
   }
+
+  //para que jugador obtenga equipo actual
+  getPlayerTeam(): Observable<any> {
+  return this.http.get<any>('http://localhost:8000/api/player/team', { withCredentials: true });
+}
 }

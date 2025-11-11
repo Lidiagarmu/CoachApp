@@ -10,8 +10,10 @@ import { TeamInvitationService } from '../../../services/team-invitation.service
 })
 export class PlayerTeamComponent implements OnInit {
   invitations: any[] = [];
+  playerTeam: any = null; // info del equipo si ya pertenece a uno
   loading = false;
   error: string | null = null;
+
   selectedInvitation: any = null;
   showAutoModal = false;
 
@@ -19,8 +21,10 @@ export class PlayerTeamComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadInvitations();
+    this.loadPlayerTeam();
   }
 
+  // Cargar invitaciones pendientes
   loadInvitations(): void {
     this.loading = true;
     this.error = null;
@@ -29,9 +33,7 @@ export class PlayerTeamComponent implements OnInit {
       next: (res) => {
         this.invitations = res.filter((inv) => inv.status === 'pending');
         this.loading = false;
-
       },
-
       error: (err) => {
         this.loading = false;
         this.error = 'Error al cargar invitaciones.';
@@ -40,26 +42,42 @@ export class PlayerTeamComponent implements OnInit {
     });
   }
 
-    showInvitation(inv: any): void {
+  // Cargar info del equipo del jugador
+ loadPlayerTeam(): void {
+  this.invitationService.getPlayerTeam().subscribe({
+    next: (team) => this.playerTeam = team,
+    error: (err) => console.error('No se pudo cargar el equipo', err),
+  });
+}
+
+  // Mostrar modal al pulsar "Mostrar"
+  showInvitation(inv: any): void {
     this.selectedInvitation = inv;
     this.showAutoModal = true;
   }
 
-  
-
+  // Cerrar modal
   closeModal(): void {
     this.selectedInvitation = null;
     this.showAutoModal = false;
   }
 
+  // Responder invitación
   respond(action: 'accept' | 'reject'): void {
     if (!this.selectedInvitation) return;
 
     this.invitationService.respondInvitation(this.selectedInvitation.id, action).subscribe({
-      next: (res) => {
+      next: () => {
         this.selectedInvitation = null;
         this.showAutoModal = false;
-        this.loadInvitations();
+
+        if (action === 'accept') {
+          // Si acepta, eliminamos las invitaciones y cargamos info del equipo
+          this.invitations = [];
+          this.loadPlayerTeam();
+        } else {
+          this.loadInvitations();
+        }
       },
       error: (err) => {
         console.error(err);

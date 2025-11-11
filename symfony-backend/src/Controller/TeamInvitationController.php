@@ -158,4 +158,35 @@ class TeamInvitationController extends AbstractController
 
         return $this->json(['message' => "Invitación {$action} correctamente"]);
     }
+
+
+    //para que el jugador cargue la info de su equipo
+    #[Route('/player/team', name: 'get_player_team', methods: ['GET'])]
+    #[IsGranted('ROLE_PLAYER')]
+    public function getPlayerTeam(EntityManagerInterface $em): JsonResponse
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+        /** @var EntityManagerInterface $em */
+        $playerProfile = $em->getRepository(PlayerProfile::class)->findOneBy(['playerAccount' => $user]);
+
+        if (!$playerProfile) {
+            return $this->json(['error' => 'Perfil de jugador no encontrado'], 404);
+        }
+
+        $team = $playerProfile->getTeam();
+
+        if (!$team) {
+            return $this->json(null); // jugador sin equipo
+        }
+
+        return $this->json([
+            'id' => $team->getId(),
+            'name' => $team->getName(),
+            'coachName' => $team->getCoach()?->getUserAccount()?->getFullName(),
+            'players' => array_map(fn($p) => $p->getPlayerAccount()->getFullName(), $team->getPlayers()->toArray())
+        ]);
+    }
+
+
 }
