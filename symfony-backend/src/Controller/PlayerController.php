@@ -9,6 +9,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use App\Entity\TeamInvitation;
+
 
 #[Route('/api/player')]
 class PlayerController extends AbstractController
@@ -55,14 +57,21 @@ class PlayerController extends AbstractController
         ->getResult();
 
     // Formatear respuesta
-    $response = array_map(function (PlayerProfile $player) {
+    $response = array_map(function (PlayerProfile $player) use ($em) {
         $userAccount = $player->getPlayerAccount();
+    // Revisar si hay invitaciones pendientes para este jugador
+    $pendingInvitation = $em->getRepository(TeamInvitation::class)
+        ->findOneBy([
+            'player' => $player,
+            'status' => 'pending'
+        ]);
         return [
             'id' => $userAccount->getId(),
             'fullName' => $userAccount->getFullName(),
             'nickname' => $userAccount->getNickname(),
             'position' => $player->getPosition(),
             'number' => $player->getNumber(),
+            'invited' => $pendingInvitation ? true : false,
         ];
     }, $players);
 

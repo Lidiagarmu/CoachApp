@@ -34,6 +34,10 @@ export class TeamInvitationService {
 
   //para que jugador obtenga equipo actual
   getPlayerTeam(): Observable<any> {
-  return this.http.get<any>('http://localhost:8000/api/player/team', { withCredentials: true });
-}
+    return this.http.get<any>('http://localhost:8000/api/player/team', { withCredentials: true });
+  }
+
+ cancelInvitation(invitationId: number): Observable<any> {
+    return this.http.patch(`${this.apiUrl}/${invitationId}/cancel`, {});
+  }
 }

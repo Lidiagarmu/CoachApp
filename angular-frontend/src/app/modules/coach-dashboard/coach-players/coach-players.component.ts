@@ -45,7 +45,7 @@ export class CoachPlayersComponent implements OnInit {
     this.playerService.getAvailablePlayers().subscribe({
       next: (res) => {
         // añadimos campos extra para manejar el estado local
-        this.players = res.map((p) => ({ ...p, invited: false, inviting: false }));
+        this.players = res.map((p) => ({ ...p, inviting: false }));
         this.loading = false;
       },
       error: (err) => {
@@ -94,4 +94,7 @@ export class CoachPlayersComponent implements OnInit {
     this.showSuccessModal = false;
     this.showPendingModal = false;
   }
+
+
+
 }
