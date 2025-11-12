@@ -59,26 +59,40 @@
 
       <!-- Campos específicos según tipo -->
       <div *ngIf="eventForm.get('type')?.value === 'training'">
+        <!-- Campo o gimnasio -->
         <div>
-          <label class="block mb-1 font-semibold">Tipo de entrenamiento</label>
-          <input type="text" formControlName="training_type" class="w-full border rounded px-3 py-2">
+          <label class="block mb-1 font-semibold">Ubicación del entrenamiento</label>
+          <select formControlName="training_location_type" class="w-full border rounded px-3 py-2">
+            <option value="campo">Campo</option>
+            <option value="gimnasio">Gimnasio</option>
+          </select>
         </div>
-        <div>
+
+        <!-- Solo si es gimnasio -->
+        <div *ngIf="eventForm.get('training_location_type')?.value === 'gimnasio'">
+          <label class="block mb-1 font-semibold">Especialidad gimnasio</label>
+          <select formControlName="gym_focus" class="w-full border rounded px-3 py-2">
+            <option value="fuerza">Fuerza</option>
+            <option value="resistencia">Resistencia</option>
+            <option value="preventivo">Preventivo</option>
+            <option value="velocidad">Velocidad</option>
+            <option value="pliometría">Pliometría</option>
+          </select>
+        </div>
+
+        <!-- Solo si es campo -->
+        <div *ngIf="eventForm.get('training_location_type')?.value === 'campo'">
           <label class="block mb-1 font-semibold">Área de enfoque</label>
-          <input type="text" formControlName="focus_area" class="w-full border rounded px-3 py-2">
+          <select formControlName="focus_area" class="w-full border rounded px-3 py-2">
+            <option value="tecnico">Técnico</option>
+            <option value="tactico">Táctico</option>
+            <option value="fisico">Físico</option>
+            <option value="mixto">Mixto</option>
+          </select>
         </div>
       </div>
 
-      <div *ngIf="eventForm.get('type')?.value === 'match'">
-        <div>
-          <label class="block mb-1 font-semibold">Rival</label>
-          <input type="text" formControlName="opponent" class="w-full border rounded px-3 py-2">
-        </div>
-        <div>
-          <label class="block mb-1 font-semibold">Tipo de partido</label>
-          <input type="text" formControlName="match_type" class="w-full border rounded px-3 py-2">
-        </div>
-      </div>
+
 
       <!-- ✅ Subir imágenes -->
       <div>
@@ -88,7 +102,7 @@
         <!-- Previsualización -->
         <div class="flex flex-wrap gap-2 mt-2">
           <div *ngFor="let file of selectedFiles" class="w-20 h-20 border rounded overflow-hidden relative">
-          <img [src]="filePreview(file)" alt="Imagen seleccionada" class="w-full h-full object-cover">
+          <img *ngFor="let preview of filePreviews" [src]="preview" class="w-20 h-20 object-cover rounded border">
             <button type="button" (click)="removeFile(file)" class="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">×</button>
           </div>
         </div>
