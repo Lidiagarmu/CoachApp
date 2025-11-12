@@ -61,6 +61,8 @@ class TeamInvitationController extends AbstractController
         $invitation->setTeam($team);
         $invitation->setPlayer($playerProfile);
         $invitation->setStatus('pending');
+        $invitation->setCoach($coachProfile);
+
     
 
         $em->persist($invitation);
@@ -78,13 +80,17 @@ class TeamInvitationController extends AbstractController
     {
         /** @var User $user */
         $user = $this->getUser();
+         /** @var EntityManagerInterface $em */
         $playerProfile = $em->getRepository(PlayerProfile::class)->findOneBy(['playerAccount' => $user]);
 
         if (!$playerProfile) {
             return $this->json(['error' => 'Perfil de jugador no encontrado'], 404);
         }
 
-        $invitations = $em->getRepository(TeamInvitation::class)->findBy(['player' => $playerProfile]);
+        $invitations = $em->getRepository(TeamInvitation::class)->findBy([
+            'player' => $playerProfile,
+            'status' => 'pending'
+        ]);
 
         $response = array_map(function (TeamInvitation $inv) {
             return [
@@ -102,31 +108,59 @@ class TeamInvitationController extends AbstractController
     #[IsGranted('ROLE_PLAYER')]
     public function respondInvitation(int $id, Request $request, EntityManagerInterface $em): JsonResponse
     {
+        /** @var Request $request */
         $data = json_decode($request->getContent(), true);
         $action = strtolower($data['action'] ?? ''); // accept | reject
 
         /** @var User $user */
         $user = $this->getUser();
+         /** @var EntityManagerInterface $em */
         $playerProfile = $em->getRepository(PlayerProfile::class)->findOneBy(['playerAccount' => $user]);
 
+
+        /** @var int $id */
         $invitation = $em->getRepository(TeamInvitation::class)->find($id);
 
         if (!$invitation || $invitation->getPlayer()->getId() !== $playerProfile->getId()) {
             return $this->json(['error' => 'Invitación no encontrada o no autorizada'], 404);
         }
 
-        if ($action === 'accept') {
-            $invitation->setStatus('accepted');
-            $playerProfile->setTeam($invitation->getTeam());
-            $invitation->getTeam()->addPlayer($playerProfile);
-        } elseif ($action === 'reject') {
-            $invitation->setStatus('rejected');
-        } else {
-            return $this->json(['error' => 'Acción inválida'], 400);
-        }
+       if ($action === 'accept') {
+    // Si ya tiene equipo, bloquear
+    if ($playerProfile->getTeam()) {
+        return $this->json(['error' => 'Ya perteneces a un equipo'], 400);
+    }
 
-        $em->flush();
+    // Aceptar la invitación
+    $invitation->setStatus('accepted');
+    $playerProfile->setTeam($invitation->getTeam());
+    $invitation->getTeam()->addPlayer($playerProfile);
+
+    // Rechazar otras invitaciones pendientes
+    $otherInvites = $em->getRepository(TeamInvitation::class)->findBy([
+        'player' => $playerProfile,
+        'status' => 'pending'
+    ]);
+
+    foreach ($otherInvites as $other) {
+        if ($other->getId() !== $invitation->getId()) {
+            $other->setStatus('rejected');
+        }
+        }
+    } elseif ($action === 'reject') {
+        $invitation->setStatus('rejected');
+    } else {
+        return $this->json(['error' => 'Acción inválida'], 400);
+    }
+
+    $em->flush();
+
 
         return $this->json(['message' => "Invitación {$action} correctamente"]);
     }
+
+
+
+    
+
 }

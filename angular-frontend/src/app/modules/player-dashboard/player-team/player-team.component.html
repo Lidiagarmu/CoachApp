@@ -1,0 +1,81 @@
+<div class="p-8 animate-fadeIn">
+  <h2 class="text-3xl font-bold mb-6 text-gray-800">Mi equipo</h2>
+
+  <!-- Si el jugador ya pertenece a un equipo -->
+  <div *ngIf="playerTeam" class="bg-white border border-gray-200 rounded-2xl shadow-md p-6 mb-4">
+    <h3 class="text-2xl font-semibold mb-2">Equipo actual</h3>
+    <p class="text-gray-700 mb-4">
+      Nombre: <b>{{ playerTeam.name }}</b>
+    </p>
+    <p class="text-gray-700 mb-4">
+      Entrenador: <b>{{ playerTeam.coachName }}</b>
+    </p>
+    <p class="text-gray-700 mb-4">
+      Jugadores: <b>{{ playerTeam.players?.length || 0 }}</b>
+    </p>
+    <!-- Puedes añadir más info del equipo aquí -->
+  </div>
+
+  <!-- Aviso de invitaciones pendientes -->
+  <div
+    *ngIf="invitations.length > 0 && !playerTeam"
+    class="bg-yellow-100 border border-yellow-300 text-yellow-800 px-4 py-3 rounded-lg mb-4 flex justify-between items-center"
+  >
+    <span>
+      ⚽ Tienes {{ invitations.length }} invitación{{ invitations.length > 1 ? 'es' : '' }} pendiente{{ invitations.length > 1 ? 's' : '' }}.
+    </span>
+    <button
+      class="bg-gray-300 hover:bg-yellow-400 text-black px-3 py-1 rounded"
+      (click)="showInvitation(invitations[0])"
+    >
+      Mostrar
+    </button>
+  </div>
+
+  <!-- Modal de invitación -->
+  <div
+    *ngIf="showAutoModal && selectedInvitation"
+    class="fixed inset-0 bg-black/40 flex items-center justify-center z-50"
+  >
+    <div class="bg-white rounded-2xl shadow-lg p-6 w-96 text-center relative animate-fadeIn">
+
+      <!-- X en la esquina superior derecha -->
+      <button
+        (click)="closeModal()"
+        class="absolute top-2 right-4 text-gray-500 hover:text-gray-700 text-lg font-bold"
+        aria-label="Cerrar"
+      >
+        ✕
+      </button>
+
+      <h3 class="text-xl font-bold mb-4">Invitación de equipo</h3>
+      <p class="text-gray-700 mb-6">
+        El equipo <b>{{ selectedInvitation.team }}</b> te ha invitado a unirte.
+      </p>
+
+      <div class="flex justify-center gap-4">
+        <button
+          (click)="respond('accept')"
+          class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg"
+        >
+          Aceptar
+        </button>
+        <button
+          (click)="respond('reject')"
+          class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg"
+        >
+          Rechazar
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Mensaje cuando no hay invitaciones y no tiene equipo -->
+  <div
+    *ngIf="!playerTeam && invitations.length === 0"
+    class="bg-white/80 border border-gray-200 rounded-2xl shadow-md p-6 text-center text-gray-600"
+  >
+    No tienes invitaciones pendientes.
+  </div>
+</div>

@@ -3,6 +3,14 @@ import { CommonModule } from '@angular/common';
 import { PlayerService, Player } from '../../../services/player.service';
 import { TeamInvitationService } from '../../../services/team-invitation.service';
 
+
+//Esto extiende el modelo de Player solo dentro de este componente
+interface PlayerWithInvitationState extends Player {
+  inviting?: boolean;
+  invited?: boolean;
+}
+
+
 @Component({
   selector: 'app-coach-players',
   standalone: true,
@@ -10,10 +18,16 @@ import { TeamInvitationService } from '../../../services/team-invitation.service
   templateUrl: './coach-players.component.html',
 })
 export class CoachPlayersComponent implements OnInit {
-  players: Player[] = [];
+  players: PlayerWithInvitationState[] = [];
   loading = false;
   error: string | null = null;
-  success: string | null = null;
+
+  // modales
+  showConfirmModal = false;
+  showSuccessModal = false;
+  showPendingModal = false;
+  selectedPlayer: PlayerWithInvitationState | null = null;
+
 
   constructor(
     private playerService: PlayerService,
@@ -30,7 +44,8 @@ export class CoachPlayersComponent implements OnInit {
 
     this.playerService.getAvailablePlayers().subscribe({
       next: (res) => {
-        this.players = res;
+        // añadimos campos extra para manejar el estado local
+        this.players = res.map((p) => ({ ...p, inviting: false }));
         this.loading = false;
       },
       error: (err) => {
@@ -41,18 +56,45 @@ export class CoachPlayersComponent implements OnInit {
     });
   }
 
-  invitePlayer(playerId: number): void {
-    if (!confirm('¿Enviar invitación a este jugador?')) return;
+  openConfirmModal(player: PlayerWithInvitationState): void {
+    this.selectedPlayer = player;
+    this.showConfirmModal = true;
+  }
 
-    this.invitationService.createInvitation(playerId).subscribe({
+  sendInvitation(): void {
+    if (!this.selectedPlayer) return;
+
+    const player = this.selectedPlayer;
+    player.inviting = true;
+    this.showConfirmModal = false;
+
+    this.invitationService.createInvitation(player.id).subscribe({
       next: () => {
-        alert('✅ Invitación enviada correctamente');
-        this.loadPlayers();
+        player.inviting = false;
+        player.invited = true;
+        this.showSuccessModal = true;
       },
       error: (err) => {
+        player.inviting = false;
         console.error(err);
-        alert(err.error?.error || ' Error al enviar invitación');
+
+        if (err.status === 409) {
+          // ya está pendiente
+          player.invited = true;
+          this.showPendingModal = true;
+        } else {
+          this.error = err.error?.error || 'Error al enviar invitación.';
+        }
       },
     });
   }
+
+  closeModals(): void {
+    this.showConfirmModal = false;
+    this.showSuccessModal = false;
+    this.showPendingModal = false;
+  }
+
+
+
 }

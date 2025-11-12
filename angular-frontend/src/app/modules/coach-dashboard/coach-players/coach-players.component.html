@@ -3,17 +3,7 @@
 
   <!-- Loader -->
   <div *ngIf="loading" class="text-gray-500">Cargando jugadores...</div>
-
-  <!-- Error -->
   <div *ngIf="error" class="text-red-500 mb-4">{{ error }}</div>
-
-  <!-- Sin jugadores -->
-  <div
-    *ngIf="!loading && players.length === 0"
-    class="bg-white/80 border border-gray-200 rounded-2xl shadow-md p-6 text-center text-gray-600"
-  >
-    No hay jugadores disponibles en este momento.
-  </div>
 
   <!-- Lista jugadores -->
   <div
@@ -36,38 +26,90 @@
             *ngFor="let player of players"
             class="hover:bg-gray-50 transition duration-150"
           >
-
-            <!-- Nombre -->
-            <td class="p-3 border text-gray-800 font-medium">
-              {{ player.fullName || 'Jugador sin nombre' }}
-            </td>
-
-            <!-- Nickname -->
-            <td class="p-3 border text-gray-600">
-              {{ player.nickname || '—' }}
-            </td>
-
-            <!-- Dorsal -->
-            <td class="p-3 border text-gray-600 text-center">
-              {{ player.number || '—' }}
-            </td>
-
-            <!-- Acciones -->
+            <td class="p-3 border text-gray-800 font-medium">{{ player.fullName || 'Jugador sin nombre' }}</td>
+            <td class="p-3 border text-gray-600">{{ player.nickname || '—' }}</td>
+            <td class="p-3 border text-gray-600 text-center">{{ player.number || '—' }}</td>
             <td class="p-3 border text-center">
-              <button
-                (click)="invitePlayer(player.id)"
-                class="bg-primary hover:bg-primary/80 text-black px-4 py-2 rounded-lg text-sm transition"
-              >
-                Invitar
-              </button>
+              <!-- Estado Invitación -->
+              <ng-container *ngIf="player.invited; else inviteBtn">
+                <div class="inline-flex gap-2 justify-center min-w-[180px]">
+                  <button
+                    disabled
+                    class="bg-gray-300 text-gray-600 px-4 py-2 rounded-lg text-sm cursor-not-allowed"
+                  >
+                    Esperando respuesta
+                  </button>
+                </div>
+              </ng-container>
+
+              <!-- Botón Invitar -->
+              <ng-template #inviteBtn>
+                <button
+                  (click)="openConfirmModal(player)"
+                  [disabled]="player.inviting"
+                  class="bg-primary hover:bg-primary/80 text-black px-4 py-2 rounded-lg text-sm transition"
+                >
+                  {{ player.inviting ? 'Enviando...' : 'Invitar' }}
+                </button>
+              </ng-template>
             </td>
           </tr>
         </tbody>
       </table>
     </div>
   </div>
+</div>
 
-  <!-- Mensajes -->
-  <p *ngIf="success" class="text-green-600 mt-4 font-medium">{{ success }}</p>
-  <p *ngIf="error" class="text-red-500 mt-4 font-medium">{{ error }}</p>
+<!-- ✅ MODALES -->
+<!-- Confirmación -->
+<div
+  *ngIf="showConfirmModal"
+  class="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+>
+  <div class="bg-white rounded-2xl shadow-lg p-6 text-center w-[320px]">
+    <p class="text-lg mb-4">
+      ¿Enviar invitación a <strong>{{ selectedPlayer?.fullName }}</strong>?
+    </p>
+    <div class="flex justify-center gap-3">
+      <button
+        (click)="sendInvitation()"
+        class="bg-primary px-4 py-2 rounded-lg text-black"
+      >
+        Confirmar
+      </button>
+      <button (click)="closeModals()" class="bg-gray-300 px-4 py-2 rounded-lg text-gray-700">
+        Cancelar
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Éxito -->
+<div
+  *ngIf="showSuccessModal"
+  class="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+>
+  <div class="bg-white rounded-2xl shadow-lg p-6 text-center w-[320px]">
+    <p class="text-lg font-medium text-green-600 mb-4">
+      ✅ Invitación enviada correctamente
+    </p>
+    <button (click)="closeModals()" class="bg-primary px-4 py-2 rounded-lg text-black">
+      Aceptar
+    </button>
+  </div>
+</div>
+
+<!-- Pendiente -->
+<div
+  *ngIf="showPendingModal"
+  class="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+>
+  <div class="bg-white rounded-2xl shadow-lg p-6 text-center w-[320px]">
+    <p class="text-lg font-medium text-gray-700 mb-4">
+      ⚠️ Este jugador ya tiene una invitación pendiente.
+    </p>
+    <button (click)="closeModals()" class="bg-gray-300 px-4 py-2 rounded-lg text-gray-700">
+      Cerrar
+    </button>
+  </div>
 </div>

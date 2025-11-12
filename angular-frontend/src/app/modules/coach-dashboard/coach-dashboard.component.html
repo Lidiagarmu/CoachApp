@@ -78,16 +78,25 @@
     </nav>
   </aside>
 
-  <!-- Contenido dinámico -->
+  <!--Contenido dinámico -->
   <main class="flex-1 ml-64 p-8 bg-white/70 rounded-tl-3xl shadow-inner min-h-[calc(100vh-5rem)]">
 
+    <!--Sección Equipo-->
     <section *ngIf="activeTab === 'team'" class="animate-fadeIn">
       <app-coach-team></app-coach-team>
     </section>
 
+    <!--Sección Jugadores disponibles-->
     <section *ngIf="activeTab === 'players'" class="animate-fadeIn">
       <app-coach-players></app-coach-players>
     </section>
+
+
+    <!--Seccion Eventos-->
+
+
+    <!--Seccion Ajustes-->
+
 
   </main>
 </div>

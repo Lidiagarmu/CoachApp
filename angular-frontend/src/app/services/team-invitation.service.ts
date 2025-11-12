@@ -19,16 +19,25 @@ export class TeamInvitationService {
 
   // Enviar invitación a un jugador
   createInvitation(playerId: number): Observable<any> {
-    return this.http.post(this.apiUrl, { playerId });
+    return this.http.post(this.apiUrl, { playerId }, { withCredentials: true });
   }
 
   // Obtener invitaciones del jugador
   getPlayerInvitations(): Observable<TeamInvitation[]> {
-    return this.http.get<TeamInvitation[]>(`${this.apiUrl}/player`);
+    return this.http.get<TeamInvitation[]>(`${this.apiUrl}/player`, { withCredentials: true } );
   }
 
   // Responder invitación
   respondInvitation(id: number, action: 'accept' | 'reject'): Observable<any> {
-    return this.http.patch(`${this.apiUrl}/${id}/respond`, { action });
+    return this.http.patch(`${this.apiUrl}/${id}/respond`, { action }, { withCredentials: true });
+  }
+
+  //para que jugador obtenga equipo actual
+  getPlayerTeam(): Observable<any> {
+    return this.http.get<any>('http://localhost:8000/api/player/team', { withCredentials: true });
+  }
+
+ cancelInvitation(invitationId: number): Observable<any> {
+    return this.http.patch(`${this.apiUrl}/${invitationId}/cancel`, {});
   }
 }
