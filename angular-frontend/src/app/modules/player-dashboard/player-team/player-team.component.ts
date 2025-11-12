@@ -13,6 +13,8 @@ export class PlayerTeamComponent implements OnInit {
   playerTeam: any = null; // info del equipo si ya pertenece a uno
   loading = false;
   error: string | null = null;
+ 
+
 
   selectedInvitation: any = null;
   showAutoModal = false;
@@ -43,12 +45,18 @@ export class PlayerTeamComponent implements OnInit {
   }
 
   // Cargar info del equipo del jugador
- loadPlayerTeam(): void {
-  this.invitationService.getPlayerTeam().subscribe({
-    next: (team) => this.playerTeam = team,
-    error: (err) => console.error('No se pudo cargar el equipo', err),
-  });
-}
+  loadPlayerTeam(): void {
+    this.invitationService.getPlayerTeam().subscribe({
+      next: (team) => {
+        this.playerTeam = team;
+      },
+      error: (err) => {
+        console.error('Error al cargar el equipo:', err);
+        this.playerTeam = null;
+      }
+    });
+  }
+
 
   // Mostrar modal al pulsar "Mostrar"
   showInvitation(inv: any): void {
