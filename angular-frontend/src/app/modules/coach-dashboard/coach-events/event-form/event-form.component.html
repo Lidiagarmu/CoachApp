@@ -1,0 +1,108 @@
+<div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+  <div class="bg-white rounded-xl shadow-lg w-full max-w-lg p-6 relative">
+    <button (click)="closeForm()" class="absolute top-3 right-3 text-gray-600 hover:text-gray-900">&times;</button>
+
+    <h2 class="text-2xl font-bold mb-4">{{ eventToEdit ? 'Editar Evento' : 'Crear Evento' }}</h2>
+
+    <form [formGroup]="eventForm" (ngSubmit)="submit()" class="space-y-4">
+
+      <!-- Tipo de evento -->
+      <div>
+        <label class="block mb-1 font-semibold">Tipo de evento</label>
+        <select formControlName="type" class="w-full border rounded px-3 py-2">
+          <option value="training">Entrenamiento</option>
+          <option value="match">Partido</option>
+        </select>
+      </div>
+
+      <!-- Título -->
+      <div>
+        <label class="block mb-1 font-semibold">Título</label>
+        <input type="text" formControlName="title" class="w-full border rounded px-3 py-2">
+      </div>
+
+      <!-- Descripción -->
+      <div>
+        <label class="block mb-1 font-semibold">Descripción</label>
+        <textarea formControlName="description" rows="3" class="w-full border rounded px-3 py-2"></textarea>
+      </div>
+
+      <!-- Fecha y Hora -->
+      <div class="flex gap-2">
+        <div class="flex-1">
+          <label class="block mb-1 font-semibold">Fecha</label>
+          <input type="date" formControlName="date" class="w-full border rounded px-3 py-2">
+        </div>
+        <div class="flex-1">
+          <label class="block mb-1 font-semibold">Hora</label>
+          <input type="time" formControlName="time" class="w-full border rounded px-3 py-2">
+        </div>
+      </div>
+
+      <!-- Duración -->
+      <div>
+        <label class="block mb-1 font-semibold">Duración (min)</label>
+        <input type="number" formControlName="duration" class="w-full border rounded px-3 py-2">
+      </div>
+
+      <!-- Ubicación -->
+      <div class="flex gap-2">
+        <div class="flex-1">
+          <label class="block mb-1 font-semibold">Nombre ubicación</label>
+          <input type="text" formControlName="location_name" class="w-full border rounded px-3 py-2">
+        </div>
+        <div class="flex-1">
+          <label class="block mb-1 font-semibold">URL ubicación</label>
+          <input type="url" formControlName="location_url" class="w-full border rounded px-3 py-2">
+        </div>
+      </div>
+
+      <!-- Campos específicos según tipo -->
+      <div *ngIf="eventForm.get('type')?.value === 'training'">
+        <div>
+          <label class="block mb-1 font-semibold">Tipo de entrenamiento</label>
+          <input type="text" formControlName="training_type" class="w-full border rounded px-3 py-2">
+        </div>
+        <div>
+          <label class="block mb-1 font-semibold">Área de enfoque</label>
+          <input type="text" formControlName="focus_area" class="w-full border rounded px-3 py-2">
+        </div>
+      </div>
+
+      <div *ngIf="eventForm.get('type')?.value === 'match'">
+        <div>
+          <label class="block mb-1 font-semibold">Rival</label>
+          <input type="text" formControlName="opponent" class="w-full border rounded px-3 py-2">
+        </div>
+        <div>
+          <label class="block mb-1 font-semibold">Tipo de partido</label>
+          <input type="text" formControlName="match_type" class="w-full border rounded px-3 py-2">
+        </div>
+      </div>
+
+      <!-- ✅ Subir imágenes -->
+      <div>
+        <label class="block mb-1 font-semibold">Imágenes del evento</label>
+        <input type="file" (change)="onFilesSelected($event)" multiple class="w-full">
+
+        <!-- Previsualización -->
+        <div class="flex flex-wrap gap-2 mt-2">
+          <div *ngFor="let file of selectedFiles" class="w-20 h-20 border rounded overflow-hidden relative">
+          <img [src]="filePreview(file)" alt="Imagen seleccionada" class="w-full h-full object-cover">
+            <button type="button" (click)="removeFile(file)" class="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">×</button>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- Botones Cancelar/ Crear-->
+      <div class="flex justify-end gap-2 mt-4">
+        <button type="button" (click)="closeForm()" class="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded">Cancelar</button>
+        <button type="submit" class="bg-primary hover:bg-primary/80 text-white px-4 py-2 rounded">
+          {{ eventToEdit ? 'Actualizar' : 'Crear' }}
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>

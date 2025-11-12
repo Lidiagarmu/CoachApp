@@ -91,8 +91,11 @@
       <app-coach-players></app-coach-players>
     </section>
 
-
     <!--Seccion Eventos-->
+    <section *ngIf="activeTab === 'events'" class="animate-fadeIn">
+      <app-coach-events></app-coach-events>
+    </section>
+
 
 
     <!--Seccion Ajustes-->
