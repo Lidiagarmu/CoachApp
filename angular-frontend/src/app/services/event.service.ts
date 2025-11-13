@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Event as AppEvent } from '../interfaces/event.model';
+import { map } from 'rxjs/operators';
+
 
 
 export interface Event {
@@ -37,8 +39,22 @@ export class EventService {
   }
 
   // 👉 Obtener eventos de un equipo
+
   getEventsByTeam(teamId: number | string): Observable<AppEvent[]> {
-    return this.http.get<AppEvent[]>(`${this.apiUrl}/team/${teamId}`, { withCredentials: true });
+    return this.http
+      .get<AppEvent[]>(`${this.apiUrl}/team/${teamId}`, { withCredentials: true })
+      .pipe(
+        map(events =>
+          events.map(event => ({
+            ...event,
+            images: event.images?.map(img =>
+              img.startsWith('http')
+                ? img // si ya tiene dominio, la dejamos igual
+                : `http://localhost:8000${img}` // si no, le agregamos el host sin /api
+            ) || []
+          }))
+        )
+      );
   }
 
   // 👉 Actualizar evento
