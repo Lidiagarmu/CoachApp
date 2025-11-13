@@ -33,28 +33,28 @@ export class EventService {
 
   // 👉 Crear un evento
   createEvent(event: Partial<AppEvent>): Observable<any> {
-    return this.http.post(this.apiUrl, event);
+    return this.http.post(this.apiUrl, event, { withCredentials: true });
   }
 
   // 👉 Obtener eventos de un equipo
   getEventsByTeam(teamId: number | string): Observable<AppEvent[]> {
-    return this.http.get<AppEvent[]>(`${this.apiUrl}/team/${teamId}`);
+    return this.http.get<AppEvent[]>(`${this.apiUrl}/team/${teamId}`, { withCredentials: true });
   }
 
   // 👉 Actualizar evento
   updateEvent(id: string, event: Partial<AppEvent>): Observable<any> {
-    return this.http.put(`${this.apiUrl}/${id}`, event);
+    return this.http.put(`${this.apiUrl}/${id}`, event, { withCredentials: true });
   }
 
   // 👉 Eliminar evento
   deleteEvent(id: string): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${id}`);
+    return this.http.delete(`${this.apiUrl}/${id}`, { withCredentials: true });
   }
 
   // 👉 Subir imágenes
   uploadImages(eventId: string, files: File[]): Observable<any> {
     const formData = new FormData();
     files.forEach(file => formData.append('images[]', file));
-    return this.http.post(`${this.apiUrl}/${eventId}/images`, formData);
+    return this.http.post(`${this.apiUrl}/${eventId}/images`, formData, { withCredentials: true });
   }
 }

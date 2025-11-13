@@ -50,8 +50,9 @@ class EventController extends AbstractController
             $event = $this->eventService->createEvent($data, $this->teamRepo);
 
             return $this->json([
+                'id' => $event->getId(),
                 'message' => 'Evento creado correctamente',
-                'event_id' => $event->getId(),
+                
             ], 201);
         } catch (\Exception $e) {
             return $this->json(['error' => $e->getMessage()], 400);

@@ -4,6 +4,7 @@ import { EventFormComponent } from './event-form/event-form.component';
 import { CommonModule, NgIf, NgFor } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Event as AppEvent } from '../../../interfaces/event.model';
+import { environment } from '../../../../environments/enviroment';
 
 @Component({
   selector: 'app-coach-events',
@@ -21,6 +22,9 @@ export class CoachEventsComponent implements OnInit {
   showFormModal = false;
   eventToEdit?: AppEvent;
 
+  backendUrl = environment.apiUrl; 
+
+
   constructor(private eventService: EventService) {}
 
   ngOnInit(): void {
@@ -29,6 +33,16 @@ export class CoachEventsComponent implements OnInit {
 
   loadEvents(): void {
     this.eventService.getEventsByTeam(this.teamId).subscribe(events => {
+
+          // 🧠 construir URLs completas para imágenes
+      events.forEach(event => {
+        if (event.images) {
+          event.images = event.images.map(img =>
+            img.startsWith('http') ? img : `${this.backendUrl}${img}`
+          );
+        }
+      });
+
       this.events = events;
       this.trainings = events.filter(e => e.type === 'training');
       this.games = events.filter(e => e.type === 'match');

@@ -17,15 +17,19 @@ class EventService
     private EntityManagerInterface $em;
     private Security $security;
     private SluggerInterface $slugger;
+    private string $eventsDirectory;
 
     public function __construct(
         EntityManagerInterface $em,
         Security $security,
-        SluggerInterface $slugger
+        SluggerInterface $slugger,
+        string $eventsDirectory
     ) {
         $this->em = $em;
         $this->security = $security;
         $this->slugger = $slugger;
+        $this->eventsDirectory = $eventsDirectory;
+        
     }
 
     /**
@@ -102,23 +106,24 @@ class EventService
 
         $uploaded = [];
 
-        foreach ($files as $file) {
-            if (!$file instanceof UploadedFile) {
-                continue;
-            }
 
-            $safeFilename = $this->slugger->slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME));
-            $newFilename = $safeFilename . '-' . uniqid() . '.' . $file->guessExtension();
+            foreach ($files as $file) {
+                        if (!$file instanceof UploadedFile) continue;
 
-            $file->move('uploads/events', $newFilename);
+                        $safeFilename = $this->slugger->slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME));
+                        $newFilename = $safeFilename . '-' . uniqid() . '.' . $file->guessExtension();
 
-            $image = new EventImage();
-            $image->setEvent($event);
-            $image->setUrl('/uploads/events/' . $newFilename);
+                        // mover archivo a public/uploads/events
+                        $file->move($this->eventsDirectory, $newFilename);
 
-            $this->em->persist($image);
-            $uploaded[] = $image->getUrl();
-        }
+                        $image = new EventImage();
+                        $image->setEvent($event);
+                        $image->setUrl('/uploads/events/' . $newFilename);
+
+                        $this->em->persist($image);
+                        $uploaded[] = $image->getUrl();
+                    }
+
 
         $this->em->flush();
 

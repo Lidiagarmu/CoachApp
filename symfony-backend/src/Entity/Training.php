@@ -8,9 +8,11 @@ use App\Repository\TrainingRepository;
 #[ORM\Table(name: "trainings")]
 class Training
 {
+    // Shared primary key with Event
     #[ORM\Id]
     #[ORM\OneToOne(targetEntity: Event::class)]
-    #[ORM\JoinColumn(name: "id", referencedColumnName: "id")]
+    // añadimos onDelete: 'CASCADE' para que la FK en BD borre esta fila cuando se elimine el event
+    #[ORM\JoinColumn(name: "id", referencedColumnName: "id", onDelete: "CASCADE", nullable: false)]
     private Event $event;
 
     #[ORM\Column(type: 'string', length: 20)]

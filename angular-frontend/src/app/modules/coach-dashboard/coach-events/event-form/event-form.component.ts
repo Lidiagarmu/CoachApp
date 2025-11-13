@@ -72,8 +72,10 @@ export class EventFormComponent {
     const formValue = this.eventForm.value;
     const eventData: Partial<AppEvent> = {
       ...formValue,
-      team: this.teamId.toString()
+      team_id: this.teamId
     };
+
+    console.log('🟢 Enviando eventData:', eventData);
 
     const handleAfterSave = (eventId: string) => {
       if (this.selectedFiles.length > 0) {
