@@ -10,7 +10,7 @@ import { map } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class EventService {
-  private apiUrl = 'http://localhost:8000/apis/events';
+  private apiUrl = 'http://localhost:8000/api/events';
 
   constructor(private http: HttpClient) {}
 
