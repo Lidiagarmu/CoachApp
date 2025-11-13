@@ -4,4 +4,9 @@ export interface User {
   nickname: string;
   fullName: string;
   roles: string[];
+  age?: number;
+  team?: {
+    id: number;
+    name: string;
+  } | null;
 }
