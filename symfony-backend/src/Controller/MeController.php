@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 
+
 class MeController extends AbstractController
 {
    #[Route('/api/me', name: 'api_me', methods: ['GET'])]
@@ -16,6 +17,8 @@ class MeController extends AbstractController
        if (!$user) {
            return $this->json(['error' => 'Unauthorized'], 401);
        }
+         //  Incluir también la relación con el equipo (si existe)
+        $team = $user->getTeam();
 
        return $this->json([
            'id' => $user->getId(),
@@ -23,6 +26,10 @@ class MeController extends AbstractController
            'nickname' => $user->getNickname(),
            'fullName' => $user->getFullName(),
            'roles' => $user->getRoles(),
+           'team' => $team ? [
+                'id' => $team->getId(),
+                'name' => $team->getName(),
+            ] : null,
        ]);
    }
 }

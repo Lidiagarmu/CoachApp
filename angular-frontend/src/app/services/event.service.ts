@@ -6,30 +6,11 @@ import { map } from 'rxjs/operators';
 
 
 
-export interface Event {
-  id: string;
-  title: string;
-  description: string;
-  date: string;
-  time: string;
-  duration: number;
-  location_name: string;
-  location_url: string;
-  type: 'training' | 'match';
-  team: string;
-  images: string[];
-  // Campos específicos de training o match opcionales
-  training_type?: string;
-  focus_area?: string;
-  opponent?: string;
-  match_type?: string;
-}
-
 @Injectable({
   providedIn: 'root'
 })
 export class EventService {
-  private apiUrl = 'http://localhost:8000/api/events';
+  private apiUrl = 'http://localhost:8000/apis/events';
 
   constructor(private http: HttpClient) {}
 

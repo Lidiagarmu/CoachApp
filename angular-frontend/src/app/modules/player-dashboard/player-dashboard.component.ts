@@ -35,6 +35,7 @@ export class PlayerDashboardComponent implements OnInit {
         this.fullName = user.fullName || '';
         this.role = user.roles?.includes('ROLE_COACH') ? 'Entrenador' : 'Jugador';
          this.teamId = user.team?.id;
+         console.log('✅ teamId del jugador:', this.teamId); 
       },
       error: () => {
         // Opcional: manejar error, logout si token inválido
