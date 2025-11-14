@@ -4,10 +4,15 @@ namespace App\Entity;
 
 use App\Repository\PlayerProfileRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+
 
 #[ORM\Entity(repositoryClass: PlayerProfileRepository::class)]
 class PlayerProfile
 {
+
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -32,6 +37,12 @@ class PlayerProfile
 
     #[ORM\OneToMany(mappedBy: 'player', targetEntity: Event::class)]
     private Collection $events;
+
+    public function __construct()
+    {
+        $this->events = new ArrayCollection();
+    }
+
 
     public function getCoach(): ?CoachProfile
     {
