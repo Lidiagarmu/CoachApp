@@ -182,7 +182,7 @@ class EventController extends AbstractController
         }
 
         // Buscar todos los eventos asignados a ese jugador
-        $events = $this->eventRepo->findBy(['player' => $playerId], ['date' => 'ASC']);
+        $events = $this->eventRepo->findBy(['player' => $playerProfile], ['date' => 'ASC']);
 
         // Convertir a JSON
         $data = array_map(function (Event $e) {

@@ -30,6 +30,9 @@ class PlayerProfile
     #[ORM\ManyToOne(inversedBy: 'players', targetEntity: Team::class)]
     private ?Team $team = null;
 
+    #[ORM\OneToMany(mappedBy: 'player', targetEntity: Event::class)]
+    private Collection $events;
+
     public function getCoach(): ?CoachProfile
     {
         return $this->coach;
@@ -92,6 +95,11 @@ class PlayerProfile
     {
         $this->team = $team;
         return $this;
+    }
+
+    public function getEvents(): Collection
+    {
+        return $this->events;
     }
 
 }
