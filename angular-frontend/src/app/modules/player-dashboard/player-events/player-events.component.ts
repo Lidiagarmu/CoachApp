@@ -12,11 +12,22 @@ import { CommonModule } from '@angular/common';
 })
 export class PlayerEventsComponent implements OnInit {
   @Input() teamId?: number;
-  @Input() playerId?: number;
   trainings: AppEvent[] = [];
   matches: AppEvent[] = [];
   loading = false;
   errorMessage = '';
+
+  private _playerId?: number;
+
+   @Input() 
+  set playerId(value: number | undefined) {
+    this._playerId = value;
+    if (this._playerId) this.loadEvents();
+  }
+  get playerId(): number | undefined {
+    return this._playerId;
+  }
+
 
   constructor(private eventService: EventService) {}
 
@@ -31,8 +42,11 @@ export class PlayerEventsComponent implements OnInit {
     this.loading = true;
     this.eventService.getEventsByPlayer(this.playerId).subscribe({
       next: events => {
+        console.log('💡 Eventos crudos del API:', events);
         this.trainings = events.filter(e => e.type === 'training');
         this.matches = events.filter(e => e.type === 'match');
+        console.log('💡 Entrenamientos filtrados:', this.trainings);
+        console.log('💡 Partidos filtrados:', this.matches);
         this.loading = false;
       },
       error: err => {
@@ -42,4 +56,5 @@ export class PlayerEventsComponent implements OnInit {
       }
     });
   }
+
 }

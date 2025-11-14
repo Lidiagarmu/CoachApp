@@ -35,7 +35,7 @@ class PlayerProfile
     #[ORM\ManyToOne(inversedBy: 'players', targetEntity: Team::class)]
     private ?Team $team = null;
 
-    #[ORM\OneToMany(mappedBy: 'player', targetEntity: Event::class)]
+    #[ORM\ManyToMany(targetEntity: Event::class, mappedBy: 'players')]
     private Collection $events;
 
     public function __construct()

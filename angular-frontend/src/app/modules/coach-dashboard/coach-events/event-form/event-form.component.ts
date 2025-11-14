@@ -72,7 +72,10 @@ export class EventFormComponent {
     const formValue = this.eventForm.value;
     const eventData: Partial<AppEvent> = {
       ...formValue,
-      team_id: this.teamId
+        teamId: this.teamId,  
+        description: formValue.description || '',
+        location_name: formValue.location_name || '',
+        location_url: formValue.location_url || ''
     };
 
     console.log('🟢 Enviando eventData:', eventData);

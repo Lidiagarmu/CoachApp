@@ -52,8 +52,8 @@ class Event
     private ?Team $team = null;
 
     //asociación de evento al jugador
-    #[ORM\ManyToOne(targetEntity: PlayerProfile::class, inversedBy: 'events')]
-    private ?PlayerProfile $player = null;
+    #[ORM\ManyToMany(targetEntity: PlayerProfile::class, inversedBy: 'events')]
+    private Collection $players;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private \DateTimeInterface $created_at;
@@ -68,6 +68,7 @@ class Event
     {
         $this->created_at = new \DateTime();
         $this->images = new ArrayCollection();
+        $this->players = new ArrayCollection();
     }
 
     // Getters & Setters
@@ -105,16 +106,6 @@ class Event
     public function getCreatedAt(): \DateTimeInterface { return $this->created_at; }
     public function setCreatedAt(\DateTimeInterface $created_at): self { $this->created_at = $created_at; return $this; }
 
-    public function getPlayer(): ?PlayerProfile
-    {
-        return $this->player;
-    }
-
-    public function setPlayer(?PlayerProfile $player): self
-    {
-        $this->player = $player;
-        return $this;
-    }
 
     /** @return Collection<int, EventImage> */
     public function getImages(): Collection { return $this->images; }
@@ -134,5 +125,21 @@ class Event
 
         }
         return $this;
+    }
+
+    public function addPlayer(PlayerProfile $player): self {
+    if (!$this->players->contains($player)) {
+        $this->players->add($player);
+    }
+    return $this;
+    }
+
+    public function removePlayer(PlayerProfile $player): self {
+        $this->players->removeElement($player);
+        return $this;
+    }
+
+    public function getPlayers(): Collection {
+        return $this->players;
     }
 }
