@@ -6,6 +6,7 @@ use App\Repository\EventRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
+use App\Entity\Team;
 
 #[ORM\Entity(repositoryClass: EventRepository::class)]
 #[ORM\Table(name: "events")]
@@ -45,15 +46,23 @@ class Event
     #[ORM\JoinColumn(nullable: false)]
     private User $created_by;
 
+    //asociación de evento al equipo
     #[ORM\ManyToOne(targetEntity: Team::class)]
     #[ORM\JoinColumn(nullable: true)]
     private ?Team $team = null;
+
+    //asociación de evento al jugador
+    #[ORM\ManyToOne(targetEntity: PlayerProfile::class, inversedBy: 'events')]
+    private ?PlayerProfile $player = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private \DateTimeInterface $created_at;
 
     #[ORM\OneToMany(mappedBy: 'event', targetEntity: EventImage::class, cascade: ['persist', 'remove'])]
     private Collection $images;
+
+
+
 
     public function __construct()
     {
@@ -95,6 +104,17 @@ class Event
 
     public function getCreatedAt(): \DateTimeInterface { return $this->created_at; }
     public function setCreatedAt(\DateTimeInterface $created_at): self { $this->created_at = $created_at; return $this; }
+
+    public function getPlayer(): ?PlayerProfile
+    {
+        return $this->player;
+    }
+
+    public function setPlayer(?PlayerProfile $player): self
+    {
+        $this->player = $player;
+        return $this;
+    }
 
     /** @return Collection<int, EventImage> */
     public function getImages(): Collection { return $this->images; }

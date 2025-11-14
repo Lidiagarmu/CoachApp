@@ -1,3 +1,6 @@
+import { Team } from './team.model';
+import { PlayerProfile } from './player-profile.model';
+
 export interface User {
   id: number;
   email: string;
@@ -5,8 +8,10 @@ export interface User {
   fullName: string;
   roles: string[];
   age?: number;
-  team?: {
-    id: number;
-    name: string;
-  } | null;
+
+  // Mantener team por compatibilidad si quieres
+  team?: Team | null;
+
+  // Perfil de jugador (nuevo campo)
+  playerProfile?: PlayerProfile;
 }

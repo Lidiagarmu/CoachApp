@@ -67,21 +67,30 @@ class EventService
 
         $this->em->persist($event);
 
-        // Crear entidad hija
-        if ($data['type'] === 'training') {
+        // 🆕 Asignar evento a todos los jugadores del equipo
+        $players = $team->getPlayers(); // Devuelve array de PlayerProfile
+        foreach ($players as $playerProfile) {
+            $playerEvent = clone $event; // clonamos el evento base
+            $playerEvent->setPlayer($playerProfile); // asignamos el jugador
+            $this->em->persist($playerEvent);
+
+
+    // Clonar entidad hija si aplica
+        if ($event->getType() === 'training') {
             $training = new Training();
-            $training->setEvent($event);
+            $training->setEvent($playerEvent);
             $training->setTrainingType($data['training_type'] ?? '');
             $training->setFocusArea($data['focus_area'] ?? '');
             $training->setCoach($user);
             $this->em->persist($training);
         } else {
             $game = new Game();
-            $game->setEvent($event);
+            $game->setEvent($playerEvent);
             $game->setOpponent($data['opponent'] ?? '');
             $game->setMatchType($data['match_type'] ?? '');
             $game->setTeam($team);
             $this->em->persist($game);
+            }
         }
 
         $this->em->flush();

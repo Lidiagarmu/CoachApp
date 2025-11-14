@@ -18,6 +18,7 @@ export class PlayerDashboardComponent implements OnInit {
   role: string = 'Jugador';
   profilePhoto: string | null = null;
   teamId?: number;
+  playerId?: number;
 
 
   activeTab: 'team' | 'events' | 'settings' = 'team';
@@ -28,21 +29,25 @@ export class PlayerDashboardComponent implements OnInit {
   ) {}
 
 
+ 
   ngOnInit(): void {
-    this.authService.fetchUserFromApi().subscribe({
-      next: user => {
-        this.nickname = user.nickname || '';
-        this.fullName = user.fullName || '';
-        this.role = user.roles?.includes('ROLE_COACH') ? 'Entrenador' : 'Jugador';
-         this.teamId = user.team?.id;
-         console.log('✅ teamId del jugador:', this.teamId); 
-      },
-      error: () => {
-        // Opcional: manejar error, logout si token inválido
-        this.authService.logout();
-      }
-    });
+      this.authService.fetchUserFromApi().subscribe({
+          next: user => {
+              this.nickname = user.nickname || '';
+              this.fullName = user.fullName || '';
+              this.role = user.roles?.includes('ROLE_COACH') ? 'Entrenador' : 'Jugador';
+
+              // 🆕 Usamos playerProfile
+              this.teamId = user.playerProfile?.team?.id;
+              this.playerId = user.playerProfile?.id;
+
+              console.log('✅ teamId del jugador:', this.teamId); 
+              console.log('✅ playerId del jugador:', this.playerId); 
+          },
+          error: () => this.authService.logout()
+      });
   }
+
 
   openTab(tab: 'team' | 'events' | 'settings') {
     this.activeTab = tab;

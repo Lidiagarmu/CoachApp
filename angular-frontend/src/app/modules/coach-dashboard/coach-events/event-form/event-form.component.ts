@@ -77,7 +77,7 @@ export class EventFormComponent {
 
     console.log('🟢 Enviando eventData:', eventData);
 
-    const handleAfterSave = (eventId: string) => {
+    const handleAfterSave = (eventId: number) => {
       if (this.selectedFiles.length > 0) {
         this.eventService.uploadImages(eventId, this.selectedFiles).subscribe({
           next: () => {

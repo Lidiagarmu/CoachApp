@@ -45,6 +45,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToOne(mappedBy: 'userAccount', targetEntity: CoachProfile::class, cascade: ['persist', 'remove'])]
     private ?CoachProfile $coachProfile = null;
 
+    /** @var PlayerProfile|null */
     #[ORM\OneToOne(mappedBy: 'playerAccount', targetEntity: PlayerProfile::class, cascade: ['persist', 'remove'])]
     private ?PlayerProfile $playerProfile = null;
 

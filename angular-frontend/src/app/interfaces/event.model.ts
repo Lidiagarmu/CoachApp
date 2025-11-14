@@ -1,8 +1,13 @@
-export interface Event {
-  id: string;
-  type: 'training' | 'match';
+export interface EventTeam {
+  id: number;
+  name: string;
+  shield?: string;
+}
 
-  // Campos comunes
+export interface Event {
+  id: number; // usar number si Symfony devuelve id como entero
+  type: 'training' | 'match';
+  
   date: string;
   time: string;
   duration: number;
@@ -16,8 +21,12 @@ export interface Event {
   focus_area?: string;
 
   // Partido
-  team?: string;
-  teamShield?: string;
   opponent?: string;
   match_type?: string;
+
+  // Relación con equipo
+  team?: EventTeam | null;
+
+  // 🆕 Relación con jugador (opcional)
+  playerId?: number;
 }

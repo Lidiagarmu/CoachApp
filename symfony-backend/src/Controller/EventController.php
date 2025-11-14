@@ -49,11 +49,12 @@ class EventController extends AbstractController
 
             $event = $this->eventService->createEvent($data, $this->teamRepo);
 
-            return $this->json([
-                'id' => $event->getId(),
-                'message' => 'Evento creado correctamente',
-                
-            ], 201);
+        return $this->json([
+            'id' => $event->getId(),
+            'teamId' => $event->getTeam()?->getId(), // ✅ null safe
+            'message' => 'Evento creado correctamente',
+        ], 201);
+
         } catch (\Exception $e) {
             return $this->json(['error' => $e->getMessage()], 400);
         }
@@ -167,4 +168,48 @@ class EventController extends AbstractController
             return $this->json(['error' => $e->getMessage()], 400);
         }
     }
+
+
+    #[Route('/player/{playerId}', name: 'list_player_events', methods: ['GET'])]
+    public function listByPlayer(int $playerId): JsonResponse
+    {
+        // Obtener el playerProfile
+        $playerProfile = $this->security->getUser()->getPlayerProfile();
+
+        // Seguridad: un jugador solo puede ver SUS propios eventos
+        if (!$this->isGranted('ROLE_COACH') && (!$playerProfile || $playerProfile->getId() !== $playerId)) {
+            return $this->json(['error' => 'No puedes ver eventos de otros jugadores'], 403);
+        }
+
+        // Buscar todos los eventos asignados a ese jugador
+        $events = $this->eventRepo->findBy(['player' => $playerId], ['date' => 'ASC']);
+
+        // Convertir a JSON
+        $data = array_map(function (Event $e) {
+            $team = $e->getTeam();
+            return [
+                'id' => $e->getId(),
+                'title' => $e->getTitle(),
+                'description' => $e->getDescription(),
+                'date' => $e->getDate()->format('Y-m-d'),
+                'time' => $e->getTime()->format('H:i'),
+                'duration' => $e->getDuration(),
+                'type' => $e->getType(),
+                'location_name' => $e->getLocationName(),
+                'location_url' => $e->getLocationUrl(),
+                'team' => $team ? [
+                    'id' => $team->getId(),
+                    'name' => $team->getName(),
+                    'shield' => $team->getShield(),
+                ] : null,
+                'images' => array_map(
+                    fn($img) => $img->getUrl(),
+                    $e->getImages()->toArray()
+                ),
+            ];
+        }, $events);
+
+        return $this->json($data, 200);
+    }
+
 }

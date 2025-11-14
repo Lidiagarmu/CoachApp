@@ -70,15 +70,18 @@ export class CoachEventsComponent implements OnInit {
     this.closeForm();
   }
 
-  deleteEvent(id: string): void {
-    this.eventService.deleteEvent(id).subscribe(() => this.loadEvents());
+  deleteEvent(id: number) {
+    this.eventService.deleteEvent(id).subscribe({
+      next: () => this.loadEvents(),
+      error: (err) => console.error(err)
+    });
   }
 
   onFilesSelected(event: any): void {
     this.selectedFiles = Array.from(event.target.files);
   }
 
-  uploadSelectedImages(eventId: string): void {
+  uploadSelectedImages(eventId: number): void {
     if (!this.selectedFiles || this.selectedFiles.length === 0) return;
 
     this.eventService.uploadImages(eventId, this.selectedFiles).subscribe(() => {
@@ -86,4 +89,10 @@ export class CoachEventsComponent implements OnInit {
       this.loadEvents();
     });
   }
+
+  getTeamShield(event: AppEvent): string | null {
+    return event.team?.shield ?? null;
+  }
+
+
 }
