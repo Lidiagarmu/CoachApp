@@ -13,10 +13,20 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use App\Service\EventService;
+
 
 #[Route('/api/invitations')]
 class TeamInvitationController extends AbstractController
 {
+    private EventService $eventService;
+
+    public function __construct(EventService $eventService)
+    {
+        $this->eventService = $eventService;
+    }
+
+
     #[Route('', name: 'create_invitation', methods: ['POST'])]
     #[IsGranted('ROLE_COACH')]
     public function createInvitation(Request $request, EntityManagerInterface $em): JsonResponse
@@ -126,34 +136,37 @@ class TeamInvitationController extends AbstractController
         }
 
        if ($action === 'accept') {
-    // Si ya tiene equipo, bloquear
-    if ($playerProfile->getTeam()) {
-        return $this->json(['error' => 'Ya perteneces a un equipo'], 400);
-    }
-
-    // Aceptar la invitación
-    $invitation->setStatus('accepted');
-    $playerProfile->setTeam($invitation->getTeam());
-    $invitation->getTeam()->addPlayer($playerProfile);
-
-    // Rechazar otras invitaciones pendientes
-    $otherInvites = $em->getRepository(TeamInvitation::class)->findBy([
-        'player' => $playerProfile,
-        'status' => 'pending'
-    ]);
-
-    foreach ($otherInvites as $other) {
-        if ($other->getId() !== $invitation->getId()) {
-            $other->setStatus('rejected');
+        // Si ya tiene equipo, bloquear
+        if ($playerProfile->getTeam()) {
+            return $this->json(['error' => 'Ya perteneces a un equipo'], 400);
         }
-        }
-    } elseif ($action === 'reject') {
-        $invitation->setStatus('rejected');
-    } else {
-        return $this->json(['error' => 'Acción inválida'], 400);
-    }
 
-    $em->flush();
+        // Aceptar la invitación
+        $invitation->setStatus('accepted');
+        $playerProfile->setTeam($invitation->getTeam());
+        $invitation->getTeam()->addPlayer($playerProfile);
+
+        // Asignar eventos existentes al jugador
+        $this->eventService->assignExistingEventsToNewPlayer($playerProfile);
+
+        // Rechazar otras invitaciones pendientes
+        $otherInvites = $em->getRepository(TeamInvitation::class)->findBy([
+            'player' => $playerProfile,
+            'status' => 'pending'
+        ]);
+
+        foreach ($otherInvites as $other) {
+            if ($other->getId() !== $invitation->getId()) {
+                $other->setStatus('rejected');
+            }
+            }
+        } elseif ($action === 'reject') {
+            $invitation->setStatus('rejected');
+        } else {
+            return $this->json(['error' => 'Acción inválida'], 400);
+        }
+
+        $em->flush();
 
 
         return $this->json(['message' => "Invitación {$action} correctamente"]);

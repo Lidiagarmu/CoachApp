@@ -143,11 +143,23 @@ class TeamController extends AbstractController
         }
 
         $team->addPlayer($player);
-        $em->persist($team);
+        $player->setTeam($team);
+        $em->persist($player);
+
+        // ✅ Asignar todos los eventos existentes del equipo al jugador
+        $events = $this->eventRepo->findBy(['team' => $team]);
+        foreach ($events as $event) {
+            $event->addPlayer($player);
+            $em->persist($event);
+        }
+
         $em->flush();
 
-        return $this->json(['success' => 'Jugador añadido', 'playerId' => $player->getPlayerAccount()->getId()]);
+        return $this->json(['success' => 'Jugador añadido y eventos asignados', 'playerId' => $player->getPlayerAccount()->getId()]);
     }
+
+
+
 
     #[Route('/available', name: 'team_available', methods: ['GET'])]
     public function getAvailableTeams(EntityManagerInterface $em): JsonResponse
@@ -304,4 +316,6 @@ class TeamController extends AbstractController
             ], $team->getPlayers()->toArray())
         ]);
     }
+
+    
 }

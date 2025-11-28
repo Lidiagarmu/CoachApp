@@ -6,6 +6,7 @@
 parameters:
  default_admin_email: '%env(DEFAULT_ADMIN_EMAIL)%'
  default_admin_password: '%env(DEFAULT_ADMIN_PASSWORD)%'
+ events_directory: '%kernel.project_dir%/public/uploads/events'
 
 services:
     # default configuration for services in *this* file
@@ -29,3 +30,7 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+    
+    App\Service\EventService:
+        arguments:
+            $eventsDirectory: '%events_directory%'

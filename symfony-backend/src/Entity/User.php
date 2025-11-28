@@ -6,6 +6,7 @@ use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use App\Entity\Team;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
@@ -37,9 +38,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(nullable: true)]
     private ?int $age = null;
 
+    
+    #[ORM\ManyToOne(targetEntity: Team::class, inversedBy: 'players')]
+    private ?Team $team = null;
+
     #[ORM\OneToOne(mappedBy: 'userAccount', targetEntity: CoachProfile::class, cascade: ['persist', 'remove'])]
     private ?CoachProfile $coachProfile = null;
 
+    /** @var PlayerProfile|null */
     #[ORM\OneToOne(mappedBy: 'playerAccount', targetEntity: PlayerProfile::class, cascade: ['persist', 'remove'])]
     private ?PlayerProfile $playerProfile = null;
 
@@ -93,6 +99,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setAge(?int $age): static
     {
         $this->age = $age;
+        return $this;
+    }
+
+       public function getTeam(): ?Team
+    {
+        return $this->team;
+    }
+
+    public function setTeam(?Team $team): self
+    {
+        $this->team = $team;
         return $this;
     }
 

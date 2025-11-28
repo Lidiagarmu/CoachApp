@@ -4,6 +4,7 @@ import { NavbarComponent } from '../../shared/components/navbar/navbar.component
 import { AuthService } from '../../services/auth.service';
 import { CoachTeamComponent } from './coach-team/coach-team.component';
 import { CoachPlayersComponent } from './coach-players/coach-players.component';
+import { CoachEventsComponent } from './coach-events/coach-events.component';
 
 @Component({
   selector: 'app-coach-dashboard',
@@ -13,6 +14,7 @@ import { CoachPlayersComponent } from './coach-players/coach-players.component';
     NavbarComponent,
     CoachTeamComponent,
     CoachPlayersComponent,
+    CoachEventsComponent
   ],
   templateUrl: './coach-dashboard.component.html',
 })
