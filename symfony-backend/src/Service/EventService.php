@@ -11,6 +11,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use App\Entity\PlayerProfile;
+use App\Repository\EventRepository;
 
 class EventService
 {
@@ -18,17 +20,20 @@ class EventService
     private Security $security;
     private SluggerInterface $slugger;
     private string $eventsDirectory;
+    private EventRepository $eventRepo;
 
     public function __construct(
         EntityManagerInterface $em,
         Security $security,
         SluggerInterface $slugger,
-        string $eventsDirectory
+        string $eventsDirectory,
+        EventRepository $eventRepo
     ) {
         $this->em = $em;
         $this->security = $security;
         $this->slugger = $slugger;
         $this->eventsDirectory = $eventsDirectory;
+        $this->eventRepo = $eventRepo;
         
     }
 
@@ -175,6 +180,29 @@ class EventService
         }
 
         $this->em->remove($event);
+        $this->em->flush();
+    }
+
+
+    /**
+     * 🆕 Asignar eventos existentes del equipo a un jugador nuevo
+     */
+    public function assignExistingEventsToNewPlayer(PlayerProfile $player): void
+    {
+        $team = $player->getTeam();
+        if (!$team) {
+            return;
+        }
+
+        // 1️⃣ Traer todos los eventos existentes del equipo
+        $existingEvents = $this->eventRepo->findByTeam($team->getId());
+
+        // 2️⃣ Asignar cada evento al jugador
+        foreach ($existingEvents as $event) {
+            $event->addPlayer($player);
+        }
+
+        // 3️⃣ Persistir los cambios
         $this->em->flush();
     }
 }
