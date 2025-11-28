@@ -53,7 +53,9 @@ class Event
 
     //asociación de evento al jugador
     #[ORM\ManyToMany(targetEntity: PlayerProfile::class, inversedBy: 'events')]
+    #[ORM\JoinTable(name: 'events_players')]
     private Collection $players;
+
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private \DateTimeInterface $created_at;

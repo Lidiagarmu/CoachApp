@@ -219,10 +219,13 @@ class EventController extends AbstractController
         // Seguridad: jugador solo puede ver sus eventos
         if (!$this->isGranted('ROLE_COACH') && ($currentPlayerProfile === null || $currentPlayerProfile->getId() !== $playerId)) {
             return $this->json(['error' => 'No puedes ver eventos de otros jugadores'], 403);
-        }
+        }       
 
         // Buscar todos los eventos de este jugador
-        $events = $this->eventRepo->findBy(['player' => $playerProfile], ['date' => 'ASC']);
+        $events = $this->eventRepo->findByPlayer($playerId);
+
+
+
 
         // Convertir a array para JSON
         $data = array_map(fn(Event $e) => [

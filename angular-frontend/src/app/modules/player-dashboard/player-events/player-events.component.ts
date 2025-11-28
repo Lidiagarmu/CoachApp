@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { EventService } from '../../../services/event.service';
 import { Event as AppEvent} from '../../../interfaces/event.model'; 
 import { CommonModule } from '@angular/common';
@@ -10,7 +10,7 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule],
   templateUrl: './player-events.component.html',
 })
-export class PlayerEventsComponent implements OnInit {
+export class PlayerEventsComponent implements OnInit, OnChanges {
   @Input() teamId?: number;
   trainings: AppEvent[] = [];
   matches: AppEvent[] = [];
@@ -33,6 +33,13 @@ export class PlayerEventsComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.playerId) this.loadEvents();
+  }
+
+
+    ngOnChanges(changes: SimpleChanges) {
+    if (changes['playerId'] && this.playerId) {
+      this.loadEvents();
+    }
   }
 
   

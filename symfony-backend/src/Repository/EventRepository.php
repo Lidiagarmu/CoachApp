@@ -33,4 +33,17 @@ class EventRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+
+    public function findByPlayer($playerProfileId)
+{
+    return $this->createQueryBuilder('e')
+        ->innerJoin('e.players', 'p')
+        ->andWhere('p.id = :playerId')
+        ->setParameter('playerId', $playerProfileId)
+        ->orderBy('e.date', 'ASC')
+        ->getQuery()
+        ->getResult();
+}
+
 }
