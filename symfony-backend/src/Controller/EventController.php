@@ -133,6 +133,62 @@ class EventController extends AbstractController
 
 
     /**
+     * 📸 Test - Subir imágenes (máx. 10)
+     */
+    #[Route('/{id}/images-test', name: 'upload_event_images_test', methods: ['POST'])]
+    public function uploadImagesTest(string $id, Request $request): JsonResponse
+    {
+        try {
+            $this->logger->info('🧪 TEST uploadImages iniciado', ['eventId' => $id]);
+            
+            // Raw debug
+            $this->logger->info('📋 Request info', [
+                'contentType' => $request->getContentType(),
+                'method' => $request->getMethod(),
+                'requestFiles_keys' => $request->files->keys(),
+            ]);
+
+            // Get images using different methods
+            $imagesParam = $request->files->get('images');
+            $allFiles = $request->files->all();
+
+            $this->logger->info('📦 Métodos de obtención', [
+                'imagesParam_type' => gettype($imagesParam),
+                'imagesParam_isEmpty' => empty($imagesParam),
+                'allFiles' => array_keys($allFiles),
+            ]);
+
+            if ($imagesParam) {
+                $this->logger->info('🔍 Análisis de imagesParam', [
+                    'type' => get_class($imagesParam),
+                    'isArray' => is_array($imagesParam),
+                    'isIterable' => is_iterable($imagesParam),
+                    'count' => is_countable($imagesParam) ? count($imagesParam) : 'N/A',
+                ]);
+
+                if (is_iterable($imagesParam)) {
+                    $array = iterator_to_array($imagesParam);
+                    $this->logger->info('📊 Archivos en array', ['count' => count($array)]);
+                    
+                    foreach ($array as $idx => $file) {
+                        $this->logger->info("📎 Archivo $idx", [
+                            'class' => get_class($file),
+                            'isUploadedFile' => $file instanceof UploadedFile,
+                            'name' => $file instanceof UploadedFile ? $file->getClientOriginalName() : 'N/A',
+                            'size' => $file instanceof UploadedFile ? $file->getSize() : 'N/A',
+                        ]);
+                    }
+                }
+            }
+
+            return $this->json(['status' => 'Test completado, revisar logs']);
+        } catch (\Exception $e) {
+            $this->logger->error('❌ Error en test: ' . $e->getMessage(), ['exception' => $e]);
+            return $this->json(['error' => $e->getMessage()], 400);
+        }
+    }
+
+    /**
      * 📸 Subir imágenes (máx. 10)
      */
     #[Route('/{id}/images', name: 'upload_event_images', methods: ['POST'])]
