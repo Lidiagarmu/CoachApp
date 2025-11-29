@@ -133,6 +133,46 @@ class EventController extends AbstractController
 
 
     /**
+     * 🆓 PUBLIC - Test simple upload (sin autenticación)
+     */
+    #[Route('/test-upload', name: 'test_upload', methods: ['POST'])]
+    public function testUpload(Request $request): JsonResponse
+    {
+        try {
+            $this->logger->info('🧪 PUBLIC testUpload iniciado');
+            
+            $files = $request->files->get('images', []);
+            
+            $this->logger->info('📦 Archivos recibidos', [
+                'type' => gettype($files),
+                'isArray' => is_array($files),
+            ]);
+
+            if (is_iterable($files) && !is_array($files)) {
+                $files = iterator_to_array($files);
+            }
+
+            $this->logger->info('📊 Después de conversión', ['count' => count($files)]);
+            
+            foreach ($files as $idx => $file) {
+                $this->logger->info("📎 [$idx]", [
+                    'type' => get_class($file),
+                    'name' => $file instanceof UploadedFile ? $file->getClientOriginalName() : 'N/A',
+                    'size' => $file instanceof UploadedFile ? $file->getSize() : 'N/A',
+                ]);
+            }
+
+            return $this->json([
+                'status' => 'ok',
+                'filesReceived' => count($files),
+            ]);
+        } catch (\Exception $e) {
+            $this->logger->error('❌ Error: ' . $e->getMessage());
+            return $this->json(['error' => $e->getMessage()], 400);
+        }
+    }
+
+    /**
      * 📸 Test - Subir imágenes (máx. 10)
      */
     #[Route('/{id}/images-test', name: 'upload_event_images_test', methods: ['POST'])]
