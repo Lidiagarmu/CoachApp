@@ -5,20 +5,25 @@ export interface EventTeam {
 }
 
 export interface Event {
-  id: number; // usar number si Symfony devuelve id como entero
+  id: number; 
   type: 'training' | 'match';
-  
+
+  title?: string;
+  description?: string;
+
   date: string;
   time: string;
   duration: number;
+
   location_name: string;
   location_url: string;
+
   images: string[];
 
   // Entrenamiento
-  title?: string;
-  training_type?: string;
-  focus_area?: string;
+  training_type?: 'campo' | 'gimnasio';  
+  focus_area?: string;                           
+  gym_focus?: string;   
 
   // Partido
   opponent?: string;
@@ -27,6 +32,6 @@ export interface Event {
   // Relación con equipo
   team?: EventTeam | null;
 
-  // 🆕 Relación con jugador (opcional)
+  // Relación con jugador (opcional)
   playerId?: number;
 }

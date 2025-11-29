@@ -23,20 +23,38 @@ export class EventService {
 
   getEventsByTeam(teamId: number | string): Observable<AppEvent[]> {
     return this.http
-      .get<AppEvent[]>(`${this.apiUrl}/team/${teamId}`, { withCredentials: true })
+      .get<Partial<AppEvent>[]>(`${this.apiUrl}/team/${teamId}`, { withCredentials: true })
       .pipe(
-        map(events =>
-          events.map(event => ({
-            ...event,
+        map(events => events.map(event => {
+          return {
+            id: event.id ?? 0,
+            type: event.type ?? 'training',
+            title: event.title ?? '',
+            description: event.description ?? '',
+            date: event.date ?? '',
+            time: event.time ?? '',
+            duration: event.duration ?? 60,
+            location_name: event.location_name ?? '',
+            location_url: event.location_url ?? '',
             images: event.images?.map(img =>
-              img.startsWith('http')
-                ? img // si ya tiene dominio, la dejamos igual
-                : `http://localhost:8000${img}` // si no, le agregamos el host sin /api
-            ) || []
-          }))
-        )
+              img.startsWith('http') ? img : `http://localhost:8000${img}`
+            ) || [],
+
+            // Campos de entrenamiento
+            training_type: event.training_type ?? '',
+            focus_area: event.focus_area ?? '',
+
+            // Campos de partido
+            opponent: event.opponent ?? '',
+            match_type: event.match_type ?? '',
+
+            // Equipo
+            team: event.team ?? null
+          } as AppEvent
+        }))
       );
   }
+
 
 
   getEventsByPlayer(playerId: number | string): Observable<AppEvent[]> {

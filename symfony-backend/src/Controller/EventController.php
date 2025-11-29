@@ -26,19 +26,22 @@ class EventController extends AbstractController
     private TeamRepository $teamRepo;
     private Security $security;
     private PlayerProfileRepository $playerProfileRepo;
+    private \Psr\Log\LoggerInterface $logger;
 
     public function __construct(
         EventService $eventService,
         EventRepository $eventRepo,
         TeamRepository $teamRepo,
         Security $security,
-        PlayerProfileRepository $playerProfileRepo 
+        PlayerProfileRepository $playerProfileRepo,
+        \Psr\Log\LoggerInterface $logger
     ) {
         $this->eventService = $eventService;
         $this->eventRepo = $eventRepo;
         $this->teamRepo = $teamRepo;
         $this->security = $security;
-        $this->playerProfileRepo = $playerProfileRepo; 
+        $this->playerProfileRepo = $playerProfileRepo;
+        $this->logger = $logger;
     }
 
     #[Route('', name: 'create_event', methods: ['POST'])]
@@ -50,20 +53,41 @@ class EventController extends AbstractController
                 return $this->json(['error' => 'Datos inválidos o vacíos'], 400);
             }
 
+            // Accept either camelCase (`teamId`) or snake_case (`team_id`) from frontend
+            $teamId = $data['teamId'] ?? $data['team_id'] ?? null;
+
             $event = new Event();
             $event->setTitle($data['title'] ?? 'Evento');
             $event->setType($data['type'] ?? 'training');
-            $event->setDate(new \DateTime($data['date'] ?? 'now'));
-            $event->setTime(new \DateTime($data['time'] ?? 'now'));
+
+            // Validate and parse date/time to avoid throwing uncaught exceptions
+            try {
+                $date = !empty($data['date']) ? new \DateTime($data['date']) : new \DateTime('now');
+            } catch (\Exception $e) {
+                return $this->json(['error' => 'Fecha inválida: ' . $e->getMessage()], 400);
+            }
+
+            try {
+                $time = !empty($data['time']) ? new \DateTime($data['time']) : new \DateTime('now');
+            } catch (\Exception $e) {
+                return $this->json(['error' => 'Hora inválida: ' . $e->getMessage()], 400);
+            }
+
+            $event->setDate($date);
+            $event->setTime($time);
             $event->setDuration($data['duration'] ?? 60);
-            $team = $this->teamRepo->find($data['teamId'] ?? null);
+            $team = $this->teamRepo->find($teamId);
             $event->setTeam($team);
 
             
 
 
-            // 🔑 Asignar creador para no romper la columna not null
-            $event->setCreatedBy($this->security->getUser());
+            // 🔑 Asignar creador: ensure there is an authenticated user
+            $user = $this->security->getUser();
+            if (!$user) {
+                return $this->json(['error' => 'No autenticado. Inicia sesión para crear eventos.'], 401);
+            }
+            $event->setCreatedBy($user);
 
             // Asignar jugadores del equipo solo si hay equipo
             if ($team) {
@@ -78,6 +102,13 @@ class EventController extends AbstractController
             $event->setLocationUrl($data['location_url'] ?? '');
             $event->setDescription($data['description'] ?? '');
 
+            // Normalize training type keys: frontend may send `training_type` or `training_location_type`
+            $event->setTrainingType($data['training_type'] ?? $data['training_location_type'] ?? null);
+            $event->setFocusArea($data['focus_area'] ?? null);
+            $event->setOpponent($data['opponent'] ?? null);
+            $event->setMatchType($data['match_type'] ?? null);
+
+
             $em->persist($event);
             $em->flush(); // persistir los cambios
 
@@ -87,8 +118,15 @@ class EventController extends AbstractController
                 'message' => 'Evento creado correctamente',
             ], 201);
 
-        } catch (\Exception $e) {
-            return $this->json(['error' => $e->getMessage()], 400);
+        } catch (\Throwable $e) {
+            // Log full exception (message + trace) for easier debugging
+            $this->logger->error('Error creating event: ' . $e->getMessage(), ['exception' => $e]);
+
+            // Return helpful debug info in development. If this is production, consider removing the trace.
+            return $this->json([
+                'error' => $e->getMessage(),
+                'trace' => method_exists($e, 'getTraceAsString') ? $e->getTraceAsString() : null,
+            ], 500);
         }
     }
 
@@ -152,6 +190,11 @@ class EventController extends AbstractController
                     'name' => $team->getName(),
                     'shield' => $team->getShield(),
                 ] : null,
+                'training_type' => $e->getTrainingType(),
+                'focus_area' => $e->getFocusArea(),
+                'opponent' => $e->getOpponent(),
+                'match_type' => $e->getMatchType(),
+
                 'images' => array_map(fn($img) => $img->getUrl(), $e->getImages()->toArray()),
             ];
         }, $events);
@@ -243,6 +286,11 @@ class EventController extends AbstractController
                 'name' => $e->getTeam()->getName(),
                 'shield' => $e->getTeam()->getShield(),
             ] : null,
+            'training_type' => $e->getTrainingType(),
+            'focus_area' => $e->getFocusArea(),
+            'opponent' => $e->getOpponent(),
+            'match_type' => $e->getMatchType(),
+
             'images' => array_map(fn($img) => $img->getUrl(), $e->getImages()->toArray()),
         ], $events);
 

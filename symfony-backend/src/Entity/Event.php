@@ -63,6 +63,19 @@ class Event
     #[ORM\OneToMany(mappedBy: 'event', targetEntity: EventImage::class, cascade: ['persist', 'remove'])]
     private Collection $images;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $training_type = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $focus_area = null;
+
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $opponent = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $match_type = null;
+
 
 
 
@@ -144,4 +157,17 @@ class Event
     public function getPlayers(): Collection {
         return $this->players;
     }
+
+    public function getTrainingType(): ?string { return $this->training_type; }
+    public function setTrainingType(?string $type): self { $this->training_type = $type; return $this; }
+
+    public function getFocusArea(): ?string { return $this->focus_area; }
+    public function setFocusArea(?string $area): self { $this->focus_area = $area; return $this; }
+
+    public function getOpponent(): ?string { return $this->opponent; }
+    public function setOpponent(?string $opponent): self { $this->opponent = $opponent; return $this; }
+
+    public function getMatchType(): ?string { return $this->match_type; }
+    public function setMatchType(?string $matchType): self { $this->match_type = $matchType; return $this; }
+
 }

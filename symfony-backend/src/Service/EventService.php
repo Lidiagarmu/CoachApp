@@ -162,6 +162,7 @@ class EventService
         $event->setDuration($data['duration'] ?? $event->getDuration());
         $event->setLocationName($data['location_name'] ?? $event->getLocationName());
         $event->setLocationUrl($data['location_url'] ?? $event->getLocationUrl());
+        
 
         $this->em->flush();
 
