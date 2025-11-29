@@ -149,19 +149,30 @@ export class EventFormComponent {
  onFilesSelected(event: Event): void {
   const input = event.target as HTMLInputElement;
   if (input.files) {
+    console.log('🎯 onFilesSelected llamado');
+    console.log('📥 input.files.length:', input.files.length);
+    
     // Validate each file
     const validFiles: File[] = [];
     for (let i = 0; i < input.files.length; i++) {
       const file = input.files[i];
       
+      console.log(`📎 Archivo ${i}:`, {
+        name: file.name,
+        size: file.size,
+        type: file.type,
+        lastModified: file.lastModified,
+      });
+      
       // Check if file has a valid name
       if (!file.name || file.name.trim() === '') {
-        console.warn('Archivo sin nombre válido ignorado');
+        console.warn(`⚠️ Archivo ${i} sin nombre válido, ignorado`);
         continue;
       }
       
       // Check file size (max 5MB per image)
       if (file.size > 5 * 1024 * 1024) {
+        console.warn(`⚠️ Archivo ${i} "${file.name}" es demasiado grande`);
         alert(`Archivo "${file.name}" es demasiado grande (máx 5MB)`);
         continue;
       }
@@ -169,12 +180,16 @@ export class EventFormComponent {
       // Check file type
       const validTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
       if (!validTypes.includes(file.type)) {
+        console.warn(`⚠️ Archivo ${i} "${file.name}" tipo inválido:`, file.type);
         alert(`Archivo "${file.name}" no es una imagen válida (JPG, PNG, WebP, GIF)`);
         continue;
       }
       
       validFiles.push(file);
+      console.log(`✅ Archivo ${i} "${file.name}" es válido`);
     }
+    
+    console.log('📊 Resultado:', { totalSeleccionados: input.files.length, validos: validFiles.length });
     
     if (validFiles.length === 0) {
       alert('Ninguno de los archivos seleccionados es válido');
@@ -184,6 +199,8 @@ export class EventFormComponent {
     this.selectedFiles = validFiles;
     this.filePreviews = this.selectedFiles.map(file => URL.createObjectURL(file));
     this.cdr.detectChanges();
+    
+    console.log('✨ Archivos lista para enviar:', this.selectedFiles.map(f => f.name));
   }
 }
 

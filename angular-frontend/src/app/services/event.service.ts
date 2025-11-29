@@ -97,29 +97,41 @@ export class EventService {
 
   // 👉 Subir imágenes
   uploadImages(eventId: number, files: File[]): Observable<any> {
-    console.log('🔧 uploadImages llamado con:', { eventId, fileCount: files.length, files: files.map(f => ({ name: f.name, size: f.size, type: f.type })) });
+    console.log('🔧 uploadImages iniciado');
+    console.log('   eventId:', eventId);
+    console.log('   archivos recibidos:', files.length);
+    
+    files.forEach((f, i) => {
+      console.log(`   [${i}] ${f.name} (${f.size} bytes, ${f.type})`);
+    });
     
     const formData = new FormData();
     
     // Validate files before adding
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
-      console.log(`📎 Agregando archivo ${i + 1}:`, { name: file.name, size: file.size, type: file.type });
       
       if (!file.name || file.name.trim() === '') {
-        console.error(`❌ Archivo ${i} tiene nombre vacío`);
+        console.error(`❌ Error: Archivo ${i} tiene nombre vacío`);
         throw new Error(`Archivo ${i} tiene nombre vacío`);
       }
       
+      console.log(`📎 Agregando archivo "${file.name}" al FormData`);
       formData.append('images', file);
     }
     
-    console.log('📤 Enviando FormData a:', `/api/events/${eventId}/images`);
+    console.log(`✅ FormData preparado con ${files.length} archivo(s)`);
+    console.log('📤 Enviando POST a:', `${this.apiUrl}/${eventId}/images`);
     
     return this.http.post(`${this.apiUrl}/${eventId}/images`, formData, { withCredentials: true }).pipe(
-      tap(response => console.log('✅ Respuesta de subida:', response)),
+      tap(response => {
+        console.log('✅ Respuesta de uploadImages:', response);
+      }),
       catchError(err => {
-        console.error('❌ Error en uploadImages:', err);
+        console.error('❌ Error en uploadImages');
+        console.error('   Status:', err.status);
+        console.error('   Error message:', err?.error?.error || err?.message);
+        console.error('   Full error:', err);
         throw err;
       })
     );
