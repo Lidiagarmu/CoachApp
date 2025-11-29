@@ -116,8 +116,25 @@ export class EventService {
         throw new Error(`Archivo ${i} tiene nombre vacío`);
       }
       
-      console.log(`📎 Agregando archivo "${file.name}" al FormData`);
-      formData.append('images', file);
+      console.log(`📎 Agregando archivo "${file.name}" al FormData con key "images"`);
+      // Use explicit key for each file
+      formData.append(`images[${i}]`, file);
+    }
+    
+    // Debug: Log FormData content
+    console.log('🔍 Inspeccionando FormData content:');
+    try {
+      const entries = Array.from((formData as any).entries());
+      console.log('   Total entries:', entries.length);
+      entries.forEach(([key, value]: any) => {
+        if (value instanceof File) {
+          console.log(`   Key: "${key}" => File(name="${value.name}", size=${value.size}, type="${value.type}")`);
+        } else {
+          console.log(`   Key: "${key}" => ${value}`);
+        }
+      });
+    } catch (e) {
+      console.error('   Error inspeccionando FormData:', e);
     }
     
     console.log(`✅ FormData preparado con ${files.length} archivo(s)`);

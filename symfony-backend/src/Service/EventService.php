@@ -145,7 +145,7 @@ class EventService
                 'index' => $idx,
                 'originalName' => $originalName,
                 'size' => $file->getSize(),
-                'mimeType' => $file->getMimeType()
+                'clientMimeType' => $file->getClientMimeType()
             ]);
             
             // Validate we have a proper filename
@@ -163,7 +163,8 @@ class EventService
                 $safeFilename = 'image';
             }
             
-            $extension = $file->guessExtension() ?: pathinfo($originalName, PATHINFO_EXTENSION) ?: 'bin';
+            // Use getClientOriginalExtension() instead of guessExtension() to avoid file access issues
+            $extension = $file->getClientOriginalExtension() ?: pathinfo($originalName, PATHINFO_EXTENSION) ?: 'bin';
             
             // Validate extension
             if (empty($extension) || strlen($extension) > 10) {

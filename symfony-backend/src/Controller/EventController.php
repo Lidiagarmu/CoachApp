@@ -246,7 +246,18 @@ class EventController extends AbstractController
                 'requestFiles' => $request->files->keys()
             ]);
 
-            $files = $request->files->get('images', []);
+            // First try the standard way (for images[0], images[1], etc)
+            $files = [];
+            $i = 0;
+            while ($request->files->has("images[$i]")) {
+                $files[] = $request->files->get("images[$i]");
+                $i++;
+            }
+            
+            // If no files found with indexed keys, try the old way (images as array)
+            if (empty($files)) {
+                $files = $request->files->get('images', []);
+            }
 
             $this->logger->info('📁 Archivos recibidos', [
                 'type' => gettype($files),
@@ -300,6 +311,17 @@ class EventController extends AbstractController
             }
 
             $this->logger->info('✅ Archivos válidos a procesar', ['count' => count($validFiles)]);
+
+            // Log before passing to service
+            foreach ($validFiles as $idx => $file) {
+                $this->logger->info('📢 Archivo a procesar en servicio', [
+                    'index' => $idx,
+                    'name' => $file->getClientOriginalName(),
+                    'size' => $file->getSize(),
+                    'clientMimeType' => $file->getClientMimeType(),
+                    'path' => $file->getRealPath()
+                ]);
+            }
 
             $uploaded = $this->eventService->uploadImages($event, $validFiles);
 
