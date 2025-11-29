@@ -66,6 +66,11 @@ export class EventFormComponent {
     }
   }
 
+  onTypeChange(event: Event): void {
+    const val = (event.target as HTMLSelectElement).value;
+    this.eventForm.get('type')?.setValue(val);
+  }
+
   submit(): void {
     if (this.eventForm.invalid) return;
 
@@ -132,7 +137,39 @@ export class EventFormComponent {
  onFilesSelected(event: Event): void {
   const input = event.target as HTMLInputElement;
   if (input.files) {
-    this.selectedFiles = Array.from(input.files);
+    // Validate each file
+    const validFiles: File[] = [];
+    for (let i = 0; i < input.files.length; i++) {
+      const file = input.files[i];
+      
+      // Check if file has a valid name
+      if (!file.name || file.name.trim() === '') {
+        console.warn('Archivo sin nombre válido ignorado');
+        continue;
+      }
+      
+      // Check file size (max 5MB per image)
+      if (file.size > 5 * 1024 * 1024) {
+        alert(`Archivo "${file.name}" es demasiado grande (máx 5MB)`);
+        continue;
+      }
+      
+      // Check file type
+      const validTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+      if (!validTypes.includes(file.type)) {
+        alert(`Archivo "${file.name}" no es una imagen válida (JPG, PNG, WebP, GIF)`);
+        continue;
+      }
+      
+      validFiles.push(file);
+    }
+    
+    if (validFiles.length === 0) {
+      alert('Ninguno de los archivos seleccionados es válido');
+      return;
+    }
+    
+    this.selectedFiles = validFiles;
     this.filePreviews = this.selectedFiles.map(file => URL.createObjectURL(file));
     this.cdr.detectChanges();
   }

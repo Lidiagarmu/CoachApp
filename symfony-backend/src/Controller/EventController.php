@@ -15,6 +15,7 @@ use Symfony\Bundle\SecurityBundle\Security;
 use App\Entity\PlayerProfile;
 use App\Repository\PlayerProfileRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 
 
@@ -144,13 +145,52 @@ class EventController extends AbstractController
 
         try {
             $files = $request->files->get('images', []);
-            $uploaded = $this->eventService->uploadImages($event, $files);
+
+            // Normalize: if a single UploadedFile is provided, wrap it into an array
+            if ($files instanceof UploadedFile) {
+                $files = [$files];
+            }
+
+            // If files is a ParameterBag or Traversable, convert to array
+            if (!is_array($files) && is_iterable($files)) {
+                $files = iterator_to_array($files);
+            }
+
+            // Ensure we have an array (could be null or other unexpected type)
+            if (!is_array($files)) {
+                $files = [];
+            }
+
+            // Validate we have files
+            if (empty($files)) {
+                return $this->json(['error' => 'No se han proporcionado archivos'], 400);
+            }
+
+            // Filter out empty or invalid files
+            $validFiles = [];
+            foreach ($files as $file) {
+                if ($file instanceof UploadedFile) {
+                    $originalName = $file->getClientOriginalName();
+                    if (!empty($originalName) && trim($originalName) !== '') {
+                        $validFiles[] = $file;
+                    } else {
+                        $this->logger->warning('Skipping file with empty name');
+                    }
+                }
+            }
+
+            if (empty($validFiles)) {
+                return $this->json(['error' => 'Ninguno de los archivos proporcionados tiene un nombre válido'], 400);
+            }
+
+            $uploaded = $this->eventService->uploadImages($event, $validFiles);
 
             return $this->json([
                 'message' => 'Imágenes subidas correctamente',
                 'urls' => $uploaded,
             ], 201);
         } catch (\Exception $e) {
+            $this->logger->error('Error uploading images: ' . $e->getMessage(), ['exception' => $e]);
             return $this->json(['error' => $e->getMessage()], 400);
         }
     }

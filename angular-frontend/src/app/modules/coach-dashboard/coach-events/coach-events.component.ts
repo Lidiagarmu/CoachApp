@@ -91,7 +91,10 @@ export class CoachEventsComponent implements OnInit {
   }
 
   getTeamShield(event: AppEvent): string | null {
-    return event.team?.shield ?? null;
+    const shield = event.team?.shield ?? null;
+    if (!shield) return null;
+    
+    return shield.startsWith('http') ? shield : `${this.backendUrl}${shield}`;
   }
 
 

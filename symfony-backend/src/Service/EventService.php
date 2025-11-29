@@ -120,24 +120,58 @@ class EventService
 
         $uploaded = [];
 
+        // Ensure target directory exists
+        if (!is_dir($this->eventsDirectory)) {
+            if (!@mkdir($this->eventsDirectory, 0755, true) && !is_dir($this->eventsDirectory)) {
+                throw new \Exception('No se puede crear el directorio de uploads: ' . $this->eventsDirectory);
+            }
+        }
 
-            foreach ($files as $file) {
-                        if (!$file instanceof UploadedFile) continue;
+        foreach ($files as $file) {
+            if (!$file instanceof UploadedFile) {
+                // skip invalid entries but log for debugging
+                // continue silently to avoid breaking the whole upload
+                continue;
+            }
 
-                        $safeFilename = $this->slugger->slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME));
-                        $newFilename = $safeFilename . '-' . uniqid() . '.' . $file->guessExtension();
+            $originalName = $file->getClientOriginalName() ?? '';
+            
+            // Validate we have a proper filename
+            if (empty($originalName) || empty(trim($originalName))) {
+                throw new \Exception('El nombre del archivo está vacío o es inválido');
+            }
+            
+            $safeFilename = $this->slugger->slug(pathinfo($originalName, PATHINFO_FILENAME));
+            
+            // Ensure slug is not empty after sanitization
+            if (empty((string)$safeFilename)) {
+                // Fallback: use a generic name if slug is empty
+                $safeFilename = 'image';
+            }
+            
+            $extension = $file->guessExtension() ?: pathinfo($originalName, PATHINFO_EXTENSION) ?: 'bin';
+            
+            // Validate extension
+            if (empty($extension) || strlen($extension) > 10) {
+                $extension = 'bin';
+            }
+            
+            $newFilename = $safeFilename . '-' . uniqid() . '.' . $extension;
 
-                        // mover archivo a public/uploads/events
-                        $file->move($this->eventsDirectory, $newFilename);
+            try {
+                $file->move($this->eventsDirectory, $newFilename);
+            } catch (\Exception $e) {
+                // Better error message for common file problems
+                throw new \Exception('Error moviendo fichero "' . $originalName . '": ' . $e->getMessage());
+            }
 
-                        $image = new EventImage();
-                        $image->setEvent($event);
-                        $image->setUrl('/uploads/events/' . $newFilename);
+            $image = new EventImage();
+            $image->setEvent($event);
+            $image->setUrl('/uploads/events/' . $newFilename);
 
-                        $this->em->persist($image);
-                        $uploaded[] = $image->getUrl();
-                    }
-
+            $this->em->persist($image);
+            $uploaded[] = $image->getUrl();
+        }
 
         $this->em->flush();
 

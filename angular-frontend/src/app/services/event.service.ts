@@ -98,7 +98,8 @@ export class EventService {
   // 👉 Subir imágenes
   uploadImages(eventId: number, files: File[]): Observable<any> {
     const formData = new FormData();
-    files.forEach(file => formData.append('images[]', file));
+    // Use 'images' as the field name (no trailing []), Symfony expects the key 'images'
+    files.forEach(file => formData.append('images', file));
     return this.http.post(`${this.apiUrl}/${eventId}/images`, formData, { withCredentials: true });
   }
 }
