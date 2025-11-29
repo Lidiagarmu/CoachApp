@@ -144,7 +144,18 @@ class EventController extends AbstractController
         }
 
         try {
+            $this->logger->info('📤 Iniciando carga de imágenes', [
+                'eventId' => $id,
+                'contentType' => $request->getContentType(),
+                'requestFiles' => $request->files->keys()
+            ]);
+
             $files = $request->files->get('images', []);
+
+            $this->logger->info('📁 Archivos recibidos', [
+                'type' => gettype($files),
+                'count' => is_array($files) ? count($files) : (is_iterable($files) ? iterator_count($files) : 'N/A')
+            ]);
 
             // Normalize: if a single UploadedFile is provided, wrap it into an array
             if ($files instanceof UploadedFile) {
@@ -161,6 +172,8 @@ class EventController extends AbstractController
                 $files = [];
             }
 
+            $this->logger->info('📊 Archivos después de normalización', ['count' => count($files)]);
+
             // Validate we have files
             if (empty($files)) {
                 return $this->json(['error' => 'No se han proporcionado archivos'], 400);
@@ -168,13 +181,20 @@ class EventController extends AbstractController
 
             // Filter out empty or invalid files
             $validFiles = [];
-            foreach ($files as $file) {
+            foreach ($files as $idx => $file) {
+                $this->logger->debug('🔍 Validando archivo', [
+                    'index' => $idx,
+                    'isUploadedFile' => $file instanceof UploadedFile,
+                    'originalName' => $file instanceof UploadedFile ? $file->getClientOriginalName() : 'N/A',
+                    'size' => $file instanceof UploadedFile ? $file->getSize() : 'N/A'
+                ]);
+
                 if ($file instanceof UploadedFile) {
                     $originalName = $file->getClientOriginalName();
                     if (!empty($originalName) && trim($originalName) !== '') {
                         $validFiles[] = $file;
                     } else {
-                        $this->logger->warning('Skipping file with empty name');
+                        $this->logger->warning('⚠️ Ignorando archivo con nombre vacío', ['index' => $idx]);
                     }
                 }
             }
@@ -182,6 +202,8 @@ class EventController extends AbstractController
             if (empty($validFiles)) {
                 return $this->json(['error' => 'Ninguno de los archivos proporcionados tiene un nombre válido'], 400);
             }
+
+            $this->logger->info('✅ Archivos válidos a procesar', ['count' => count($validFiles)]);
 
             $uploaded = $this->eventService->uploadImages($event, $validFiles);
 

@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use App\Entity\PlayerProfile;
 use App\Repository\EventRepository;
+use Psr\Log\LoggerInterface;
 
 class EventService
 {
@@ -21,19 +22,22 @@ class EventService
     private SluggerInterface $slugger;
     private string $eventsDirectory;
     private EventRepository $eventRepo;
+    private LoggerInterface $logger;
 
     public function __construct(
         EntityManagerInterface $em,
         Security $security,
         SluggerInterface $slugger,
         string $eventsDirectory,
-        EventRepository $eventRepo
+        EventRepository $eventRepo,
+        LoggerInterface $logger
     ) {
         $this->em = $em;
         $this->security = $security;
         $this->slugger = $slugger;
         $this->eventsDirectory = $eventsDirectory;
         $this->eventRepo = $eventRepo;
+        $this->logger = $logger;
         
     }
 
@@ -127,17 +131,26 @@ class EventService
             }
         }
 
-        foreach ($files as $file) {
+        $this->logger->info('🎬 Iniciando procesamiento de imágenes', ['count' => count($files)]);
+
+        foreach ($files as $idx => $file) {
             if (!$file instanceof UploadedFile) {
-                // skip invalid entries but log for debugging
-                // continue silently to avoid breaking the whole upload
+                $this->logger->warning('⚠️ Archivo no es UploadedFile, ignorado', ['index' => $idx, 'type' => gettype($file)]);
                 continue;
             }
 
             $originalName = $file->getClientOriginalName() ?? '';
             
+            $this->logger->debug('🔄 Procesando archivo', [
+                'index' => $idx,
+                'originalName' => $originalName,
+                'size' => $file->getSize(),
+                'mimeType' => $file->getMimeType()
+            ]);
+            
             // Validate we have a proper filename
             if (empty($originalName) || empty(trim($originalName))) {
+                $this->logger->error('❌ Nombre de archivo vacío', ['index' => $idx]);
                 throw new \Exception('El nombre del archivo está vacío o es inválido');
             }
             
@@ -146,6 +159,7 @@ class EventService
             // Ensure slug is not empty after sanitization
             if (empty((string)$safeFilename)) {
                 // Fallback: use a generic name if slug is empty
+                $this->logger->warning('⚠️ Slug vacío, usando nombre genérico', ['originalName' => $originalName]);
                 $safeFilename = 'image';
             }
             
@@ -158,10 +172,16 @@ class EventService
             
             $newFilename = $safeFilename . '-' . uniqid() . '.' . $extension;
 
+            $this->logger->info('📝 Nombre de archivo generado', ['newFilename' => $newFilename]);
+
             try {
                 $file->move($this->eventsDirectory, $newFilename);
             } catch (\Exception $e) {
-                // Better error message for common file problems
+                $this->logger->error('❌ Error moviendo fichero', [
+                    'originalName' => $originalName,
+                    'newFilename' => $newFilename,
+                    'error' => $e->getMessage()
+                ]);
                 throw new \Exception('Error moviendo fichero "' . $originalName . '": ' . $e->getMessage());
             }
 
@@ -171,9 +191,13 @@ class EventService
 
             $this->em->persist($image);
             $uploaded[] = $image->getUrl();
+            
+            $this->logger->info('✅ Imagen registrada', ['url' => $image->getUrl()]);
         }
 
         $this->em->flush();
+
+        $this->logger->info('✨ Imágenes procesadas exitosamente', ['count' => count($uploaded)]);
 
         return $uploaded;
     }

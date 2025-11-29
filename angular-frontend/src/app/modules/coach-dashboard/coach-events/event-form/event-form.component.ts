@@ -86,18 +86,29 @@ export class EventFormComponent {
     };
 
     console.log('🟢 Enviando eventData:', eventData);
+    console.log('📸 Archivos seleccionados:', this.selectedFiles);
+    console.log('📊 Total de archivos:', this.selectedFiles.length);
 
     const handleAfterSave = (eventId: number) => {
       if (this.selectedFiles.length > 0) {
+        console.log('⬆️ Iniciando subida de imágenes para evento:', eventId);
+        console.log('📁 Archivos a subir:', this.selectedFiles.map(f => ({ name: f.name, size: f.size, type: f.type })));
+        
         this.eventService.uploadImages(eventId, this.selectedFiles).subscribe({
-          next: () => {
+          next: (response) => {
+            console.log('✅ Imágenes subidas exitosamente:', response);
             this.selectedFiles = [];
             this.formSaved.emit();
             this.closeForm();
           },
-          error: err => console.error('Error subiendo imágenes', err)
+          error: err => {
+            console.error('❌ Error subiendo imágenes', err);
+            console.error('Error details:', err?.error);
+            alert('Error subiendo imágenes: ' + (err?.error?.error || err?.message || 'Error desconocido'));
+          }
         });
       } else {
+        console.log('ℹ️ Sin imágenes para subir');
         this.formSaved.emit();
         this.closeForm();
       }
@@ -119,6 +130,7 @@ export class EventFormComponent {
           if (!id) {
             console.warn('Respuesta de creación inesperada:', createdEvent);
           }
+          console.log('🆕 Evento creado con ID:', id);
           handleAfterSave(Number(id));
         },
         error: err => {

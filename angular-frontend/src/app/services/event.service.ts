@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Event as AppEvent } from '../interfaces/event.model';
-import { map } from 'rxjs/operators';
+import { map, tap, catchError } from 'rxjs/operators';
 
 
 
@@ -97,9 +97,31 @@ export class EventService {
 
   // 👉 Subir imágenes
   uploadImages(eventId: number, files: File[]): Observable<any> {
+    console.log('🔧 uploadImages llamado con:', { eventId, fileCount: files.length, files: files.map(f => ({ name: f.name, size: f.size, type: f.type })) });
+    
     const formData = new FormData();
-    // Use 'images' as the field name (no trailing []), Symfony expects the key 'images'
-    files.forEach(file => formData.append('images', file));
-    return this.http.post(`${this.apiUrl}/${eventId}/images`, formData, { withCredentials: true });
+    
+    // Validate files before adding
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      console.log(`📎 Agregando archivo ${i + 1}:`, { name: file.name, size: file.size, type: file.type });
+      
+      if (!file.name || file.name.trim() === '') {
+        console.error(`❌ Archivo ${i} tiene nombre vacío`);
+        throw new Error(`Archivo ${i} tiene nombre vacío`);
+      }
+      
+      formData.append('images', file);
+    }
+    
+    console.log('📤 Enviando FormData a:', `/api/events/${eventId}/images`);
+    
+    return this.http.post(`${this.apiUrl}/${eventId}/images`, formData, { withCredentials: true }).pipe(
+      tap(response => console.log('✅ Respuesta de subida:', response)),
+      catchError(err => {
+        console.error('❌ Error en uploadImages:', err);
+        throw err;
+      })
+    );
   }
 }
