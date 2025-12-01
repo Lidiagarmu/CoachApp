@@ -9,7 +9,8 @@
       <!-- Tipo de evento -->
       <div>
         <label class="block mb-1 font-semibold">Tipo de evento</label>
-        <select formControlName="type" class="w-full border rounded px-3 py-2">
+        <select formControlName="type" (change)="onTypeChange($event)" class="w-full border rounded px-3 py-2 text-gray-400">
+          <option value="" disabled>Selecciona tipo </option>
           <option value="training">Entrenamiento</option>
           <option value="match">Partido</option>
         </select>
@@ -18,60 +19,69 @@
       <!-- Título -->
       <div>
         <label class="block mb-1 font-semibold">Título</label>
-        <input type="text" formControlName="title" class="w-full border rounded px-3 py-2">
+        <input type="text" formControlName="title" class="w-full border rounded px-3 py-2 text-gray-400">
       </div>
 
       <!-- Descripción -->
       <div>
         <label class="block mb-1 font-semibold">Descripción</label>
-        <textarea formControlName="description" rows="3" class="w-full border rounded px-3 py-2"></textarea>
+        <textarea formControlName="description" rows="3" class="w-full border rounded px-3 py-2 text-gray-400"></textarea>
       </div>
 
       <!-- Fecha y Hora -->
       <div class="flex gap-2">
         <div class="flex-1">
           <label class="block mb-1 font-semibold">Fecha</label>
-          <input type="date" formControlName="date" class="w-full border rounded px-3 py-2">
+          <input type="date" formControlName="date" class="w-full border rounded px-3 py-2 text-gray-400">
         </div>
         <div class="flex-1">
           <label class="block mb-1 font-semibold">Hora</label>
-          <input type="time" formControlName="time" class="w-full border rounded px-3 py-2">
+          <input type="time" formControlName="time" class="w-full border rounded px-3 py-2 text-gray-400">
         </div>
       </div>
+
+
 
       <!-- Duración -->
       <div>
         <label class="block mb-1 font-semibold">Duración (min)</label>
-        <input type="number" formControlName="duration" class="w-full border rounded px-3 py-2">
+        <input type="number" formControlName="duration" class="w-full border rounded px-3 py-2 text-gray-400">
       </div>
 
       <!-- Ubicación -->
       <div class="flex gap-2">
         <div class="flex-1">
-          <label class="block mb-1 font-semibold">Nombre ubicación</label>
-          <input type="text" formControlName="location_name" class="w-full border rounded px-3 py-2">
+          <label class="block mb-1 font-semibold">Lugar:</label>
+          <input type="text" formControlName="location_name" class="w-full border rounded px-3 py-2 text-gray-400">
         </div>
         <div class="flex-1">
           <label class="block mb-1 font-semibold">URL ubicación</label>
-          <input type="url" formControlName="location_url" class="w-full border rounded px-3 py-2">
+          <input type="url" formControlName="location_url" class="w-full border rounded px-3 py-2 text-gray-400">
         </div>
       </div>
 
       <!-- Campos específicos según tipo -->
+
+      <!-- Campos para Entrenamiento -->
       <div *ngIf="eventForm.get('type')?.value === 'training'">
         <!-- Campo o gimnasio -->
         <div>
-          <label class="block mb-1 font-semibold">Ubicación del entrenamiento</label>
-          <select formControlName="training_location_type" class="w-full border rounded px-3 py-2">
+          <label class="block mb-1 font-semibold">Tipo de entrenamiento</label>
+          
+          <select formControlName="training_type" class="w-full border rounded px-3 py-2 text-gray-400">
+            <option value="" disabled>Selecciona tipo </option>
+
             <option value="campo">Campo</option>
             <option value="gimnasio">Gimnasio</option>
           </select>
         </div>
 
         <!-- Solo si es gimnasio -->
-        <div *ngIf="eventForm.get('training_location_type')?.value === 'gimnasio'">
+          <div *ngIf="eventForm.get('training_type')?.value === 'gimnasio'">
           <label class="block mb-1 font-semibold">Especialidad gimnasio</label>
-          <select formControlName="gym_focus" class="w-full border rounded px-3 py-2">
+          <select formControlName="gym_focus" class="w-full border rounded px-3 py-2 text-gray-400"> 
+            <option value="" disabled>Selecciona especialidad</option>
+
             <option value="fuerza">Fuerza</option>
             <option value="resistencia">Resistencia</option>
             <option value="preventivo">Preventivo</option>
@@ -81,9 +91,11 @@
         </div>
 
         <!-- Solo si es campo -->
-        <div *ngIf="eventForm.get('training_location_type')?.value === 'campo'">
+          <div *ngIf="eventForm.get('training_type')?.value === 'campo'">
           <label class="block mb-1 font-semibold">Área de enfoque</label>
-          <select formControlName="focus_area" class="w-full border rounded px-3 py-2">
+          <select formControlName="focus_area" class="w-full border rounded px-3 py-2 text-gray-400">
+            <option value="" disabled>Selecciona enfoque</option>
+
             <option value="tecnico">Técnico</option>
             <option value="tactico">Táctico</option>
             <option value="fisico">Físico</option>
@@ -93,16 +105,38 @@
       </div>
 
 
+        <!-- Campos para Partido -->
+        <div *ngIf="eventForm.get('type')?.value === 'match'">
+          <div class="flex gap-2">
+            <div class="flex-1">
+              <label class="block mb-1 font-semibold">Rival</label>
+              <input type="text" formControlName="opponent" class="w-full border rounded px-3 py-2 text-gray-400" placeholder="Nombre del equipo rival">
+            </div>
+            <div class="flex-1">
+              <label class="block mb-1 font-semibold">Tipo de partido</label>
+              <select formControlName="match_type" class="w-full border rounded px-3 py-2 text-gray-400">
+                <option value="" disabled>Selecciona tipo</option>
+                <option value="amistoso">Amistoso</option>
+                <option value="liga">Liga</option>
+                <option value="torneo">Torneo</option>
+                <option value="copa">Copa</option>
+                <option value="otra">Otra</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+
 
       <!-- ✅ Subir imágenes -->
       <div>
         <label class="block mb-1 font-semibold">Imágenes del evento</label>
-        <input type="file" (change)="onFilesSelected($event)" multiple class="w-full">
+        <input type="file" (change)="onFilesSelected($event)" multiple accept="image/*" class="w-full">
 
         <!-- Previsualización -->
         <div class="flex flex-wrap gap-2 mt-2">
-          <div *ngFor="let file of selectedFiles" class="w-20 h-20 border rounded overflow-hidden relative">
-          <img *ngFor="let preview of filePreviews" [src]="preview" class="w-20 h-20 object-cover rounded border">
+          <div *ngFor="let file of selectedFiles; let i = index" class="w-20 h-20 border rounded overflow-hidden relative">
+            <img [src]="filePreviews[i]" class="w-20 h-20 object-cover rounded border" *ngIf="filePreviews[i]">
             <button type="button" (click)="removeFile(file)" class="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">×</button>
           </div>
         </div>

@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use App\Entity\PlayerProfile;
 use App\Repository\EventRepository;
+use Psr\Log\LoggerInterface;
 
 class EventService
 {
@@ -21,19 +22,22 @@ class EventService
     private SluggerInterface $slugger;
     private string $eventsDirectory;
     private EventRepository $eventRepo;
+    private LoggerInterface $logger;
 
     public function __construct(
         EntityManagerInterface $em,
         Security $security,
         SluggerInterface $slugger,
         string $eventsDirectory,
-        EventRepository $eventRepo
+        EventRepository $eventRepo,
+        LoggerInterface $logger
     ) {
         $this->em = $em;
         $this->security = $security;
         $this->slugger = $slugger;
         $this->eventsDirectory = $eventsDirectory;
         $this->eventRepo = $eventRepo;
+        $this->logger = $logger;
         
     }
 
@@ -120,26 +124,81 @@ class EventService
 
         $uploaded = [];
 
+        // Ensure target directory exists
+        if (!is_dir($this->eventsDirectory)) {
+            if (!@mkdir($this->eventsDirectory, 0755, true) && !is_dir($this->eventsDirectory)) {
+                throw new \Exception('No se puede crear el directorio de uploads: ' . $this->eventsDirectory);
+            }
+        }
 
-            foreach ($files as $file) {
-                        if (!$file instanceof UploadedFile) continue;
+        $this->logger->info('🎬 Iniciando procesamiento de imágenes', ['count' => count($files)]);
 
-                        $safeFilename = $this->slugger->slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME));
-                        $newFilename = $safeFilename . '-' . uniqid() . '.' . $file->guessExtension();
+        foreach ($files as $idx => $file) {
+            if (!$file instanceof UploadedFile) {
+                $this->logger->warning('⚠️ Archivo no es UploadedFile, ignorado', ['index' => $idx, 'type' => gettype($file)]);
+                continue;
+            }
 
-                        // mover archivo a public/uploads/events
-                        $file->move($this->eventsDirectory, $newFilename);
+            $originalName = $file->getClientOriginalName() ?? '';
+            
+            $this->logger->debug('🔄 Procesando archivo', [
+                'index' => $idx,
+                'originalName' => $originalName,
+                'size' => $file->getSize(),
+                'clientMimeType' => $file->getClientMimeType()
+            ]);
+            
+            // Validate we have a proper filename
+            if (empty($originalName) || empty(trim($originalName))) {
+                $this->logger->error('❌ Nombre de archivo vacío', ['index' => $idx]);
+                throw new \Exception('El nombre del archivo está vacío o es inválido');
+            }
+            
+            $safeFilename = $this->slugger->slug(pathinfo($originalName, PATHINFO_FILENAME));
+            
+            // Ensure slug is not empty after sanitization
+            if (empty((string)$safeFilename)) {
+                // Fallback: use a generic name if slug is empty
+                $this->logger->warning('⚠️ Slug vacío, usando nombre genérico', ['originalName' => $originalName]);
+                $safeFilename = 'image';
+            }
+            
+            // Use getClientOriginalExtension() instead of guessExtension() to avoid file access issues
+            $extension = $file->getClientOriginalExtension() ?: pathinfo($originalName, PATHINFO_EXTENSION) ?: 'bin';
+            
+            // Validate extension
+            if (empty($extension) || strlen($extension) > 10) {
+                $extension = 'bin';
+            }
+            
+            $newFilename = $safeFilename . '-' . uniqid() . '.' . $extension;
 
-                        $image = new EventImage();
-                        $image->setEvent($event);
-                        $image->setUrl('/uploads/events/' . $newFilename);
+            $this->logger->info('📝 Nombre de archivo generado', ['newFilename' => $newFilename]);
 
-                        $this->em->persist($image);
-                        $uploaded[] = $image->getUrl();
-                    }
+            try {
+                $file->move($this->eventsDirectory, $newFilename);
+            } catch (\Exception $e) {
+                $this->logger->error('❌ Error moviendo fichero', [
+                    'originalName' => $originalName,
+                    'newFilename' => $newFilename,
+                    'error' => $e->getMessage()
+                ]);
+                throw new \Exception('Error moviendo fichero "' . $originalName . '": ' . $e->getMessage());
+            }
 
+            $image = new EventImage();
+            $image->setEvent($event);
+            $image->setUrl('/uploads/events/' . $newFilename);
+
+            $this->em->persist($image);
+            $uploaded[] = $image->getUrl();
+            
+            $this->logger->info('✅ Imagen registrada', ['url' => $image->getUrl()]);
+        }
 
         $this->em->flush();
+
+        $this->logger->info('✨ Imágenes procesadas exitosamente', ['count' => count($uploaded)]);
 
         return $uploaded;
     }
@@ -162,6 +221,7 @@ class EventService
         $event->setDuration($data['duration'] ?? $event->getDuration());
         $event->setLocationName($data['location_name'] ?? $event->getLocationName());
         $event->setLocationUrl($data['location_url'] ?? $event->getLocationUrl());
+        
 
         $this->em->flush();
 

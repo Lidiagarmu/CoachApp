@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Event as AppEvent } from '../interfaces/event.model';
-import { map } from 'rxjs/operators';
+import { map, tap, catchError } from 'rxjs/operators';
 
 
 
@@ -23,20 +23,38 @@ export class EventService {
 
   getEventsByTeam(teamId: number | string): Observable<AppEvent[]> {
     return this.http
-      .get<AppEvent[]>(`${this.apiUrl}/team/${teamId}`, { withCredentials: true })
+      .get<Partial<AppEvent>[]>(`${this.apiUrl}/team/${teamId}`, { withCredentials: true })
       .pipe(
-        map(events =>
-          events.map(event => ({
-            ...event,
+        map(events => events.map(event => {
+          return {
+            id: event.id ?? 0,
+            type: event.type ?? 'training',
+            title: event.title ?? '',
+            description: event.description ?? '',
+            date: event.date ?? '',
+            time: event.time ?? '',
+            duration: event.duration ?? 60,
+            location_name: event.location_name ?? '',
+            location_url: event.location_url ?? '',
             images: event.images?.map(img =>
-              img.startsWith('http')
-                ? img // si ya tiene dominio, la dejamos igual
-                : `http://localhost:8000${img}` // si no, le agregamos el host sin /api
-            ) || []
-          }))
-        )
+              img.startsWith('http') ? img : `http://localhost:8000${img}`
+            ) || [],
+
+            // Campos de entrenamiento
+            training_type: event.training_type ?? '',
+            focus_area: event.focus_area ?? '',
+
+            // Campos de partido
+            opponent: event.opponent ?? '',
+            match_type: event.match_type ?? '',
+
+            // Equipo
+            team: event.team ?? null
+          } as AppEvent
+        }))
       );
   }
+
 
 
   getEventsByPlayer(playerId: number | string): Observable<AppEvent[]> {
@@ -79,8 +97,60 @@ export class EventService {
 
   // 👉 Subir imágenes
   uploadImages(eventId: number, files: File[]): Observable<any> {
+    console.log('🔧 uploadImages iniciado');
+    console.log('   eventId:', eventId);
+    console.log('   archivos recibidos:', files.length);
+    
+    files.forEach((f, i) => {
+      console.log(`   [${i}] ${f.name} (${f.size} bytes, ${f.type})`);
+    });
+    
     const formData = new FormData();
-    files.forEach(file => formData.append('images[]', file));
-    return this.http.post(`${this.apiUrl}/${eventId}/images`, formData, { withCredentials: true });
+    
+    // Validate files before adding
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      
+      if (!file.name || file.name.trim() === '') {
+        console.error(`❌ Error: Archivo ${i} tiene nombre vacío`);
+        throw new Error(`Archivo ${i} tiene nombre vacío`);
+      }
+      
+      console.log(`📎 Agregando archivo "${file.name}" al FormData con key "images"`);
+      // Use explicit key for each file
+      formData.append(`images[${i}]`, file);
+    }
+    
+    // Debug: Log FormData content
+    console.log('🔍 Inspeccionando FormData content:');
+    try {
+      const entries = Array.from((formData as any).entries());
+      console.log('   Total entries:', entries.length);
+      entries.forEach(([key, value]: any) => {
+        if (value instanceof File) {
+          console.log(`   Key: "${key}" => File(name="${value.name}", size=${value.size}, type="${value.type}")`);
+        } else {
+          console.log(`   Key: "${key}" => ${value}`);
+        }
+      });
+    } catch (e) {
+      console.error('   Error inspeccionando FormData:', e);
+    }
+    
+    console.log(`✅ FormData preparado con ${files.length} archivo(s)`);
+    console.log('📤 Enviando POST a:', `${this.apiUrl}/${eventId}/images`);
+    
+    return this.http.post(`${this.apiUrl}/${eventId}/images`, formData, { withCredentials: true }).pipe(
+      tap(response => {
+        console.log('✅ Respuesta de uploadImages:', response);
+      }),
+      catchError(err => {
+        console.error('❌ Error en uploadImages');
+        console.error('   Status:', err.status);
+        console.error('   Error message:', err?.error?.error || err?.message);
+        console.error('   Full error:', err);
+        throw err;
+      })
+    );
   }
 }
