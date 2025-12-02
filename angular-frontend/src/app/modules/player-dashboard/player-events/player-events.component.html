@@ -7,9 +7,11 @@
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
     <div *ngFor="let training of trainings" class="bg-white rounded-xl shadow p-6 flex flex-col">
       <h3 class="text-xl font-bold mb-2">{{ training.title }}</h3>
+      <p class="text-gray-700 mb-1"><strong>Descripción:</strong> {{ training.description }}</p>
       <p class="text-gray-700 mb-1"><strong>Fecha:</strong> {{ training.date }} {{ training.time }}</p>
       <p class="text-gray-700 mb-1"><strong>Duración:</strong> {{ training.duration }} min</p>
-      <p class="text-gray-700 mb-1"><strong>Ubicación:</strong> <a [href]="training.location_url" target="_blank">{{ training.location_name }}</a></p>
+      <p class="text-gray-700 mb-1"><strong>Lugar: </strong> {{ training.location_name }}</p>
+      <p class="text-gray-700 mb-1" *ngIf="training.location_url"><strong>URL ubicación: </strong> <a [href]="training.location_url" target="_blank">{{ training.location_url }}</a></p>
       <p class="text-gray-700 mb-1"><strong>Tipo:</strong> {{ training.training_type }}</p>
       <p class="text-gray-700 mb-3"><strong>Área de enfoque:</strong> {{ training.focus_area }}</p>
 
@@ -26,9 +28,11 @@
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
     <div *ngFor="let game of matches" class="bg-white rounded-xl shadow p-6 flex flex-col">
       <h3 class="text-xl font-bold mb-2">{{ game.title }}</h3>
+      <p class="text-gray-700 mb-1"><strong>Descripción:</strong> {{ game.description }}</p>
       <p class="text-gray-700 mb-1"><strong>Fecha:</strong> {{ game.date }} {{ game.time }}</p>
       <p class="text-gray-700 mb-1"><strong>Duración:</strong> {{ game.duration }} min</p>
-      <p class="text-gray-700 mb-1"><strong>Ubicación:</strong> <a [href]="game.location_url" target="_blank">{{ game.location_name }}</a></p>
+      <p class="text-gray-700 mb-1"><strong>Lugar: </strong> {{ game.location_name }}</p>
+      <p class="text-gray-700 mb-1" *ngIf="game.location_url"><strong>URL ubicación: </strong> <a [href]="game.location_url" target="_blank">{{ game.location_url }}</a></p>
       <p class="text-gray-700 mb-1"><strong>Rival:</strong> {{ game.opponent }}</p>
       <p class="text-gray-700 mb-3"><strong>Tipo de partido:</strong> {{ game.match_type }}</p>
 
