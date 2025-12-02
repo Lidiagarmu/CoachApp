@@ -23,21 +23,10 @@
   <div *ngIf="trainings.length === 0" class="text-gray-500">No hay entrenamientos disponibles.</div>
 
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-
-    <div *ngFor="let training of trainings" class="bg-white rounded-xl shadow p-6 flex flex-col  max-w-full overflow-hidden">
+    <div *ngFor="let training of trainings" class="bg-white rounded-xl shadow p-6 flex flex-col max-w-full overflow-hidden">
 
       <!-- Título -->
-      <h3 class="text-xl font-bold mb-2 truncate">
-        {{ training.title }}
-      </h3>
-
-      <!-- Descripción -->
-      <p class="text-gray-700 mb-1 line-clamp-3">
-        <svg class="inline w-5 h-5 mr-2 text-secondary" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M8 16h8M8 12h8M8 8h8M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-        </svg>
-        <strong>Descripción: </strong> {{ training.description }}
-      </p>
+      <h3 class="text-xl font-bold mb-2 truncate">{{ training.title }}</h3>
 
       <!-- Fecha y hora -->
       <p class="text-gray-700 mb-1">
@@ -68,90 +57,87 @@
       </p>
 
       <!-- URL Ubicación -->
-      <p class="text-gray-700 mb-1" *ngIf="training.location_url">
+      <p class="text-gray-700 mb-3" *ngIf="training.location_url">
         <svg class="inline w-5 h-5 mr-2 text-secondary" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M12 11c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3z"/>
           <path stroke-linecap="round" stroke-linejoin="round" d="M12 22s8-8 8-12a8 8 0 10-16 0c0 4 8 12 8 12z"/>
         </svg>
         <strong>URL Ubicación: </strong>
-        <a [href]="training.location_url"
-           target="_blank"
-           class="text-blue-600 underline truncate block max-w-full">
-           {{ training.location_url }}
+        <a [href]="training.location_url" target="_blank" class="text-blue-600 underline truncate block max-w-full">
+          {{ training.location_url }}
         </a>
       </p>
 
-      <!-- Tipo de entrenamiento -->
-      <p class="text-gray-700 mb-1 truncate">
-        <svg class="inline w-5 h-5 mr-2 text-secondary" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M6 6v12h2V6H6zm10 0v12h2V6h-2zM9 12h6"/>
-        </svg>
-        <strong>Tipo de entrenamiento: </strong> {{ training.training_type }}
-      </p>
-
-      <!-- Área de enfoque -->
-      <p class="text-gray-700 mb-3 truncate">
-        <svg class="inline w-5 h-5 mr-2 text-secondary" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <circle cx="12" cy="12" r="10"/>
-          <circle cx="12" cy="12" r="6"/>
-          <circle cx="12" cy="12" r="2"/>
-        </svg>
-        <strong>Área de enfoque:</strong> {{ training.focus_area }}
-      </p>
-
-      <!-- Imágenes -->
-      <div class="flex flex-wrap gap-2 mb-3">
-        <img *ngFor="let img of training.images"
-             [src]="img"
-             class="w-20 h-20 object-cover rounded border" />
+       <!-- Imágenes -->
+      <div *ngIf="training.images.length" class="mt-4">
+        <h3 class="font-semibold mb-2 text-gray-700">Imágenes del evento:</h3>
+        <div class="flex flex-wrap gap-2">
+          <img *ngFor="let img of training.images" [src]="img" class="w-24 h-24 object-cover rounded border" />
+        </div>
       </div>
 
       <!-- Botones -->
-      <div class="mt-auto flex gap-2">
-        <button (click)="editEvent(training)" class="bg-yellow-400 hover:bg-yellow-500 text-white px-3 py-1 rounded">Editar</button>
-        <button (click)="deleteEvent(training.id)" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded">Eliminar</button>
+      <div class="flex justify-between items-center w-full mt-5">
+
+        <!-- Izquierda: Editar y Eliminar -->
+        <div class="flex gap-2">
+          <!-- Editar (lápiz) -->
+          <button (click)="editEvent(training)" class="bg-yellow-400 hover:bg-yellow-500 text-white p-2 rounded-full flex items-center justify-center">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 20h9"/>
+              <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 3.5l4 4L7 21H3v-4L16.5 3.5z"/>
+            </svg>
+          </button>
+
+          <!-- Eliminar (papelera) -->
+          <button (click)="deleteEvent(training.id)" class="bg-red-500 hover:bg-red-600 text-white p-2 rounded-full flex items-center justify-center">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 7L5 7"/>
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 7v12a2 2 0 002 2h8a2 2 0 002-2V7"/>
+              <path stroke-linecap="round" stroke-linejoin="round" d="M10 7V4a1 1 0 012 0v3"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Derecha: Ver más -->
+        <button (click)="openModal(training)" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-1 rounded">
+          Ver más
+        </button>
+
       </div>
+
+
 
     </div>
   </div>
 </section>
 
-
 <!-- Partidos -->
 <section>
   <h2 class="text-2xl font-semibold mb-4 text-black">Partidos</h2>
   <div *ngIf="games.length === 0" class="text-gray-500">No hay partidos disponibles.</div>
+
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
     <div *ngFor="let game of games" class="bg-white rounded-xl shadow p-6 flex flex-col">
-      
+
       <!-- Equipo -->
       <div class="flex items-center gap-4 mb-3">
-        <img
-          *ngIf="getTeamShield(game)"
-          [src]="getTeamShield(game)"
-          class="w-12 h-12 object-contain rounded-full border"
-        />
+        <img *ngIf="getTeamShield(game)" [src]="getTeamShield(game)" class="w-12 h-12 object-contain rounded-full border" />
         <div>
           <h3 class="text-xl font-bold truncate">{{ game.team?.name }}</h3>
         </div>
       </div>
 
+      <!-- Título -->
       <h4 class="text-lg font-semibold mb-1 truncate">{{ game.title }}</h4>
-
-      <!-- Descripción -->
-      <p class="text-gray-700 mb-1 line-clamp-3">
-        <svg class="inline w-5 h-5 mr-2 text-secondary" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M8 16h8M8 12h8M8 8h8M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-        </svg>
-        <strong>Descripción: </strong>{{ game.description }}
-      </p>
 
       <!-- Fecha y hora -->
       <p class="text-gray-700 mb-1">
         <svg class="inline w-5 h-5 mr-2 text-secondary" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3M3 8h18M5 8v13a2 2 0 002 2h10a2 2 0 002-2V8"/>
         </svg>
-        <strong>Fecha: </strong> {{ game.date }} <strong>Hora: </strong>{{ game.time }}
+        <strong>Fecha: </strong> {{ game.date }}
+        <strong>Hora: </strong> {{ game.time }}
       </p>
 
       <!-- Duración -->
@@ -174,48 +160,64 @@
       </p>
 
       <!-- URL Ubicación -->
-      <p class="text-gray-700 mb-1" *ngIf="game.location_url">
+      <p class="text-gray-700 mb-3" *ngIf="game.location_url">
         <svg class="inline w-5 h-5 mr-2 text-secondary" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M12 11c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3z"/>
           <path stroke-linecap="round" stroke-linejoin="round" d="M12 22s8-8 8-12a8 8 0 10-16 0c0 4 8 12 8 12z"/>
         </svg>
-        <strong>Ubicación: </strong>
-        <a [href]="game.location_url"
-           target="_blank"
-           class="text-blue-600 underline break-all line-clamp-1">
-           {{ game.location_url }}
+        <strong>URL Ubicación: </strong>
+        <a [href]="game.location_url" target="_blank" class="text-blue-600 underline truncate block max-w-full">
+          {{ game.location_url }}
         </a>
       </p>
 
-      <!-- Rival -->
-      <p class="text-gray-700 mb-1 truncate">
-        <svg class="inline w-5 h-5 mr-2 text-secondary" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M12 2l7 4v6c0 5-3 9-7 10-4-1-7-5-7-10V6l7-4z"/>
-          <path stroke-linecap="round" stroke-linejoin="round" d="M12 12v4"/>
-        </svg>
-        <strong>Rival: </strong> {{ game.opponent }}
-      </p>
-
-      <!-- Tipo de partido -->
-      <p class="text-gray-700 mb-3 truncate">
-      <svg class="inline w-5 h-5 mr-2 text-secondary" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-        <path d="M19.071 4.929a9.936 9.936 0 0 0-7.07-2.938 9.943 9.943 0 0 0-7.072 2.938c-3.899 3.898-3.899 10.243 0 14.142a9.94 9.94 0 0 0 7.073 2.938 9.936 9.936 0 0 0 7.07-2.937c3.899-3.898 3.899-10.243-.001-14.143zM12.181 4h-.359c.061-.001.119-.009.18-.009s.118.008.179.009zM16 17.01l-1.258 2.516a7.956 7.956 0 0 1-2.741.493 7.96 7.96 0 0 1-2.746-.494L8 17.01H5.765a7.96 7.96 0 0 1-1.623-3.532L6 11 4.784 8.567a7.936 7.936 0 0 1 1.559-2.224 7.994 7.994 0 0 1 3.22-1.969L12 6l2.438-1.625a8.01 8.01 0 0 1 3.22 1.968 7.94 7.94 0 0 1 1.558 2.221L18 11l1.858 2.478A7.952 7.952 0 0 1 18.243 17z"/>
-        <path d="M8.5 11 10 15h4l1.5-4L12 8.5z"/>
-      </svg>
-        <strong>Tipo de partido: </strong> {{ game.match_type }}
-      </p>
-
       <!-- Imágenes -->
-      <div class="flex flex-wrap gap-2 mb-3">
-        <img *ngFor="let img of game.images" [src]="img" class="w-20 h-20 object-cover rounded border">
+      <div *ngIf="game.images.length" class="mt-4">
+        <h3 class="font-semibold mb-2 text-gray-700">Imágenes del evento:</h3>
+        <div class="flex flex-wrap gap-2">
+          <img *ngFor="let img of game.images" [src]="img" class="w-24 h-24 object-cover rounded border" />
+        </div>
       </div>
+      
 
       <!-- Botones -->
-      <div class="mt-auto flex gap-2">
-        <button (click)="editEvent(game)" class="bg-yellow-400 hover:bg-yellow-500 text-white px-3 py-1 rounded">Editar</button>
-        <button (click)="deleteEvent(game.id)" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded">Eliminar</button>
+      <div class="mt-5 flex justify-between items-center w-full">
+
+        <!-- Izquierda: Editar y Eliminar -->
+        <div class="flex gap-2">
+          <!-- Editar (lápiz) -->
+          <button (click)="editEvent(game)" class="bg-yellow-400 hover:bg-yellow-500 text-white p-2 rounded-full flex items-center justify-center">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 20h9"/>
+              <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 3.5l4 4L7 21H3v-4L16.5 3.5z"/>
+            </svg>
+          </button>
+
+          <!-- Eliminar (papelera) -->
+          <button (click)="deleteEvent(game.id)" class="bg-red-500 hover:bg-red-600 text-white p-2 rounded-full flex items-center justify-center">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 7L5 7"/>
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 7v12a2 2 0 002 2h8a2 2 0 002-2V7"/>
+              <path stroke-linecap="round" stroke-linejoin="round" d="M10 7V4a1 1 0 012 0v3"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Derecha: Ver más -->
+        <button (click)="openModal(game)" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-1 rounded">
+          Ver más
+        </button>
+
       </div>
+
 
     </div>
   </div>
 </section>
+
+<!-- Modal de detalles -->
+<app-modal-event-details
+  *ngIf="showDetailsModal && selectedEvent"
+  [event]="selectedEvent"
+  (close)="closeDetailsModal()"
+></app-modal-event-details>
