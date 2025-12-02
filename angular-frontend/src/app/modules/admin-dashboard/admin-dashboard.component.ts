@@ -24,7 +24,9 @@ export class AdminDashboardComponent implements OnInit {
       next: user => {
         this.nickname = user.nickname || '';
         this.fullName = user.fullName || '';
-        this.role = user.roles?.includes('ROLE_COACH') ? 'Entrenador' : 'Jugador';
+        this.role = user.roles?.includes('ROLE_ADMIN') ? 'Administrador' :
+          user.roles?.includes('ROLE_COACH') ? 'Entrenador' :
+          'Jugador';
       },
       error: () => {
         // Opcional: manejar error, logout si token inválido
