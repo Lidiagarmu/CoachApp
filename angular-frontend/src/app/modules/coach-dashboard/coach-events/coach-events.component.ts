@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { EventService } from '../../../services/event.service';
 import { EventFormComponent } from './event-form/event-form.component';
+import { ModalEventDetailsComponent } from './modal-event-details/modal-event-details.component';
 import { CommonModule, NgIf, NgFor } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Event as AppEvent } from '../../../interfaces/event.model';
@@ -9,7 +10,14 @@ import { environment } from '../../../../environments/enviroment';
 @Component({
   selector: 'app-coach-events',
   standalone: true,
-  imports: [EventFormComponent, CommonModule, ReactiveFormsModule, NgIf, NgFor],
+  imports: [
+    EventFormComponent,
+    ModalEventDetailsComponent, 
+    CommonModule, 
+    ReactiveFormsModule, 
+    NgIf, 
+    NgFor
+  ],
   templateUrl: './coach-events.component.html'
 })
 export class CoachEventsComponent implements OnInit {
@@ -22,8 +30,10 @@ export class CoachEventsComponent implements OnInit {
   showFormModal = false;
   eventToEdit?: AppEvent;
 
-  backendUrl = environment.apiUrl; 
+  showDetailsModal = false;  // <-- modal de detalles
+  selectedEvent?: AppEvent;  // <-- evento seleccionado para ver detalles
 
+  backendUrl = environment.apiUrl; 
 
   constructor(private eventService: EventService) {}
 
@@ -33,8 +43,7 @@ export class CoachEventsComponent implements OnInit {
 
   loadEvents(): void {
     this.eventService.getEventsByTeam(this.teamId).subscribe(events => {
-
-          // 🧠 construir URLs completas para imágenes
+      // 🧠 construir URLs completas para imágenes
       events.forEach(event => {
         if (event.images) {
           event.images = event.images.map(img =>
@@ -93,9 +102,19 @@ export class CoachEventsComponent implements OnInit {
   getTeamShield(event: AppEvent): string | null {
     const shield = event.team?.shield ?? null;
     if (!shield) return null;
-    
     return shield.startsWith('http') ? shield : `${this.backendUrl}${shield}`;
   }
 
+  // ===============================================
+  // Nuevo: abrir modal de detalles
+  // ===============================================
+  openModal(event: AppEvent): void {
+    this.selectedEvent = event;
+    this.showDetailsModal = true;
+  }
 
+  closeDetailsModal(): void {
+    this.selectedEvent = undefined;
+    this.showDetailsModal = false;
+  }
 }

@@ -1,0 +1,118 @@
+<!-- Modal de detalles del evento -->
+<div
+  *ngIf="selectedEvent"
+  class="fixed inset-0 bg-black/50 flex items-start justify-center z-50 p-4 overflow-y-auto"
+>
+  <div
+    class="bg-white rounded-xl shadow-lg w-full max-w-3xl p-6 relative max-h-[90vh] overflow-y-auto transform transition-transform duration-300 ease-in-out"
+  >
+    <!-- Botón cerrar -->
+    <button
+      (click)="closeDetailsModal()"
+      class="absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-2xl font-bold"
+    >
+      &times;
+    </button>
+
+    <!-- Título del evento -->
+    <h2 class="text-3xl font-bold mb-6 text-center text-black">{{ selectedEvent.title }}</h2>
+
+    <!-- Información general -->
+    <div class="mb-6 text-gray-700 flex flex-col gap-2">
+      <p>
+        <svg class="inline w-5 h-5 mr-2 text-secondary" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3M3 8h18M5 8v13a2 2 0 002 2h10a2 2 0 002-2V8"/>
+        </svg>
+        <strong>Fecha:</strong> {{ selectedEvent.date }}
+        <strong>Hora:</strong> {{ selectedEvent.time }}
+      </p>
+      <p>
+        <svg class="inline w-5 h-5 mr-2 text-secondary" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <rect x="4" y="3" width="16" height="18" rx="1" ry="1"/>
+          <rect x="10" y="16" width="4" height="5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 6h2M6 9h2M6 12h2M6 15h2M16 6h2M16 9h2M16 12h2M16 15h2"/>
+          <path stroke-linecap="round" stroke-linejoin="round" d="M11 6h2M11 9h2M11 12h2M11 15h2"/>
+        </svg>
+        <strong>Lugar:</strong> {{ selectedEvent.location_name }}
+      </p>
+      <p *ngIf="selectedEvent.location_url">
+        <svg class="inline w-5 h-5 mr-2 text-secondary" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 11c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3z"/>
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 22s8-8 8-12a8 8 0 10-16 0c0 4 8 12 8 12z"/>
+        </svg>
+        <strong>URL Ubicación: </strong>
+        <a [href]="selectedEvent.location_url" target="_blank" class="text-blue-600 underline break-all">{{ selectedEvent.location_url }}</a>
+      </p>
+      <p>
+        <svg class="inline w-5 h-5 mr-2 text-secondary" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2m-4-8a9 9 0 100 18 9 9 0 000-18z"/>
+        </svg>
+        <strong>Duración: </strong> {{ selectedEvent.duration }} min
+      </p>
+      <p>
+        <svg class="inline w-5 h-5 mr-2 text-secondary" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M8 16h8M8 12h8M8 8h8"/>
+        </svg>
+        <strong>Descripción: </strong> <br> {{ selectedEvent.description }}
+      </p>
+    </div>
+
+    <!-- Campos específicos según tipo -->
+    <div *ngIf="selectedEvent.type === 'training'" class="mb-6 text-gray-700">
+      <p>
+        <svg class="inline w-5 h-5 mr-2 text-secondary" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 6v12h2V6H6zm10 0v12h2V6h-2zM9 12h6"/>
+        </svg>
+        <strong>Tipo de entrenamiento:</strong> {{ selectedEvent.training_type }}
+      </p>
+      <p *ngIf="selectedEvent.training_type === 'gimnasio'"><strong>Especialidad gimnasio:</strong> {{ selectedEvent.gym_focus }}</p>
+      <p *ngIf="selectedEvent.training_type === 'campo'">
+        <svg class="inline w-5 h-5 mr-2 text-secondary" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="10"/>
+          <circle cx="12" cy="12" r="6"/>
+          <circle cx="12" cy="12" r="2"/>
+        </svg>
+        <strong>Área de enfoque:</strong> {{ selectedEvent.focus_area }}</p>
+    </div>
+
+    <div *ngIf="selectedEvent.type === 'match'" class="mb-6 text-gray-700">
+      <p>
+        <svg class="inline w-5 h-5 mr-2 text-secondary" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 2l7 4v6c0 5-3 9-7 10-4-1-7-5-7-10V6l7-4z"/>
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 12v4"/>
+        </svg>
+        <strong>Rival:</strong> {{ selectedEvent.opponent }}
+      </p>
+      <p>
+        <svg class="inline w-5 h-5 mr-2 text-secondary" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M19.071 4.929a9.936 9.936 0 0 0-7.07-2.938 9.943 9.943 0 0 0-7.072 2.938c-3.899 3.898-3.899 10.243 0 14.142a9.94 9.94 0 0 0 7.073 2.938 9.936 9.936 0 0 0 7.07-2.937c3.899-3.898 3.899-10.243-.001-14.143zM12.181 4h-.359c.061-.001.119-.009.18-.009s.118.008.179.009zM16 17.01l-1.258 2.516a7.956 7.956 0 0 1-2.741.493 7.96 7.96 0 0 1-2.746-.494L8 17.01H5.765a7.96 7.96 0 0 1-1.623-3.532L6 11 4.784 8.567a7.936 7.936 0 0 1 1.559-2.224 7.994 7.994 0 0 1 3.22-1.969L12 6l2.438-1.625a8.01 8.01 0 0 1 3.22 1.968 7.94 7.94 0 0 1 1.558 2.221L18 11l1.858 2.478A7.952 7.952 0 0 1 18.243 17z"/>
+          <path d="M8.5 11 10 15h4l1.5-4L12 8.5z"/>
+        </svg>
+        <strong>Tipo de partido:</strong> {{ selectedEvent.match_type }}
+      </p>
+
+      <div class="flex items-center gap-2 mt-2" *ngIf="selectedEvent.team?.shield">
+        <img [src]="getTeamShield(selectedEvent)" class="w-12 h-12 object-contain rounded-full border"/>
+        <p><strong>Equipo:</strong> {{ selectedEvent.team?.name }}</p>
+      </div>
+    </div>
+
+    <!-- Imágenes -->
+    <div *ngIf="selectedEvent.images.length" class="mt-4">
+      <h3 class="font-semibold mb-2 text-gray-700">Imágenes del evento:</h3>
+      <div class="flex flex-wrap gap-2">
+        <img *ngFor="let img of selectedEvent.images" [src]="img" class="w-24 h-24 object-cover rounded border" />
+      </div>
+    </div>
+
+    <!-- Botón cerrar -->
+    <div class="flex justify-end mt-6">
+      <button
+        (click)="closeDetailsModal()"
+        class="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded"
+      >
+        Cerrar
+      </button>
+    </div>
+  </div>
+</div>
