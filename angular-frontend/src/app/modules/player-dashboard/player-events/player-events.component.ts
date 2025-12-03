@@ -4,11 +4,12 @@ import { Event as AppEvent } from '../../../interfaces/event.model';
 import { CommonModule } from '@angular/common';
 import { ModalEventDetailsPlayerComponent } from './modal-event-details-player/modal-event-details-player.component';
 import { environment } from '../../../../environments/enviroment';
+import { LoadingSpinnerComponent } from '../../../shared/components/loading-spinner/loading-spinner.component';
 
 @Component({
   selector: 'app-player-events',
   standalone: true,
-  imports: [CommonModule, ModalEventDetailsPlayerComponent],
+  imports: [CommonModule, ModalEventDetailsPlayerComponent, LoadingSpinnerComponent],
   templateUrl: './player-events.component.html',
 })
 export class PlayerEventsComponent implements OnInit, OnChanges {

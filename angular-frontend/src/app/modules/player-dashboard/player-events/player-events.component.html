@@ -1,4 +1,4 @@
-<div *ngIf="loading" class="text-gray-500">Cargando eventos...</div>
+<app-loading-spinner *ngIf="loading" text="Cargando eventos actuales..."></app-loading-spinner>
 <div *ngIf="errorMessage" class="text-red-500">{{ errorMessage }}</div>
 
 <!-- Entrenamientos -->
