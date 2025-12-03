@@ -105,7 +105,7 @@ export class EventFormComponent {
           },
            
           error: err => {
-             console.error('❌ Error subiendo imágenes', err);
+              console.error('❌ Error subiendo imágenes', err);
 
               let rawMsg =
                 err?.error?.error ||
@@ -113,37 +113,39 @@ export class EventFormComponent {
                 err?.message ||
                 'Error desconocido al subir las imágenes';
 
+              let cleanMsg = '';
 
-                 // ---------------------------
-                // 🎯 Detectar error de límite de tamaño
-                // ---------------------------
-                let cleanMsg = '';
+              if (rawMsg.includes('exceeds your upload_max_filesize')) {
 
-                if (rawMsg.includes('exceeds your upload_max_filesize')) {
-                  // Extraer nombre del archivo
-                  const fileMatch = rawMsg.match(/file\s+"([^"]+)"/i);
-                  const fileName = fileMatch ? fileMatch[1] : 'uno de los archivos';
+                const fileMatch = rawMsg.match(/file\s+"([^"]+)"/i);
+                const fileName = fileMatch ? fileMatch[1] : 'uno de los archivos';
 
-                  // Extraer límite (e.g. "2048 KiB")
-                  const limitMatch = rawMsg.match(/limit is ([^)]+)\)/i);
-                  let limit = limitMatch ? limitMatch[1] : null;
+                const limitMatch = rawMsg.match(/limit is ([^)]+)\)/i);
+                let limit = limitMatch ? limitMatch[1] : null;
 
-                  // Convertir a MB si está en KiB
-                  if (limit && limit.toLowerCase().includes('kib')) {
-                    const kb = parseInt(limit);
-                    const mb = (kb / 1024).toFixed(1);
-                    limit = `${mb} MB`;
-                  }
-
-                  cleanMsg = `El archivo "${fileName}" supera el tamaño máximo permitido (${limit}).`;
-                } else {
-                  cleanMsg = rawMsg;
+                if (limit && limit.toLowerCase().includes('kib')) {
+                  const kb = parseInt(limit);
+                  const mb = (kb / 1024).toFixed(1);
+                  limit = `${mb} MB`;
                 }
 
+                cleanMsg = `El archivo "${fileName}" supera el tamaño máximo permitido (${limit}).`;
+              } else {
+                cleanMsg = rawMsg;
+              }
 
+              // ⛔ 1. borrar el evento recién creado
+              this.eventService.deleteEvent(eventId).subscribe({
+                next: () => console.log("🗑 Evento revertido por fallo en imágenes"),
+                error: err2 => console.error("⚠ Error al borrar evento fallido:", err2)
+              });
+
+              // ⛔ 2. mostrar error al modal
               this.imageUploadError.emit(cleanMsg);
-            
-                   }
+
+              // ⛔ 3. NO cerrar form
+          }
+
         });
       } else {
         console.log('ℹ️ Sin imágenes para subir');
