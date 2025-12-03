@@ -90,7 +90,7 @@
           </button>
 
           <!-- Eliminar (papelera) -->
-          <button (click)="deleteEvent(training.id)" class="bg-red-500 hover:bg-red-600 text-white p-2 rounded-full flex items-center justify-center">
+          <button (click)="openDeleteConfirm(training.id)" class="bg-red-500 hover:bg-red-600 text-white p-2 rounded-full flex items-center justify-center">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M19 7L5 7"/>
               <path stroke-linecap="round" stroke-linejoin="round" d="M6 7v12a2 2 0 002 2h8a2 2 0 002-2V7"/>
@@ -194,7 +194,7 @@
           </button>
 
           <!-- Eliminar (papelera) -->
-          <button (click)="deleteEvent(game.id)" class="bg-red-500 hover:bg-red-600 text-white p-2 rounded-full flex items-center justify-center">
+          <button (click)="openDeleteConfirm(game.id)" class="bg-red-500 hover:bg-red-600 text-white p-2 rounded-full flex items-center justify-center">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M19 7L5 7"/>
               <path stroke-linecap="round" stroke-linejoin="round" d="M6 7v12a2 2 0 002 2h8a2 2 0 002-2V7"/>
@@ -221,3 +221,33 @@
   [event]="selectedEvent"
   (close)="closeDetailsModal()"
 ></app-modal-event-details>
+
+
+<!-- Modal de confirmación de eliminación -->
+<div 
+  *ngIf="showDeleteConfirm"
+  class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+>
+  <div class="bg-white p-6 rounded-xl shadow-lg w-80 text-center">
+
+    <h2 class="text-lg font-semibold mb-4">
+      ¿Seguro que deseas eliminar este evento?
+    </h2>
+
+    <div class="flex justify-between mt-4">
+      <button 
+        (click)="confirmDelete()" 
+        class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 w-32"
+      >
+        Eliminar
+      </button>
+
+      <button 
+        (click)="closeDeleteConfirm()" 
+        class="bg-gray-300 px-4 py-2 rounded hover:bg-gray-400 w-32"
+      >
+        Cancelar
+      </button>
+    </div>
+  </div>
+</div>
