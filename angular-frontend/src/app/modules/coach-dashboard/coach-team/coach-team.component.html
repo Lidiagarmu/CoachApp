@@ -2,12 +2,8 @@
   <h2 class="text-3xl font-bold mb-6 text-gray-800"> Mi Equipo</h2>
 
   <!-- Loader -->
-<div *ngIf="loading">
-  <div class="flex flex-col items-center justify-center py-12 gap-2">
-    <div class="w-12 h-12 border-4 border-blue-500 border-dashed rounded-full animate-spin"></div>
-    <p class="text-gray-500 font-medium">Cargando equipo...</p>
-  </div>
-</div>
+  <app-loading-spinner *ngIf="loading" text="Cargando equipo..."></app-loading-spinner>
+
 
   <!-- Equipo existente -->
   <div *ngIf="team && !loading" class="bg-white/80 p-6 rounded-2xl shadow-md border border-gray-200 space-y-6">

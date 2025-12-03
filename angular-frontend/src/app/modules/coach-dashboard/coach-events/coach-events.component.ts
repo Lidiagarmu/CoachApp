@@ -7,6 +7,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { Event as AppEvent } from '../../../interfaces/event.model';
 import { environment } from '../../../../environments/enviroment';
 
+import { LoadingSpinnerComponent } from '../../../shared/components/loading-spinner/loading-spinner.component';
 @Component({
   selector: 'app-coach-events',
   standalone: true,
@@ -16,7 +17,8 @@ import { environment } from '../../../../environments/enviroment';
     CommonModule, 
     ReactiveFormsModule, 
     NgIf, 
-    NgFor
+    NgFor,
+    LoadingSpinnerComponent
   ],
   templateUrl: './coach-events.component.html'
 })
