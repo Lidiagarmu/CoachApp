@@ -18,6 +18,8 @@ export class EventFormComponent {
   @Input() eventToEdit?: AppEvent;
   @Output() formClosed = new EventEmitter<void>();
   @Output() formSaved = new EventEmitter<void>();
+  @Output() imageUploadError = new EventEmitter<string>();
+
 
   eventForm: FormGroup;
   selectedFiles: File[] = [];
@@ -101,11 +103,49 @@ export class EventFormComponent {
             this.formSaved.emit();
             this.closeForm();
           },
+           
           error: err => {
-            console.error('❌ Error subiendo imágenes', err);
-            console.error('Error details:', err?.error);
-            alert('Error subiendo imágenes: ' + (err?.error?.error || err?.message || 'Error desconocido'));
+              console.error('❌ Error subiendo imágenes', err);
+
+              let rawMsg =
+                err?.error?.error ||
+                err?.error?.message ||
+                err?.message ||
+                'Error desconocido al subir las imágenes';
+
+              let cleanMsg = '';
+
+              if (rawMsg.includes('exceeds your upload_max_filesize')) {
+
+                const fileMatch = rawMsg.match(/file\s+"([^"]+)"/i);
+                const fileName = fileMatch ? fileMatch[1] : 'uno de los archivos';
+
+                const limitMatch = rawMsg.match(/limit is ([^)]+)\)/i);
+                let limit = limitMatch ? limitMatch[1] : null;
+
+                if (limit && limit.toLowerCase().includes('kib')) {
+                  const kb = parseInt(limit);
+                  const mb = (kb / 1024).toFixed(1);
+                  limit = `${mb} MB`;
+                }
+
+                cleanMsg = `El archivo "${fileName}" supera el tamaño máximo permitido (${limit}).`;
+              } else {
+                cleanMsg = rawMsg;
+              }
+
+              // ⛔ 1. borrar el evento recién creado
+              this.eventService.deleteEvent(eventId).subscribe({
+                next: () => console.log("🗑 Evento revertido por fallo en imágenes"),
+                error: err2 => console.error("⚠ Error al borrar evento fallido:", err2)
+              });
+
+              // ⛔ 2. mostrar error al modal
+              this.imageUploadError.emit(cleanMsg);
+
+              // ⛔ 3. NO cerrar form
           }
+
         });
       } else {
         console.log('ℹ️ Sin imágenes para subir');

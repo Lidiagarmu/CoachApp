@@ -38,6 +38,10 @@ export class CoachEventsComponent implements OnInit {
   showDeleteConfirm = false;
   eventToDeleteId?: number;
 
+
+  showImageErrorModal = false;
+  imageErrorMessage = '';
+
   constructor(private eventService: EventService) {}
 
   ngOnInit(): void {
@@ -149,4 +153,21 @@ export class CoachEventsComponent implements OnInit {
       error: err => console.error(err)
     });
   }
+
+
+  // ===============================================
+  // Abrir modal de error de imagen demasiado pesada
+  // ===============================================
+
+  openImageErrorModal(message: string) {
+  this.imageErrorMessage = message;
+  this.showImageErrorModal = true;
+  }
+
+  closeImageErrorModal() {
+    this.showImageErrorModal = false;
+    this.imageErrorMessage = '';
+  }
+
+
   }
