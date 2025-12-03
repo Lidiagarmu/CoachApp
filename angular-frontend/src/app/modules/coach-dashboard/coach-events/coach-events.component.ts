@@ -35,6 +35,9 @@ export class CoachEventsComponent implements OnInit {
 
   backendUrl = environment.apiUrl; 
 
+  showDeleteConfirm = false;
+  eventToDeleteId?: number;
+
   constructor(private eventService: EventService) {}
 
   ngOnInit(): void {
@@ -106,7 +109,7 @@ export class CoachEventsComponent implements OnInit {
   }
 
   // ===============================================
-  // Nuevo: abrir modal de detalles
+  // Abrir modal de detalles del evento
   // ===============================================
   openModal(event: AppEvent): void {
     this.selectedEvent = event;
@@ -117,4 +120,33 @@ export class CoachEventsComponent implements OnInit {
     this.selectedEvent = undefined;
     this.showDetailsModal = false;
   }
-}
+
+
+
+
+   // ===============================================
+  // Abrir modal de confirmación de eliminación
+  // ===============================================
+
+  openDeleteConfirm(id: number) {
+  this.eventToDeleteId = id;
+  this.showDeleteConfirm = true;
+  }
+
+  closeDeleteConfirm() {
+    this.showDeleteConfirm = false;
+    this.eventToDeleteId = undefined;
+  }
+
+  confirmDelete() {
+    if (!this.eventToDeleteId) return;
+
+    this.eventService.deleteEvent(this.eventToDeleteId).subscribe({
+      next: () => {
+        this.loadEvents();
+        this.closeDeleteConfirm();
+      },
+      error: err => console.error(err)
+    });
+  }
+  }
