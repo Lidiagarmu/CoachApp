@@ -42,6 +42,8 @@ export class CoachEventsComponent implements OnInit {
   showImageErrorModal = false;
   imageErrorMessage = '';
 
+  loading = false;
+
   constructor(private eventService: EventService) {}
 
   ngOnInit(): void {
@@ -49,6 +51,8 @@ export class CoachEventsComponent implements OnInit {
   }
 
   loadEvents(): void {
+    this.loading = true; // 🔹 activamos spinner
+
     this.eventService.getEventsByTeam(this.teamId).subscribe(events => {
       // 🧠 construir URLs completas para imágenes
       events.forEach(event => {
@@ -62,6 +66,9 @@ export class CoachEventsComponent implements OnInit {
       this.events = events;
       this.trainings = events.filter(e => e.type === 'training');
       this.games = events.filter(e => e.type === 'match');
+
+      this.loading = false; // 🔹 desactivamos spinner
+
     });
   }
 
