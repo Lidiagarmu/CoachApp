@@ -18,6 +18,8 @@ export class CoachTeamComponent implements OnInit {
 
   createForm = { name: '' };
   selectedFile: File | null = null; // Para subida de escudo
+  previewUrl: string | null = null; // ← URL temporal para mostrar el preview
+
 
   constructor(private teamService: TeamService) {}
 
@@ -40,10 +42,28 @@ export class CoachTeamComponent implements OnInit {
     });
   }
 
-onFileSelected(event: any): void {
-  const file = event.target.files?.[0];
+  onFileSelected(event: any): void {
+    const file = event.target.files?.[0];
+       if (file) {
     this.selectedFile = file;
-}
+
+    // Generar URL temporal para preview
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      this.previewUrl = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  } else {
+    this.selectedFile = null;
+    this.previewUrl = null;
+  }
+  }
+
+  // Función para eliminar la imagen seleccionada antes de enviar
+  removeSelectedImage(): void {
+    this.selectedFile = null;
+    this.previewUrl = null;
+  }
 
 
   // Crear nuevo equipo
