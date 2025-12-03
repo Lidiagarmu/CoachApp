@@ -7,6 +7,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { Event as AppEvent } from '../../../interfaces/event.model';
 import { environment } from '../../../../environments/enviroment';
 
+import { LoadingSpinnerComponent } from '../../../shared/components/loading-spinner/loading-spinner.component';
 @Component({
   selector: 'app-coach-events',
   standalone: true,
@@ -16,7 +17,8 @@ import { environment } from '../../../../environments/enviroment';
     CommonModule, 
     ReactiveFormsModule, 
     NgIf, 
-    NgFor
+    NgFor,
+    LoadingSpinnerComponent
   ],
   templateUrl: './coach-events.component.html'
 })
@@ -42,6 +44,8 @@ export class CoachEventsComponent implements OnInit {
   showImageErrorModal = false;
   imageErrorMessage = '';
 
+  loading = false;
+
   constructor(private eventService: EventService) {}
 
   ngOnInit(): void {
@@ -49,6 +53,8 @@ export class CoachEventsComponent implements OnInit {
   }
 
   loadEvents(): void {
+    this.loading = true; // 🔹 activamos spinner
+
     this.eventService.getEventsByTeam(this.teamId).subscribe(events => {
       // 🧠 construir URLs completas para imágenes
       events.forEach(event => {
@@ -62,6 +68,9 @@ export class CoachEventsComponent implements OnInit {
       this.events = events;
       this.trainings = events.filter(e => e.type === 'training');
       this.games = events.filter(e => e.type === 'match');
+
+      this.loading = false; // 🔹 desactivamos spinner
+
     });
   }
 

@@ -1,3 +1,4 @@
+
 <!-- Botón Crear Evento -->
 <div class="flex justify-end mb-6">
   <button
@@ -7,6 +8,10 @@
     + Crear Evento
   </button>
 </div>
+
+<!-- Cargando -->
+<app-loading-spinner *ngIf="loading" text="Cargando eventos disponibles..."></app-loading-spinner>
+
 
 <!-- Modal de Formulario -->
 <app-event-form

@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { PlayerService, Player } from '../../../services/player.service';
 import { TeamInvitationService } from '../../../services/team-invitation.service';
 
+import { LoadingSpinnerComponent } from '../../../shared/components/loading-spinner/loading-spinner.component';
+
 
 //Esto extiende el modelo de Player solo dentro de este componente
 interface PlayerWithInvitationState extends Player {
@@ -14,7 +16,7 @@ interface PlayerWithInvitationState extends Player {
 @Component({
   selector: 'app-coach-players',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, LoadingSpinnerComponent],
   templateUrl: './coach-players.component.html',
 })
 export class CoachPlayersComponent implements OnInit {
