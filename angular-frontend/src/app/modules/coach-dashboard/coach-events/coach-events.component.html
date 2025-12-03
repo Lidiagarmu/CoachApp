@@ -15,6 +15,8 @@
   [eventToEdit]="eventToEdit"
   (formClosed)="closeForm()"
   (formSaved)="onFormSaved()"
+  (imageUploadError)="openImageErrorModal($event)"
+
 ></app-event-form>
 
 <!-- Entrenamientos -->
@@ -249,5 +251,27 @@
         Cancelar
       </button>
     </div>
+  </div>
+</div>
+
+
+<!-- Modal: error imágenes -->
+<div
+  *ngIf="showImageErrorModal"
+  class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+>
+  <div class="bg-white p-6 rounded-lg shadow-lg w-96 text-center">
+    <h2 class="text-xl font-bold text-red-600 mb-4">Error al subir imágenes</h2>
+
+    <p class="text-gray-700 mb-6">
+      {{ imageErrorMessage }}
+    </p>
+
+    <button
+      class="bg-red-600 text-white px-6 py-2 rounded hover:bg-red-700 transition"
+      (click)="closeImageErrorModal()"
+    >
+      Cerrar
+    </button>
   </div>
 </div>

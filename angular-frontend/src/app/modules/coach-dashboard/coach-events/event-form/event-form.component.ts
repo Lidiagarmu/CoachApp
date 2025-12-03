@@ -18,6 +18,8 @@ export class EventFormComponent {
   @Input() eventToEdit?: AppEvent;
   @Output() formClosed = new EventEmitter<void>();
   @Output() formSaved = new EventEmitter<void>();
+  @Output() imageUploadError = new EventEmitter<string>();
+
 
   eventForm: FormGroup;
   selectedFiles: File[] = [];
@@ -101,11 +103,47 @@ export class EventFormComponent {
             this.formSaved.emit();
             this.closeForm();
           },
+           
           error: err => {
-            console.error('❌ Error subiendo imágenes', err);
-            console.error('Error details:', err?.error);
-            alert('Error subiendo imágenes: ' + (err?.error?.error || err?.message || 'Error desconocido'));
-          }
+             console.error('❌ Error subiendo imágenes', err);
+
+              let rawMsg =
+                err?.error?.error ||
+                err?.error?.message ||
+                err?.message ||
+                'Error desconocido al subir las imágenes';
+
+
+                 // ---------------------------
+                // 🎯 Detectar error de límite de tamaño
+                // ---------------------------
+                let cleanMsg = '';
+
+                if (rawMsg.includes('exceeds your upload_max_filesize')) {
+                  // Extraer nombre del archivo
+                  const fileMatch = rawMsg.match(/file\s+"([^"]+)"/i);
+                  const fileName = fileMatch ? fileMatch[1] : 'uno de los archivos';
+
+                  // Extraer límite (e.g. "2048 KiB")
+                  const limitMatch = rawMsg.match(/limit is ([^)]+)\)/i);
+                  let limit = limitMatch ? limitMatch[1] : null;
+
+                  // Convertir a MB si está en KiB
+                  if (limit && limit.toLowerCase().includes('kib')) {
+                    const kb = parseInt(limit);
+                    const mb = (kb / 1024).toFixed(1);
+                    limit = `${mb} MB`;
+                  }
+
+                  cleanMsg = `El archivo "${fileName}" supera el tamaño máximo permitido (${limit}).`;
+                } else {
+                  cleanMsg = rawMsg;
+                }
+
+
+              this.imageUploadError.emit(cleanMsg);
+            
+                   }
         });
       } else {
         console.log('ℹ️ Sin imágenes para subir');
