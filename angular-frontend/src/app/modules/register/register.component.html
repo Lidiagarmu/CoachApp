@@ -29,10 +29,10 @@
 
     <!-- ⚽ PLAYER SIDE -->
     <div
-      class="relative w-1/2 flex flex-col items-center justify-center text-center transition-all duration-500 cursor-pointer"
+      class="relative w-1/2 xl:w-1/2 flex flex-col items-center justify-center text-center transition-all duration-500 cursor-pointer"
       [ngClass]="{
-        'w-[65%]': hovered === 'player',
-        'w-[35%]': hovered === 'coach'
+        'xl:w-[65%]': hovered === 'player',
+        'xl:w-[35%]': hovered === 'coach'
       }"
       (mouseenter)="hovered = 'player'"
       (mouseleave)="hovered = null"
