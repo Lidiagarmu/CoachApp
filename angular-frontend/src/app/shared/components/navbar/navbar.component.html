@@ -1,6 +1,9 @@
 <nav class="bg-black w-full fixed top-0 left-0 z-50 shadow-md">
   <div class="flex items-center justify-between px-6 py-4">
-    <!-- Logo -->
+
+
+
+    <!-- Logo izda -->
     <div class="flex items-center gap-2">
       <img 
         src="/images/logo-coach-up.png" 
@@ -10,17 +13,22 @@
       <span class="text-primary font-bold text-xl">CoachUp</span>
     </div>
 
-    <!-- 🔓 Botón Logout -->
+    
+    <!-- Grupo DERECHO: Home + Logout -->
     <div class="flex items-center gap-4">
+      
+      <!-- 🏠 HOME BUTTON A LA DERECHA -->
+      <app-home-button *ngIf="showHome"></app-home-button>
+
+      <!-- 🔓 LOGOUT -->
       <button 
         *ngIf="showButton"
         (click)="logout()"
         class="flex items-center gap-2 bg-primary text-black font-semibold px-4 py-2 rounded-xl 
                hover:bg-white hover:text-black transition-all duration-300 hover:scale-105 shadow-md"
       >
-        <!-- SVG Logout Icon -->
         <svg xmlns="http://www.w3.org/2000/svg" 
-             class="h-5 w-5" 
+             class="h-5 w-5"
              fill="none" 
              viewBox="0 0 24 24" 
              stroke="currentColor" 
@@ -30,8 +38,9 @@
                    2 0 01-2-2V7a2 2 0 012-2h5a2 2 0 012 2v1" />
         </svg>
       </button>
-    </div>
 
+    </div>
+  
   </div>
 
   <!-- 🌈 Franja degradada fuera del navbar -->
