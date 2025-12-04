@@ -9,10 +9,10 @@
     
     <!-- 🧑‍🏫 COACH SIDE -->
     <div
-      class="relative w-1/2 flex flex-col items-center justify-center text-center transition-all duration-500 cursor-pointer"
+      class="relative w-1/2 xl:w-1/2 flex flex-col items-center justify-center text-center transition-all duration-500 cursor-pointer"
       [ngClass]="{
-        'w-[65%]': hovered === 'coach',
-        'w-[35%]': hovered === 'player'
+        'xl:w-[65%]': hovered === 'coach',
+        'xl:w-[35%]': hovered === 'player'
       }"
       (mouseenter)="hovered = 'coach'"
       (mouseleave)="hovered = null"
