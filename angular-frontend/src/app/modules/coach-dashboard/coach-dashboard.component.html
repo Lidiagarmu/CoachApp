@@ -5,12 +5,14 @@
 ></app-navbar>
 
 <!-- BOTÓN BURGER SOLO MÓVIL -->
-<div class="md:hidden fixed top-24 right-7 z-50">
+<div class="md:hidden fixed top-4 right-7 z-50">
   <app-menu-toggle
     [open]="isMenuOpen"
     (toggle)="toggleMenu()"
   ></app-menu-toggle>
 </div>
+
+
 
 <!-- MENU MOVIL (POPOVER) -->
 <div *ngIf="isMenuOpen" class="md:hidden fixed inset-0 z-40 select-none">
