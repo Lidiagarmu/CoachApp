@@ -3,10 +3,13 @@ import { CommonModule } from '@angular/common';
 import { NavbarComponent } from '../../shared/components/navbar/navbar.component';
 import { AuthService } from '../../services/auth.service';
 
+import { MenuToggleComponent } from '../../shared/components/menu-toggle/menu-toggle.component';
+
+
 @Component({
   selector: 'app-admin-dashboard',
   standalone: true,
-  imports: [CommonModule, NavbarComponent],
+  imports: [CommonModule, NavbarComponent, MenuToggleComponent],
   templateUrl: './admin-dashboard.component.html',
 })
 export class AdminDashboardComponent implements OnInit {
@@ -16,6 +19,13 @@ export class AdminDashboardComponent implements OnInit {
   profilePhoto: string | null = null;
 
   activeTab: 'players' | 'coaches' | 'teams' | 'settings' = 'players';
+
+  isMenuOpen: boolean = false;
+
+  toggleMenu() {
+    this.isMenuOpen = !this.isMenuOpen;
+  }
+
 
   constructor(private authService: AuthService) {}
 

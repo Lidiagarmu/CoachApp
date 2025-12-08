@@ -5,6 +5,7 @@ import { AuthService } from '../../services/auth.service';
 import { CoachTeamComponent } from './coach-team/coach-team.component';
 import { CoachPlayersComponent } from './coach-players/coach-players.component';
 import { CoachEventsComponent } from './coach-events/coach-events.component';
+import { MenuToggleComponent } from '../../shared/components/menu-toggle/menu-toggle.component';
 
 @Component({
   selector: 'app-coach-dashboard',
@@ -14,7 +15,8 @@ import { CoachEventsComponent } from './coach-events/coach-events.component';
     NavbarComponent,
     CoachTeamComponent,
     CoachPlayersComponent,
-    CoachEventsComponent
+    CoachEventsComponent,
+    MenuToggleComponent
   ],
   templateUrl: './coach-dashboard.component.html',
 })
@@ -25,6 +27,13 @@ export class CoachDashboardComponent implements OnInit {
 
   // 🔹 Controla la pestaña activa
   activeTab: 'team' | 'players' | 'events' | 'settings' = 'team';
+
+  isMenuOpen: boolean = false;
+
+  toggleMenu() {
+    this.isMenuOpen = !this.isMenuOpen;
+  }
+
 
   constructor(private authService: AuthService) {}
 
