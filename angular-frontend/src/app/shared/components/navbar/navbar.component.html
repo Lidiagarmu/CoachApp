@@ -1,50 +1,27 @@
 <nav class="bg-black w-full fixed top-0 left-0 z-50 shadow-md">
-  <div class="flex items-center justify-between px-6 py-4">
 
-
+  <!-- 🔥 Contenedor responsive -->
+  <div class="flex items-center justify-between px-4 py-3 sm:px-6 sm:py-4">
 
     <!-- Logo izda -->
     <div class="flex items-center gap-2">
       <img 
         src="/images/logo-coach-up.png" 
         alt="Logo App" 
-        class="h-10 w-10 rounded-full bg-primary p-1 object-contain shadow-md"
+        class="h-9 w-9 sm:h-10 sm:w-10 rounded-full bg-primary p-1 object-contain shadow-md"
       />
-      <span class="text-primary font-bold text-xl">CoachUp</span>
+      <span class="text-primary font-bold text-lg sm:text-xl">CoachUp</span>
     </div>
 
-    
-    <!-- Grupo DERECHO: Home + Logout -->
-    <div class="flex items-center gap-4">
-      
-      <!-- 🏠 HOME BUTTON A LA DERECHA -->
+    <!-- Grupo DERECHO: botón Home -->
+    <div class="flex items-center gap-3 sm:gap-4">
+
+      <!-- 🏠 HOME BUTTON -->
       <app-home-button *ngIf="showHome"></app-home-button>
 
-      <!-- 🔓 LOGOUT -->
-      <button 
-        *ngIf="showButton"
-        (click)="logout()"
-        class="flex items-center gap-2 bg-primary text-black font-semibold px-4 py-2 rounded-xl 
-               hover:bg-white hover:text-black transition-all duration-300 hover:scale-105 shadow-md"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" 
-             class="h-5 w-5"
-             fill="none" 
-             viewBox="0 0 24 24" 
-             stroke="currentColor" 
-             stroke-width="2">
-          <path stroke-linecap="round" stroke-linejoin="round"
-                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 01-2 2H6a2 
-                   2 0 01-2-2V7a2 2 0 012-2h5a2 2 0 012 2v1" />
-        </svg>
-      </button>
-
     </div>
-  
   </div>
 
   <!-- 🌈 Franja degradada fuera del navbar -->
-<div class="h-5 w-full bg-gradient-to-b from-black to-primary fixed top-[60px] left-0 z-40"></div>
+  <div class="h-4 sm:h-5 w-full bg-gradient-to-b from-black to-primary fixed top-[60px] left-0 z-40"></div>
 </nav>
-
-

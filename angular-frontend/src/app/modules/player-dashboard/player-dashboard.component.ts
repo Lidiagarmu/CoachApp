@@ -5,11 +5,14 @@ import { AuthService } from '../../services/auth.service';
 import { TeamInvitationService} from '../../services/team-invitation.service';
 import { PlayerTeamComponent } from './player-team/player-team.component';
 import { PlayerEventsComponent } from './player-events/player-events.component';
+import { MenuToggleComponent } from '../../shared/components/menu-toggle/menu-toggle.component';
+import { LogoutButtonComponent } from '../../shared/components/logout-button/logout-button.component';
+
 
 @Component({
   selector: 'app-player-dashboard',
   standalone: true,
-  imports: [CommonModule, NavbarComponent, PlayerTeamComponent, PlayerEventsComponent],
+  imports: [CommonModule, NavbarComponent, PlayerTeamComponent, PlayerEventsComponent, MenuToggleComponent, LogoutButtonComponent],
   templateUrl: './player-dashboard.component.html',
 })
 export class PlayerDashboardComponent implements OnInit {
@@ -22,6 +25,13 @@ export class PlayerDashboardComponent implements OnInit {
 
 
   activeTab: 'team' | 'events' | 'settings' = 'team';
+
+  isMenuOpen: boolean = false;
+
+  toggleMenu() {
+    this.isMenuOpen = !this.isMenuOpen;
+  }
+
 
   constructor(
     private authService: AuthService,

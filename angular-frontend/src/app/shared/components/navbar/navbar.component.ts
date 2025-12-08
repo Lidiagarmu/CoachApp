@@ -27,8 +27,5 @@ export class NavbarComponent implements OnInit {
     console.log('✅ Navbar inicializado, showButton =', this.showButton, ' showHome =', this.showHome );
   }
 
-  logout() {
-    this.authService.logout();          // usa método centralizado
-    this.router.navigate(['/login']);    // redirige al login
-  }
+
 }

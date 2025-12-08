@@ -1,12 +1,91 @@
-<!-- Navbar fijo arriba -->
-<app-navbar [showButton]="true" class="fixed top-0 left-0 w-full z-50"></app-navbar>
+<!-- NAVBAR FIJO ARRIBA -->
+<app-navbar 
+  [showButton]="true"
+  class="fixed top-0 left-0 w-full z-50"
+></app-navbar>
+
+<!-- BOTÓN BURGER SOLO MÓVIL -->
+<div class="md:hidden fixed top-4 right-7 z-50">
+  <app-menu-toggle
+    [open]="isMenuOpen"
+    (toggle)="toggleMenu()"
+  ></app-menu-toggle>
+</div>
+
+
+
+<!-- MENU MOVIL (POPOVER) -->
+<div *ngIf="isMenuOpen" class="md:hidden fixed inset-0 z-40 select-none">
+  <!-- Fondo semitransparente para detectar clic fuera -->
+  <div class="absolute inset-0 bg-black/30" (click)="toggleMenu()"></div>
+
+  <!-- Menú desplegable -->
+  <div class="absolute top-[5rem] right-4 w-64 bg-white rounded-xl shadow-xl border border-gray-200 p-6 animate-fadeIn z-40">
+    
+    <!-- Usuario -->
+    <div class="flex items-center gap-4 mb-6 border-b border-gray-200 pb-4">
+      <div class="w-12 h-12 rounded-full bg-blue-500 text-black flex items-center justify-center text-lg font-bold shadow">
+        {{ nickname?.charAt(0)?.toUpperCase() || 'C' }}
+      </div>
+      <div>
+        <p class="text-lg font-semibold text-gray-800">{{ nickname }}</p>
+        <p class="text-sm text-gray-500">{{ role }}</p>
+      </div>
+    </div>
+
+    <!-- Navegación -->
+    <nav class="flex flex-col gap-3">
+      <button (click)="openTab('team'); toggleMenu()" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 w-full">
+         <svg class="w-5 h-5 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M12 3l7 4v5c0 5-3.5 8-7 9-3.5-1-7-4-7-9V7l7-4z" />
+        </svg>
+        Equipo
+      </button>
+      <button (click)="openTab('players'); toggleMenu()" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 w-full">
+        <svg class="w-5 h-5 text-black" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M16 11c1.7 0 3-1.3 3-3S17.7 5 16 5s-3 1.3-3 3 1.3 3 3 3zm-8 0c1.7 0 3-1.3 3-3S9.7 5 8 5 5 6.3 5 8s1.3 3 3 3zm0 2c-2.3 0-7 1.2-7 3.5V19h14v-2.5c0-2.3-4.7-3.5-7-3.5zm8 0c-.3 0-.6 0-.9.1 1.1.8 1.9 1.8 1.9 3.4V19h6v-2.5c0-2.3-4.7-3.5-7-3.5z"/>
+        </svg>
+        Jugadores
+      </button>
+      <button (click)="openTab('events'); toggleMenu()" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 w-full">
+        <svg class="w-5 h-5 text-black" fill="currentColor" viewBox="0 0 24 24">
+          <path stroke-width="2"
+            d="M19 4h-1V2h-2v2H8V2H6v2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 16H5V10h14v10zM5 6h14v2H5V6z"/>
+        </svg>
+        Eventos
+      </button>
+      <button (click)="openTab('settings'); toggleMenu()" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 w-full">
+        <svg class="w-5 h-5 text-black" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M19.4 12.9c.04-.3.06-.6.06-.9s-.02-.6-.06-.9l2.11-1.65a.5.5 0 0 0 .12-.64l-2-3.46a.5.5 0 0 0-.61-.22l-2.49 1a6.97 6.97 0 0 0-1.56-.9l-.38-2.65a.5.5 0 0 0-.5-.42h-4a.5.5 0 0 0-.5.42l-.38 2.65c-.57.22-1.11.52-1.56.9l-2.49-1a.5.5 0 0 0-.61.22l-2 3.46a.5.5 0 0 0 .12.64l2.11 1.65c-.04.3-.06.6-.06.9s.02.6.06.9l-2.11 1.65a.5.5 0 0 0-.12.64l2 3.46c.14.24.44.34.69.22l2.49-1c.45.38.99.68 1.56.9l.38 2.65c.05.26.26.42.5.42h4c.24 0 .45-.16.5-.42l.38-2.65c.57-.22 1.11-.52 1.56-.9l2.49 1c.25.12.55.02.69-.22l2-3.46a.5.5 0 0 0-.12-.64l-2.11-1.65zM12 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7z"/>
+        </svg>
+        Ajustes
+      </button>
+
+      <!-- Botón logout -->
+      <app-logout-button></app-logout-button>
+
+
+
+      
+    </nav>
+
+  </div>
+</div>
+
+
+
 
 <!-- Layout principal -->
-<div class="flex pt-[5rem] min-h-screen bg-app-gradient text-black">
+<div class="flex w-full h-screen bg-app-gradient text-black">
 
-  <!-- Sidebar -->
-  <aside class="w-64 bg-primary text-white flex flex-col shadow-xl fixed top-[5rem] left-0 bottom-0 z-40">
-
+  <!-- SIDEBAR O MENÚ LATERAL PARA DESKTOP y TABLET --> 
+  <aside 
+    class="hidden md:flex fixed top-[5rem] left-0 bottom-0 w-64 bg-primary text-white shadow-xl z-40
+         transform transition-transform duration-300
+         md:translate-x-0
+         flex-col"
+  >
     <!-- Perfil Coach -->
     <div class="flex items-center gap-4 p-6 border-b border-primary/30">
       <div class="w-12 h-12 rounded-full bg-blue-500 text-black flex items-center justify-center text-lg font-bold shadow">
@@ -14,33 +93,33 @@
       </div>
       <div>
         <p class="text-xl text-black font-semibold">{{ nickname }}</p>
-        <p class="text-sm text-gray-500">{{ role }}</p>
+        <p class="text-sm text-gray-600">{{ role }}</p>
       </div>
     </div>
 
     <!-- Navegación -->
     <nav class="flex-1 p-4 space-y-2 mt-4">
+
+      <!-- EQUIPO -->
       <button
-        (click)="openTab('team')"
-        class="flex items-center gap-2 w-full text-left px-4 py-2 rounded-lg transition font-medium"
+        (click)="openTab('team'); isMenuOpen = false"
+        class="flex items-center gap-2 w-full px-4 py-2 rounded-lg transition font-medium"
         [ngClass]="{
           'bg-gray-100 text-black font-bold': activeTab === 'team',
           'text-white hover:bg-primary/70': activeTab !== 'team'
         }"
       >
-      <svg class="w-5 h-5 text-black" fill="none" stroke="currentColor" stroke-width="2"
-          viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round"
-              d="M12 3l7 4v5c0 5-3.5 8-7 9-3.5-1-7-4-7-9V7l7-4z" />
-      </svg>
-
-
+        <svg class="w-5 h-5 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M12 3l7 4v5c0 5-3.5 8-7 9-3.5-1-7-4-7-9V7l7-4z" />
+        </svg>
         <span class="text-black">Equipo</span>
       </button>
 
+      <!-- JUGADORES -->
       <button
-        (click)="openTab('players')"
-        class="flex items-center gap-2 w-full text-left px-4 py-2 rounded-lg transition font-medium"
+        (click)="openTab('players'); isMenuOpen = false"
+        class="flex items-center gap-2 w-full px-4 py-2 rounded-lg transition font-medium"
         [ngClass]="{
           'bg-gray-100 text-black font-bold': activeTab === 'players',
           'text-white hover:bg-primary/70': activeTab !== 'players'
@@ -52,23 +131,26 @@
         <span class="text-black">Jugadores</span>
       </button>
 
+      <!-- EVENTOS -->
       <button
-        (click)="openTab('events')"
-        class="flex items-center gap-2 w-full text-left px-4 py-2 rounded-lg transition font-medium"
+        (click)="openTab('events'); isMenuOpen = false"
+        class="flex items-center gap-2 w-full px-4 py-2 rounded-lg transition font-medium"
         [ngClass]="{
           'bg-gray-100 text-black font-bold': activeTab === 'events',
           'text-white hover:bg-primary/70': activeTab !== 'events'
         }"
       >
         <svg class="w-5 h-5 text-black" fill="currentColor" viewBox="0 0 24 24">
-          <path d="M19 4h-1V2h-2v2H8V2H6v2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z"/>
+          <path stroke-width="2"
+            d="M19 4h-1V2h-2v2H8V2H6v2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 16H5V10h14v10zM5 6h14v2H5V6z"/>
         </svg>
         <span class="text-black">Eventos</span>
       </button>
 
+      <!-- AJUSTES -->
       <button
-        (click)="openTab('settings')"
-        class="flex items-center gap-2 w-full text-left px-4 py-2 rounded-lg transition font-medium"
+        (click)="openTab('settings'); isMenuOpen = false"
+        class="flex items-center gap-2 w-full px-4 py-2 rounded-lg transition font-medium"
         [ngClass]="{
           'bg-gray-100 text-black font-bold': activeTab === 'settings',
           'text-white hover:bg-primary/70': activeTab !== 'settings'
@@ -79,30 +161,32 @@
         </svg>
         <span class="text-black">Ajustes</span>
       </button>
+
+    <!-- Botón logout -->
+    <app-logout-button></app-logout-button>
+
     </nav>
   </aside>
 
-  <!--Contenido dinámico -->
-  <main class="flex-1 ml-64 p-8 bg-white/70 rounded-tl-3xl shadow-inner min-h-[calc(100vh-5rem)]">
+  <!-- MAIN contenido principal -->
+  <main 
+    class="flex-1 overflow-y-auto mt-[4rem]  md:mb-[13rem] md:ml-64 p-8 bg-white/70 rounded-tl-3xl shadow-inner"
+  >
 
-    <!--Sección Equipo-->
-    <section *ngIf="activeTab === 'team'" class="animate-fadeIn">
+    <!-- SECCIONES -->
+    <section *ngIf="activeTab === 'team'" class="animate-fadeIn overflow-y-auto max-h-[calc(100vh-5rem)]">
       <app-coach-team></app-coach-team>
     </section>
 
-    <!--Sección Jugadores disponibles-->
     <section *ngIf="activeTab === 'players'" class="animate-fadeIn">
       <app-coach-players></app-coach-players>
     </section>
 
-    <!--Seccion Eventos-->
     <section *ngIf="activeTab === 'events'" class="animate-fadeIn">
       <app-coach-events></app-coach-events>
     </section>
 
 
-
-    <!--Seccion Ajustes-->
 
 
   </main>
