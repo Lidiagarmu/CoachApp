@@ -59,6 +59,13 @@
         </svg>
         Ajustes
       </button>
+
+      <!-- Botón logout -->
+      <app-logout-button></app-logout-button>
+
+
+
+      
     </nav>
 
   </div>
@@ -153,6 +160,9 @@
         <span class="text-black">Ajustes</span>
       </button>
 
+    <!-- Botón logout -->
+    <app-logout-button></app-logout-button>
+
     </nav>
   </aside>
 
@@ -173,6 +183,9 @@
     <section *ngIf="activeTab === 'events'" class="animate-fadeIn">
       <app-coach-events></app-coach-events>
     </section>
+
+
+
 
   </main>
 </div>

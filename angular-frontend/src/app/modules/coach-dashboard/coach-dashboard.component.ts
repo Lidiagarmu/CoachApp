@@ -6,6 +6,7 @@ import { CoachTeamComponent } from './coach-team/coach-team.component';
 import { CoachPlayersComponent } from './coach-players/coach-players.component';
 import { CoachEventsComponent } from './coach-events/coach-events.component';
 import { MenuToggleComponent } from '../../shared/components/menu-toggle/menu-toggle.component';
+import { LogoutButtonComponent } from '../../shared/components/logout-button/logout-button.component';
 
 @Component({
   selector: 'app-coach-dashboard',
@@ -16,7 +17,8 @@ import { MenuToggleComponent } from '../../shared/components/menu-toggle/menu-to
     CoachTeamComponent,
     CoachPlayersComponent,
     CoachEventsComponent,
-    MenuToggleComponent
+    MenuToggleComponent,
+    LogoutButtonComponent
   ],
   templateUrl: './coach-dashboard.component.html',
 })
