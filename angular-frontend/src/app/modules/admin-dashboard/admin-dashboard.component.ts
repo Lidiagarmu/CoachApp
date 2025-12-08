@@ -4,12 +4,13 @@ import { NavbarComponent } from '../../shared/components/navbar/navbar.component
 import { AuthService } from '../../services/auth.service';
 
 import { MenuToggleComponent } from '../../shared/components/menu-toggle/menu-toggle.component';
+import { LogoutButtonComponent } from '../../shared/components/logout-button/logout-button.component';
 
 
 @Component({
   selector: 'app-admin-dashboard',
   standalone: true,
-  imports: [CommonModule, NavbarComponent, MenuToggleComponent],
+  imports: [CommonModule, NavbarComponent, MenuToggleComponent, LogoutButtonComponent],
   templateUrl: './admin-dashboard.component.html',
 })
 export class AdminDashboardComponent implements OnInit {
