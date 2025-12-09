@@ -19,19 +19,19 @@
     
     <!-- Usuario -->
     <div class="flex items-center gap-4 mb-6 border-b border-gray-200 pb-4">
-      <div class="w-12 h-12 rounded-full bg-blue-500 text-black flex items-center justify-center text-lg font-bold shadow">
+      <div class="w-12 h-12 rounded-full bg-blue-500 text-black flex items-center justify-center text-lg font-bold shadow select-none">
         {{ nickname?.charAt(0)?.toUpperCase() || 'C' }}
       </div>
       <div>
-        <p class="text-lg font-semibold text-gray-800">{{ nickname }}</p>
-        <p class="text-sm text-gray-500">{{ role }}</p>
+        <p class="text-lg font-semibold text-gray-800 select-none">{{ nickname }}</p>
+        <p class="text-sm text-gray-500 select-none">{{ role }}</p>
       </div>
     </div>
 
     <!-- Navegación -->
     <nav class="flex flex-col gap-3">
      
-      <button (click)="openTab('players'); toggleMenu()" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 w-full">
+      <button (click)="openTab('players'); toggleMenu()" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 w-full select-none">
         <svg class="w-5 h-5 text-black" fill="currentColor" viewBox="0 0 24 24">
           <path
             d="M16 11c1.7 0 3-1.3 3-3s-1.3-3-3-3-3 1.3-3 3 1.3 3 3 3zm-8 0c1.7 0 3-1.3 3-3S9.7 5 8 5 5 6.3 5 8s1.3 3 3 3zm0 2c-2.3 0-7 1.2-7 3.5V19h14v-2.5c0-2.3-4.7-3.5-7-3.5zm8 0c-.3 0-.6 0-.9.1 1.1.8 1.9 1.8 1.9 3.4V19h6v-2.5c0-2.3-4.7-3.5-7-3.5z"
@@ -40,7 +40,7 @@
         Jugadores
       </button>
 
-      <button (click)="openTab('coaches'); toggleMenu()" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 w-full">
+      <button (click)="openTab('coaches'); toggleMenu()" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 w-full select-none">
         <svg class="w-5 h-5 text-secondary" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M4 13c0-4 3.5-7 8-7s8 3 8 7v2H4v-2z"/>
           <path stroke-linecap="round" stroke-linejoin="round" d="M3 15c0 2 2 4 5 4h8c3 0 5-2 5-4"/>
@@ -48,7 +48,7 @@
         Entrenadores
       </button>
 
-      <button (click)="openTab('teams'); toggleMenu()" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 w-full">
+      <button (click)="openTab('teams'); toggleMenu()" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 w-full select-none">
         <svg class="w-5 h-5 text-black" fill="currentColor" viewBox="0 0 24 24">
           <path
             d="M3 13h2v-2H3v2zm4 0h14v-2H7v2zm0 4h14v-2H7v2zm0-8h14V7H7v2zM3 9h2V7H3v2z"
@@ -87,15 +87,15 @@
         class="w-12 h-12 rounded-full bg-white text-black flex items-center justify-center text-lg font-bold shadow overflow-hidden"
       >
         <ng-container *ngIf="profilePhoto; else initials">
-          <img [src]="profilePhoto" alt="Foto perfil" class="w-full h-full object-cover" />
+          <img [src]="profilePhoto" alt="Foto perfil" class="w-full h-full object-cover select-none"  />
         </ng-container>
         <ng-template #initials>
           {{ nickname?.charAt(0)?.toUpperCase() || 'A' }}
         </ng-template>
       </div>
       <div>
-        <p class="text-xl text-black font-semibold">{{ nickname }}</p>
-        <p class="text-sm text-gray-500">{{ role }}</p>
+        <p class="text-xl text-black font-semibold select-none">{{ nickname }}</p>
+        <p class="text-sm text-gray-500 select-none">{{ role }}</p>
       </div>
     </div>
 
@@ -104,7 +104,7 @@
       <!-- Jugadores -->
       <button
         (click)="openTab('players')"
-        class="flex items-center gap-2 w-full text-left px-4 py-2 rounded-lg transition font-medium"
+        class="flex items-center gap-2 w-full text-left px-4 py-2 rounded-lg transition font-medium select-none"
         [ngClass]="{
           'bg-gray-100 text-black font-bold': activeTab === 'players',
           'text-white hover:bg-primary/70': activeTab !== 'players'
@@ -121,7 +121,7 @@
       <!-- Entrenadores -->
       <button
         (click)="openTab('coaches')"
-        class="flex items-center gap-2 w-full text-left px-4 py-2 rounded-lg transition font-medium"
+        class="flex items-center gap-2 w-full text-left px-4 py-2 rounded-lg transition font-medium select-none"
         [ngClass]="{
           'bg-gray-100 text-black font-bold': activeTab === 'coaches',
           'text-white hover:bg-primary/70': activeTab !== 'coaches'
@@ -139,7 +139,7 @@
       <!-- Equipos -->
       <button
         (click)="openTab('teams')"
-        class="flex items-center gap-2 w-full text-left px-4 py-2 rounded-lg transition font-medium"
+        class="flex items-center gap-2 w-full text-left px-4 py-2 rounded-lg transition font-medium select-none"
         [ngClass]="{
           'bg-gray-100 text-black font-bold': activeTab === 'teams',
           'text-white hover:bg-primary/70': activeTab !== 'teams'
@@ -156,7 +156,7 @@
       <!-- Ajustes -->
       <button
         (click)="openTab('settings')"
-        class="flex items-center gap-2 w-full text-left px-4 py-2 rounded-lg transition font-medium"
+        class="flex items-center gap-2 w-full text-left px-4 py-2 rounded-lg transition font-medium select-none"
         [ngClass]="{
           'bg-gray-100 text-black font-bold': activeTab === 'settings',
           'text-white hover:bg-primary/70': activeTab !== 'settings'
@@ -183,26 +183,26 @@
 
     <!-- Jugadores -->
     <section *ngIf="activeTab === 'players'" class="animate-fadeIn">
-      <h2 class="text-2xl font-semibold mb-4">Gestión de jugadores</h2>
-      <p class="text-gray-600">Aquí podrás listar, editar o eliminar jugadores.</p>
+      <h2 class="text-2xl font-semibold mb-4 select-none">Gestión de jugadores</h2>
+      <p class="text-gray-600 select-none">Aquí podrás listar, editar o eliminar jugadores.</p>
     </section>
 
     <!-- Entrenadores -->
     <section *ngIf="activeTab === 'coaches'" class="animate-fadeIn">
-      <h2 class="text-2xl font-semibold mb-4">Gestión de entrenadores</h2>
-      <p class="text-gray-600">Administra los entrenadores registrados.</p>
+      <h2 class="text-2xl font-semibold mb-4 select-none">Gestión de entrenadores</h2>
+      <p class="text-gray-600 select-none">Administra los entrenadores registrados.</p>
     </section>
 
     <!-- Equipos -->
     <section *ngIf="activeTab === 'teams'" class="animate-fadeIn">
-      <h2 class="text-2xl font-semibold mb-4">Gestión de equipos</h2>
-      <p class="text-gray-600">Crea, edita o elimina equipos registrados.</p>
+      <h2 class="text-2xl font-semibold mb-4 select-none">Gestión de equipos</h2>
+      <p class="text-gray-600 select-none">Crea, edita o elimina equipos registrados.</p>
     </section>
 
     <!-- Ajustes -->
     <section *ngIf="activeTab === 'settings'" class="animate-fadeIn">
-      <h2 class="text-2xl font-semibold mb-4">Ajustes del administrador</h2>
-      <p class="text-gray-600">Edita tu información de usuario o configuración general.</p>
+      <h2 class="text-2xl font-semibold mb-4 select-none">Ajustes del administrador</h2>
+      <p class="text-gray-600 select-none">Edita tu información de usuario o configuración general.</p>
     </section>
 
   </main>
