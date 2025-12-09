@@ -4,7 +4,7 @@
   <div class="flex items-center justify-between px-4 py-3 sm:px-6 sm:py-4">
 
     <!-- Logo izda -->
-    <div class="flex items-center gap-2">
+    <div class="flex items-center gap-2 select-none">
       <img 
         src="/images/logo-coach-up.png" 
         alt="Logo App" 
@@ -14,7 +14,7 @@
     </div>
 
     <!-- Grupo DERECHO: botón Home -->
-    <div class="flex items-center gap-3 sm:gap-4">
+    <div class="flex items-center gap-3 sm:gap-4 select-none">
 
       <!-- 🏠 HOME BUTTON -->
       <app-home-button *ngIf="showHome"></app-home-button>
@@ -23,5 +23,5 @@
   </div>
 
   <!-- 🌈 Franja degradada fuera del navbar -->
-  <div class="h-4 sm:h-5 w-full bg-gradient-to-b from-black to-primary fixed top-[60px] left-0 z-40"></div>
+  <div class="h-4 sm:h-5 w-full bg-gradient-to-b from-black to-primary fixed top-[60px] left-0 z-40 select-none"></div>
 </nav>

@@ -3,16 +3,16 @@
 
 <!-- Entrenamientos -->
 <section class="mb-12" *ngIf="trainings.length > 0">
-  <h2 class="text-2xl font-semibold mb-4 text-black">Entrenamientos</h2>
+  <h2 class="text-2xl font-semibold mb-4 text-black select-none">Entrenamientos</h2>
 
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
     <div *ngFor="let training of trainings" class="bg-white rounded-xl shadow p-6 flex flex-col max-w-full overflow-hidden">
 
       <!-- Título -->
-      <h3 class="text-xl font-bold mb-2 truncate">{{ training.title }}</h3>
+      <h3 class="text-xl font-bold mb-2 truncate select-none">{{ training.title }}</h3>
 
       <!-- Fecha y hora -->
-      <p class="text-gray-700 mb-1">
+      <p class="text-gray-700 mb-1 select-none">
         <svg class="inline w-5 h-5 mr-2 text-secondary" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3M3 8h18M5 8v13a2 2 0 002 2h10a2 2 0 002-2V8"/>
         </svg>
@@ -21,7 +21,7 @@
       </p>
 
       <!-- Duración -->
-      <p class="text-gray-700 mb-1">
+      <p class="text-gray-700 mb-1 select-none">
         <svg class="inline w-5 h-5 mr-2 text-secondary" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2m-4-8a9 9 0 100 18 9 9 0 000-18z"/>
         </svg>
@@ -29,7 +29,7 @@
       </p>
 
       <!-- Lugar -->
-      <p class="text-gray-700 mb-1 truncate max-w-full overflow-hidden">
+      <p class="text-gray-700 mb-1 truncate max-w-full overflow-hidden select-none">
         <svg class="inline w-5 h-5 mr-2 text-secondary" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <rect x="4" y="3" width="16" height="18" rx="1" ry="1"/>
           <rect x="10" y="16" width="4" height="5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -40,7 +40,7 @@
       </p>
 
       <!-- URL Ubicación -->
-      <p class="text-gray-700 mb-3" *ngIf="training.location_url">
+      <p class="text-gray-700 mb-3 select-none" *ngIf="training.location_url">
         <svg class="inline w-5 h-5 mr-2 text-secondary" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M12 11c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3z"/>
           <path stroke-linecap="round" stroke-linejoin="round" d="M12 22s8-8 8-12a8 8 0 10-16 0c0 4 8 12 8 12z"/>
@@ -53,16 +53,16 @@
 
       <!-- Imágenes -->
       <div *ngIf="training.images.length" class="mt-4">
-        <h3 class="font-semibold mb-2 text-gray-700">Imágenes del evento:</h3>
+        <h3 class="font-semibold mb-2 text-gray-700 select-none">Imágenes del evento:</h3>
         <div class="flex flex-wrap gap-2">
-          <img *ngFor="let img of training.images" [src]="img" class="w-24 h-24 object-cover rounded border" />
+          <img *ngFor="let img of training.images" [src]="img" class="w-24 h-24 object-cover rounded border select-none" />
         </div>
       </div>
 
-      <!-- Botón Ver más -->
+      <!-- Botón Más detalles -->
       <div class="flex justify-end mt-4">
-        <button (click)="openModal(training)" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-1 rounded">
-          Ver más
+        <button (click)="openModal(training)" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-1 rounded select-none">
+          Más detalles
         </button>
       </div>
     </div>
@@ -71,24 +71,24 @@
 
 <!-- Partidos -->
 <section *ngIf="games.length > 0">
-  <h2 class="text-2xl font-semibold mb-4 text-black">Partidos</h2>
+  <h2 class="text-2xl font-semibold mb-4 text-black select-none">Partidos</h2>
 
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
     <div *ngFor="let game of games" class="bg-white rounded-xl shadow p-6 flex flex-col">
 
       <!-- Equipo -->
       <div class="flex items-center gap-4 mb-3">
-        <img *ngIf="getTeamShield(game)" [src]="getTeamShield(game)" class="w-12 h-12 object-contain rounded-full border" />
+        <img *ngIf="getTeamShield(game)" [src]="getTeamShield(game)" class="w-12 h-12 object-contain rounded-full border select-none" />
         <div>
-          <h3 class="text-xl font-bold truncate">{{ game.team?.name }}</h3>
+          <h3 class="text-xl font-bold truncate select-none">{{ game.team?.name }}</h3>
         </div>
       </div>
 
       <!-- Título -->
-      <h4 class="text-lg font-semibold mb-1 truncate">{{ game.title }}</h4>
+      <h4 class="text-lg font-semibold mb-1 truncate select-none">{{ game.title }}</h4>
 
       <!-- Fecha y hora -->
-      <p class="text-gray-700 mb-1">
+      <p class="text-gray-700 mb-1 select-none">
         <svg class="inline w-5 h-5 mr-2 text-secondary" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3M3 8h18M5 8v13a2 2 0 002 2h10a2 2 0 002-2V8"/>
         </svg>
@@ -97,7 +97,7 @@
       </p>
 
       <!-- Duración -->
-      <p class="text-gray-700 mb-1">
+      <p class="text-gray-700 mb-1 select-none">
         <svg class="inline w-5 h-5 mr-2 text-secondary" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2m-4-8a9 9 0 100 18 9 9 0 000-18z"/>
         </svg>
@@ -105,7 +105,7 @@
       </p>
 
       <!-- Lugar -->
-      <p class="text-gray-700 mb-1 truncate">
+      <p class="text-gray-700 mb-1 truncate select-none">
         <svg class="inline w-5 h-5 mr-2 text-secondary" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <rect x="4" y="3" width="16" height="18" rx="1" ry="1"/>
           <rect x="10" y="16" width="4" height="5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -116,7 +116,7 @@
       </p>
 
       <!-- URL Ubicación -->
-      <p class="text-gray-700 mb-3" *ngIf="game.location_url">
+      <p class="text-gray-700 mb-3 select-none" *ngIf="game.location_url">
         <svg class="inline w-5 h-5 mr-2 text-secondary" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M12 11c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3z"/>
           <path stroke-linecap="round" stroke-linejoin="round" d="M12 22s8-8 8-12a8 8 0 10-16 0c0 4 8 12 8 12z"/>
@@ -129,15 +129,15 @@
 
       <!-- Imágenes -->
       <div *ngIf="game.images.length" class="mt-4">
-        <h3 class="font-semibold mb-2 text-gray-700">Imágenes del evento:</h3>
+        <h3 class="font-semibold mb-2 text-gray-700 select-none">Imágenes del evento:</h3>
         <div class="flex flex-wrap gap-2">
-          <img *ngFor="let img of game.images" [src]="img" class="w-24 h-24 object-cover rounded border" />
+          <img *ngFor="let img of game.images" [src]="img" class="w-24 h-24 object-cover rounded border select-none" />
         </div>
       </div>
 
       <!-- Botón Ver más -->
-      <div class="flex justify-center mt-4">
-        <button (click)="openModal(game)" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-1 rounded">
+      <div class="flex justify-center mt-4 ">
+        <button (click)="openModal(game)" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-1 rounded select-none">
           Ver más
         </button>
       </div>
