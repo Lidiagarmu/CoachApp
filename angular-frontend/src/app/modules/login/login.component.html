@@ -11,7 +11,7 @@
 
     <!-- 🌄 Imagen de fondo transparente -->
     <div 
-      class="absolute inset-0 bg-[url('/images/stadium.webp')]  bg-cover bg-center opacity-40 z-0">
+      class="absolute inset-0 bg-[url('/images/stadium.webp')]  bg-cover bg-center opacity-40 z-0 select-none">
     </div>
 
     <!-- 🔙 Botón back to home -->
@@ -21,7 +21,7 @@
     <!-- Formulario de inicio de sesión -->
     <div class="w-full lg:w-1/2 flex justify-center px-6 sm:px-8 md:px-12 lg:px-16">
       <div class="w-full max-w-md bg-black rounded-2xl shadow-lg p-6 sm:p-8 lg:p-10 relative z-20 isolate">
-        <h2 class="text-2xl sm:text-3xl font-bold text-center text-primary mb-6">Iniciar sesión</h2>
+        <h2 class="text-2xl sm:text-3xl font-bold text-center text-primary mb-6 select-none">Iniciar sesión</h2>
 
         <form [formGroup]="loginForm" (ngSubmit)="login()" class="space-y-4">
 
@@ -33,7 +33,7 @@
               placeholder="Correo electrónico"
               class=" input-animated w-full pl-10 p-2  border border-primary rounded-lg 
                     focus:outline-none focus:ring-2 focus:ring-primary
-                    text-secondary placeholder-secondary text-sm md:text-base"
+                    text-secondary placeholder-secondary text-sm md:text-base select-none"
             />
             <!-- Icono de correo electrónico -->
           <svg
@@ -60,7 +60,7 @@
               placeholder="Contraseña"
               class="input-animated w-full pl-10 pr-10 p-2  border border-primary rounded-lg 
                     focus:outline-none focus:ring-2 focus:ring-primary
-                    text-secondary placeholder-secondary text-sm md:text-base"
+                    text-secondary placeholder-secondary text-sm md:text-base select-none"
             />
 
             <!-- Icono candado -->
@@ -80,7 +80,7 @@
             <button
               type="button"
               (click)="showPassword = !showPassword"
-              class="absolute right-3 top-2.5 md:top-3 text-secondary hover:text-hover transition"
+              class="absolute right-3 top-2.5 md:top-3 text-secondary hover:text-hover transition select-none"
             >
               <!-- Icono ojo cerrado -->
               <svg
@@ -127,23 +127,23 @@
           <!-- Botón -->
           <button
             type="submit"
-            class="w-full py-2 md:py-3 rounded-lg bg-primary text-darkbg font-bold hover:bg-hover transition"
+            class="w-full py-2 md:py-3 rounded-lg bg-primary text-darkbg font-bold hover:bg-hover transition select-none"
           >
             Iniciar sesión
           </button>
 
           <!-- Error -->
-          <p *ngIf="errorMessage" class="text-red-500 text-sm text-center">
+          <p *ngIf="errorMessage" class="text-red-500 text-sm text-center select-none">
             {{ errorMessage }}
           </p>
         </form>
 
         <!-- Registro -->
-        <p class="mt-4 text-center text-primary text-sm">
+        <p class="mt-4 text-center text-primary text-sm select-none">
           ¿No estás registrado?
           <a
             routerLink="/register"
-            class="font-medium hover:text-hover underline transition"
+            class="font-medium hover:text-hover underline transition select-none"
           >
             Regístrate
           </a>

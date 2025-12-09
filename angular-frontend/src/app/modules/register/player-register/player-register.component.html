@@ -15,7 +15,7 @@
   <!-- Formulario -->
   <div class="w-full lg:w-1/2 flex justify-center px-6 sm:px-8 md:px-12 lg:px-16">
     <div class="w-full max-w-2xl bg-darkbg rounded-2xl shadow-lg p-6 sm:p-8 lg:p-10 relative z-20 isolate ">
-      <h2 class="text-2xl sm:text-3xl font-bold text-center text-primary mb-6">Registro jugador</h2>
+      <h2 class="text-2xl sm:text-3xl font-bold text-center text-primary mb-6 select-none">Registro jugador/a</h2>
 
       <form [formGroup]="registerForm" (ngSubmit)="register()" class="grid grid-cols-1 lg:grid-cols-2 gap-4">
 
@@ -25,7 +25,7 @@
           <!-- Nombre completo -->
           <div class="relative">
             <input type="text" formControlName="fullName" placeholder="Nombre completo"
-                  class="input-animated w-full pl-10 p-2 border border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-secondary placeholder-secondary" />
+                  class="input-animated w-full pl-10 p-2 border border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-secondary placeholder-secondary select-none" />
             <!-- SVG usuario -->
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 absolute left-3 top-2.5 text-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -39,7 +39,7 @@
           <!-- Apodo -->
           <div class="relative">
             <input type="text" formControlName="nickname" placeholder="Apodo (opcional)"
-                  class="input-animated w-full pl-10 p-2 border border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-secondary placeholder-secondary" />
+                  class="input-animated w-full pl-10 p-2 border border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-secondary placeholder-secondary select-none" />
             
             <!-- SVG apodo -->
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 absolute left-3 top-2.5 text-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -54,7 +54,7 @@
           <!-- Edad -->
          <div class="relative">
           <input type="number" formControlName="age" placeholder="Edad"
-                class="input-animated w-full pl-10 p-2 border border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-secondary placeholder-secondary" />
+                class="input-animated w-full pl-10 p-2 border border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-secondary placeholder-secondary select-none" />
           
           <!-- SVG de calendario / edad -->
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 absolute left-3 top-2.5 text-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -72,7 +72,7 @@
                 <path d="M12 2L3 5v6c0 5.25 3.75 10.74 9 12 5.25-1.26 9-6.75 9-12V5l-9-3z"/>
               </svg>
 
-            <label class="text-white font-semibold text-lg">Selecciona tu posición</label>
+            <label class="text-white font-semibold text-lg select-none">Selecciona tu posición</label>
           </div>
   
           <div class="grid grid-cols-3 gap-3">
@@ -83,11 +83,11 @@
               (click)="selectPosition(pos)"
               [disabled]="selectedPosition && selectedPosition !== pos"
               [ngClass]="{
-                'bg-primary text-darkbg font-bold': selectedPosition === pos,
-                'bg-gray-500 text-gray-300 cursor-not-allowed': selectedPosition && selectedPosition !== pos,
-                'bg-gray-700 text-gray-200 hover:bg-gray-600 hover:text-white': !selectedPosition
+                'bg-primary text-darkbg font-bold select-none': selectedPosition === pos,
+                'bg-gray-500 text-gray-300 cursor-not-allowed select-none': selectedPosition && selectedPosition !== pos,
+                'bg-gray-700 text-gray-200 hover:bg-gray-600 hover:text-white select-none': !selectedPosition
               }"
-              class="py-3 rounded-lg transition-all text-center font-medium shadow-sm"
+              class="py-3 rounded-lg transition-all text-center font-medium shadow-sm select-none"
             >
               {{ pos }}
             </button>
@@ -97,7 +97,7 @@
               type="button" 
               (click)="clearPosition()"
               [disabled]="!selectedPosition"
-              class="col-span-2 py-3 rounded-lg bg-gray-600 text-white hover:bg-red-400 transition font-medium shadow-sm"
+              class="col-span-2 py-3 rounded-lg bg-gray-600 text-white hover:bg-red-400 transition font-medium shadow-sm select-none"
             >
               Quitar selección
             </button>
@@ -114,7 +114,7 @@
           <!-- Dorsal -->
           <div class="relative">
             <input type="number" formControlName="number" placeholder="Dorsal" min="0" max="99"
-                  class="input-animated w-full pl-10 p-2 border border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-secondary placeholder-secondary" />
+                  class="input-animated w-full pl-10 p-2 border border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-secondary placeholder-secondary select-none" />
             
             <!-- SVG de camiseta estilizada -->
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 absolute left-3 top-2.5 text-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -127,7 +127,7 @@
           <!-- Correo electrónico -->
           <div class="relative">
             <input type="email" formControlName="email" placeholder="Correo electrónico"
-                  class="input-animated w-full pl-10 p-2 border border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-secondary placeholder-secondary" />
+                  class="input-animated w-full pl-10 p-2 border border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-secondary placeholder-secondary select-none" />
             
           <!-- SVG MAIL -->
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 absolute left-3 top-1/2 -translate-y-1/2 text-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -142,7 +142,7 @@
               formControlName="password" 
               placeholder="Contraseña"
               (input)="onPasswordChange($any($event.target).value)"
-              class="input-animated w-full pl-10 pr-10 p-2 border border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-secondary placeholder-secondary"
+              class="input-animated w-full pl-10 pr-10 p-2 border border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-secondary placeholder-secondary select-none"
             />
             
             <!-- SVG candado -->
@@ -155,7 +155,7 @@
 
             <!-- Botón ojo -->
             <button type="button" (click)="showPassword = !showPassword"
-                    class="absolute right-3 top-1/2 -translate-y-1/2 text-secondary hover:text-hover transition">
+                    class="absolute right-3 top-1/2 -translate-y-1/2 text-secondary hover:text-hover transition select-none">
               <svg *ngIf="!showPassword" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                       d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
@@ -172,7 +172,7 @@
 
 
           <!-- Requisitos de contraseña debajo del input -->
-          <ul class="text-sm text-gray-200 space-y-1 mt-2">
+          <ul class="text-sm text-gray-200 space-y-1 mt-2 select-none">
             <li [class.text-green-500]="passwordRequirements.minLength" class="flex items-center justify-between">
               Mínimo 6 caracteres
               <span *ngIf="passwordRequirements.minLength" class="text-green-500 ml-2">✔</span>
@@ -199,7 +199,7 @@
           <!-- Repetir contraseña -->
           <div class="relative">
             <input [type]="showRepeatPassword ? 'text' : 'password'" formControlName="repeatPassword" placeholder="Repetir contraseña"
-                  class="input-animated w-full pl-10 pr-10 p-2 border border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-secondary placeholder-secondary"/>
+                  class="input-animated w-full pl-10 pr-10 p-2 border border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-secondary placeholder-secondary select-none"/>
             
             <!-- SVG candado -->
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 absolute left-3 top-1/2 -translate-y-1/2 text-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -211,7 +211,7 @@
 
             <!-- Botón ojo -->
             <button type="button" (click)="showRepeatPassword = !showRepeatPassword"
-                    class="absolute right-3 top-1/2 -translate-y-1/2 text-secondary hover:text-hover transition">
+                    class="absolute right-3 top-1/2 -translate-y-1/2 text-secondary hover:text-hover transition select-none">
               <svg *ngIf="!showRepeatPassword" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                       d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
@@ -224,7 +224,7 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3l18 18"/>
               </svg>
             </button>
-            <p *ngIf="registerForm.errors?.['passwordMismatch']" class="text-red-500 text-sm text-center mt-2">
+            <p *ngIf="registerForm.errors?.['passwordMismatch']" class="text-red-500 text-sm text-center mt-2 select-none">
               Las contraseñas no coinciden.
             </p>
           </div>
@@ -232,11 +232,11 @@
 
           <!-- Botón de enviar -->
           <button type="submit"
-                  class="mt-4 w-full py-2 md:py-3 rounded-lg bg-primary text-darkbg font-bold hover:bg-hover transition">
+                  class="mt-4 w-full py-2 md:py-3 rounded-lg bg-primary text-darkbg font-bold hover:bg-hover transition select-none">
             Registrarse
           </button>
 
-          <p *ngIf="errorMessage" class="text-red-500 text-sm text-center mt-2">{{ errorMessage }}</p>
+          <p *ngIf="errorMessage" class="text-red-500 text-sm text-center mt-2 select-none">{{ errorMessage }}</p>
         </div>
       </form>
 

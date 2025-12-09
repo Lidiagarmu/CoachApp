@@ -16,7 +16,7 @@
   <!-- Formulario -->
   <div class="w-full lg:w-1/2 flex justify-center px-6 sm:px-8 md:px-12 lg:px-16">
     <div class="w-full max-w-2xl bg-darkbg rounded-2xl shadow-lg p-6 sm:p-8 lg:p-10 relative z-20 isolate">
-      <h2 class="text-2xl sm:text-3xl font-bold text-center text-primary mb-6">Registro entrenador</h2>
+      <h2 class="text-2xl sm:text-3xl font-bold text-center text-primary mb-6 select-none">Registro entrenador/a</h2>
 
       
       <form [formGroup]="registerForm" (ngSubmit)="register()" class="grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -27,7 +27,7 @@
           <!-- Nombre completo -->
           <div class="relative">
             <input type="text" formControlName="fullName" placeholder="Nombre completo"
-              class="input-animated w-full pl-10 p-2 border border-primary rounded-lg text-secondary placeholder-secondary focus:ring-2 focus:ring-primary" />
+              class="input-animated w-full pl-10 p-2 border border-primary rounded-lg text-secondary placeholder-secondary focus:ring-2 focus:ring-primary select-none" />
             <svg xmlns="http://www.w3.org/2000/svg"
               class="h-5 w-5 absolute left-3 top-1/2 -translate-y-1/2 text-secondary" fill="none"
               viewBox="0 0 24 24" stroke="currentColor">
@@ -39,7 +39,7 @@
           <!-- Apodo -->
           <div class="relative">
             <input type="text" formControlName="nickname" placeholder="Apodo (opcional)"
-              class="input-animated w-full pl-10 p-2 border border-primary rounded-lg text-secondary placeholder-secondary focus:ring-2 focus:ring-primary" />
+              class="input-animated w-full pl-10 p-2 border border-primary rounded-lg text-secondary placeholder-secondary focus:ring-2 focus:ring-primary select-none" />
             <!-- SVG apodo -->
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 absolute left-3 top-2.5 text-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -52,7 +52,7 @@
           <!-- Edad -->
           <div class="relative">
             <input type="number" formControlName="age" placeholder="Edad"
-              class="input-animated w-full pl-10 p-2 border border-primary rounded-lg text-secondary placeholder-secondary focus:ring-2 focus:ring-primary" />
+              class="input-animated w-full pl-10 p-2 border border-primary rounded-lg text-secondary placeholder-secondary focus:ring-2 focus:ring-primary select-none" />
             <svg xmlns="http://www.w3.org/2000/svg"
               class="h-5 w-5 absolute left-3 top-1/2 -translate-y-1/2 text-secondary" fill="none"
               viewBox="0 0 24 24" stroke="currentColor">
@@ -64,7 +64,7 @@
           <!-- Años de experiencia -->
           <div class="relative">
             <input type="number" formControlName="yearsExperience" placeholder="Años de experiencia"
-              class="input-animated w-full pl-10 p-2 border border-primary rounded-lg text-secondary placeholder-secondary focus:ring-2 focus:ring-primary" />
+              class="input-animated w-full pl-10 p-2 border border-primary rounded-lg text-secondary placeholder-secondary focus:ring-2 focus:ring-primary select-none" />
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 absolute left-3 top-1/2 -translate-y-1/2 text-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
               <path stroke-linecap="round" stroke-linejoin="round" d="M8 21h8" />
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 17v4" />
@@ -78,7 +78,7 @@
           <!-- Nombre del equipo -->
           <div class="relative">
             <input type="text" formControlName="teamName" placeholder="Nombre del equipo"
-              class="input-animated w-full pl-10 p-2 border border-primary rounded-lg text-secondary placeholder-secondary focus:ring-2 focus:ring-primary" />
+              class="input-animated w-full pl-10 p-2 border border-primary rounded-lg text-secondary placeholder-secondary focus:ring-2 focus:ring-primary select-none" />
             <svg xmlns="http://www.w3.org/2000/svg"
               class="h-5 w-5 absolute left-3 top-1/2 -translate-y-1/2 text-secondary" fill="none"
               viewBox="0 0 24 24" stroke="currentColor">
@@ -90,8 +90,8 @@
           <!-- Crear más tarde -->
           <div class="flex items-center space-x-2 mt-1">
             <input type="checkbox" formControlName="createLater" id="createLater"
-              class="h-4 w-4 text-primary border-gray-300 rounded focus:ring-primary" />
-            <label for="createLater" class="text-white text-sm">Asignar nombre de equipo más tarde</label>
+              class="h-4 w-4 text-primary border-gray-300 rounded focus:ring-primary select-none" />
+            <label for="createLater" class="text-white text-sm select-none">Asignar nombre de equipo más tarde</label>
           </div>
         </div>
 
@@ -103,7 +103,7 @@
           <!-- Correo electrónico -->
           <div class="relative">
             <input type="email" formControlName="email" placeholder="Correo electrónico"
-              class="input-animated w-full pl-10 p-2 border border-primary rounded-lg text-secondary placeholder-secondary focus:ring-2 focus:ring-primary" />
+              class="input-animated w-full pl-10 p-2 border border-primary rounded-lg text-secondary placeholder-secondary focus:ring-2 focus:ring-primary select-none" />
             <svg xmlns="http://www.w3.org/2000/svg"
               class="h-5 w-5 absolute left-3 top-1/2 -translate-y-1/2 text-secondary" fill="none"
               viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -116,7 +116,7 @@
           <div class="relative">
             <input [type]="showPassword ? 'text' : 'password'" formControlName="password"
               placeholder="Contraseña" (input)="onPasswordChange($any($event.target).value)"
-              class="input-animated w-full pl-10 pr-10 p-2 border border-primary rounded-lg text-secondary placeholder-secondary focus:ring-2 focus:ring-primary" />
+              class="input-animated w-full pl-10 pr-10 p-2 border border-primary rounded-lg text-secondary placeholder-secondary focus:ring-2 focus:ring-primary select-none" />
             <!-- Icono candado -->
             <svg xmlns="http://www.w3.org/2000/svg"
               class="h-5 w-5 absolute left-3 top-1/2 -translate-y-1/2 text-secondary" fill="none"
@@ -129,7 +129,7 @@
 
             <!-- Ojo -->
             <button type="button" (click)="showPassword = !showPassword"
-              class="absolute right-3 top-1/2 -translate-y-1/2 text-secondary hover:text-hover transition">
+              class="absolute right-3 top-1/2 -translate-y-1/2 text-secondary hover:text-hover transition select-none">
               <svg *ngIf="!showPassword" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5"
                 fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -148,7 +148,7 @@
           </div>
 
           <!-- Requisitos de contraseña -->
-          <ul class="text-sm text-gray-200 space-y-1 mt-2">
+          <ul class="text-sm text-gray-200 space-y-1 mt-2 select-none">
             <li [class.text-green-500]="passwordRequirements.minLength">Mínimo 6 caracteres</li>
             <li [class.text-green-500]="passwordRequirements.uppercase">Al menos una mayúscula</li>
             <li [class.text-green-500]="passwordRequirements.lowercase">Al menos una minúscula</li>
@@ -160,7 +160,7 @@
           <div class="relative">
             <input [type]="showRepeatPassword ? 'text' : 'password'"
               formControlName="repeatPassword" placeholder="Repetir contraseña"
-              class="input-animated w-full pl-10 pr-10 p-2 border border-primary rounded-lg text-secondary placeholder-secondary focus:ring-2 focus:ring-primary" />
+              class="input-animated w-full pl-10 pr-10 p-2 border border-primary rounded-lg text-secondary placeholder-secondary focus:ring-2 focus:ring-primary select-none" />
             <svg xmlns="http://www.w3.org/2000/svg"
               class="h-5 w-5 absolute left-3 top-1/2 -translate-y-1/2 text-secondary" fill="none"
               viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -171,7 +171,7 @@
             </svg>
 
             <button type="button" (click)="showRepeatPassword = !showRepeatPassword"
-              class="absolute right-3 top-1/2 -translate-y-1/2 text-secondary hover:text-hover transition">
+              class="absolute right-3 top-1/2 -translate-y-1/2 text-secondary hover:text-hover transition select-none">
               <svg *ngIf="!showRepeatPassword" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5"
                 fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -191,15 +191,15 @@
 
           <!-- Error contraseñas -->
           <p *ngIf="registerForm.errors?.['passwordMismatch']"
-            class="text-red-500 text-sm text-center mt-2">
+            class="text-red-500 text-sm text-center mt-2 select-none">
             Las contraseñas no coinciden.
           </p>
 
-          <p *ngIf="errorMessage" class="text-red-500 text-sm text-center mt-2">{{ errorMessage }}</p>
+          <p *ngIf="errorMessage" class="text-red-500 text-sm text-center mt-2 select-none">{{ errorMessage }}</p>
 
           <!-- Botón -->
           <button type="submit"
-            class="mt-4 w-full py-2 md:py-3 rounded-lg bg-primary text-darkbg font-bold hover:bg-hover transition">
+            class="mt-4 w-full py-2 md:py-3 rounded-lg bg-primary text-darkbg font-bold hover:bg-hover transition select-none">
             Registrarse
           </button>
           
