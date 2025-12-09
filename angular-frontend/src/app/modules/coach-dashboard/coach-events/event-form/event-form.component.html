@@ -1,88 +1,125 @@
 <div class="fixed inset-0 bg-black/50 flex items-start justify-center overflow-y-auto z-50 p-6">
-  <div class="bg-white rounded-xl shadow-lg w-full max-w-lg p-6 relative">
-    <button (click)="closeForm()" class="absolute top-3 right-3 text-gray-600 hover:text-gray-900
-     text-3xl leading-none w-10 h-10 flex items-center justify-center select-none">&times;</button>
+  <div class="bg-white rounded-2xl shadow-xl w-full max-w-4xl p-8 relative">
+    <!-- Cerrar -->
+    <button (click)="closeForm()" class="absolute top-4 right-4 text-gray-500 hover:text-gray-900 text-3xl leading-none w-10 h-10 flex items-center justify-center select-none">&times;</button>
 
-    <h2 class="text-2xl font-bold mb-4 select-none">{{ eventToEdit ? 'Editar Evento' : 'Crear Evento' }}</h2>
+    <h2 class="text-3xl font-bold mb-6 select-none">{{ eventToEdit ? 'Editar Evento' : 'Crear Evento' }}</h2>
 
-    <form [formGroup]="eventForm" (ngSubmit)="submit()" class="space-y-4">
-
+    <form [formGroup]="eventForm" (ngSubmit)="submit()" class="grid grid-cols-2 gap-6">
       <!-- Tipo de evento -->
-      <div>
-        <label class="block mb-1 font-semibold select-none">Tipo de evento</label>
-        <select formControlName="type" (change)="onTypeChange($event)" class="w-full border rounded px-3 py-2 text-gray-400 select-none">
-          <option value="" disabled>Selecciona tipo </option>
+      <div class="flex flex-col">
+        <label class="mb-1 font-semibold select-none">Tipo de evento*</label>
+        <select formControlName="type" (change)="onTypeChange($event)" class="border rounded px-3 py-2 text-gray-700"
+        [ngClass]="{
+          'border-red-500': eventForm.get('type')?.invalid && eventForm.get('type')?.touched,
+          'border-green-500': eventForm.get('type')?.valid && eventForm.get('type')?.touched,
+          'border-gray-300': !eventForm.get('type')?.touched
+       }">>
+          <option value="" disabled>Selecciona tipo</option>
           <option value="training">Entrenamiento</option>
           <option value="match">Partido</option>
         </select>
+      <span *ngIf="eventForm.get('title')?.invalid && eventForm.get('title')?.touched"
+            class="text-red-500 text-sm mt-1">
+        El tipo de evento es obligatorio
+      </span>
+      
       </div>
 
       <!-- Título -->
-      <div>
-        <label class="block mb-1 font-semibold select-none">Título</label>
-        <input type="text" formControlName="title" class="w-full border rounded px-3 py-2 text-gray-400 select-none">
+      <div class="flex flex-col col-span-2">
+        <label class="mb-1 font-semibold select-none">Título*</label>
+        <input type="text" formControlName="title" class="border rounded px-3 py-2 text-gray-700 w-full"
+        [ngClass]="{
+          'border-red-500': eventForm.get('title')?.invalid && eventForm.get('title')?.touched,
+          'border-green-500': eventForm.get('title')?.valid && eventForm.get('title')?.touched,
+          'border-gray-300': !eventForm.get('title')?.touched
+       }">
+       <span *ngIf="eventForm.get('title')?.invalid && eventForm.get('title')?.touched"
+            class="text-red-500 text-sm mt-1">
+        El título es obligatorio
+      </span>
+
       </div>
 
       <!-- Descripción -->
-      <div>
-        <label class="block mb-1 font-semibold select-none">Descripción</label>
-        <textarea formControlName="description" rows="3" class="w-full border rounded px-3 py-2 text-gray-400"></textarea>
+      <div class="flex flex-col col-span-2">
+        <label class="mb-1 font-semibold select-none">Descripción</label>
+        <textarea formControlName="description" rows="3" class="border rounded px-3 py-2 text-gray-700 w-full"></textarea>
       </div>
 
       <!-- Fecha y Hora -->
-      <div class="flex flex-col md:flex-row gap-2 select-none">
-        <div class="flex-1">
-          <label class="block mb-1 font-semibold select-none">Fecha</label>
-          <input type="date" formControlName="date" class="w-full border rounded px-3 py-2 text-gray-400 select-none">
-        </div>
-        <div class="flex-1">
-          <label class="block mb-1 font-semibold select-none">Hora</label>
-          <input type="time" formControlName="time" class="w-full border rounded px-3 py-2 text-gray-400 select-none">
-        </div>
+      <div class="flex flex-col">
+        <label class="mb-1 font-semibold select-none">Fecha*</label>
+        <input type="date" formControlName="date" class="border rounded px-3 py-2 text-gray-700"
+        [ngClass]="{
+          'border-red-500': eventForm.get('date')?.invalid && eventForm.get('date')?.touched,
+          'border-green-500': eventForm.get('date')?.valid && eventForm.get('date')?.touched,
+          'border-gray-300': !eventForm.get('date')?.touched
+        }"
+      >
+      <span *ngIf="eventForm.get('title')?.invalid && eventForm.get('title')?.touched"
+            class="text-red-500 text-sm mt-1">
+        La fecha es obligatoria
+      </span>
+
+      </div>
+      <div class="flex flex-col">
+        <label class="mb-1 font-semibold select-none">Hora*</label>
+        <input type="time" formControlName="time" class="border rounded px-3 py-2 text-gray-700"
+        [ngClass]="{
+          'border-red-500': eventForm.get('time')?.invalid && eventForm.get('time')?.touched,
+          'border-green-500': eventForm.get('time')?.valid && eventForm.get('time')?.touched,
+          'border-gray-300': !eventForm.get('time')?.touched
+        }"
+        >
+        <span *ngIf="eventForm.get('title')?.invalid && eventForm.get('title')?.touched"
+            class="text-red-500 text-sm mt-1">
+        La hora es obligatoria
+        </span>
       </div>
 
-
-
       <!-- Duración -->
-      <div>
-        <label class="block mb-1 font-semibold select-none">Duración (min)</label>
-        <input type="number" formControlName="duration" class="w-full border rounded px-3 py-2 text-gray-400 select-none">
+      <div class="flex flex-col">
+        <label class="mb-1 font-semibold select-none">Duración* (min)</label>
+        <input type="number" formControlName="duration" class="border rounded px-3 py-2 text-gray-700"
+        [ngClass]="{
+          'border-red-500': eventForm.get('time')?.invalid && eventForm.get('time')?.touched,
+          'border-green-500': eventForm.get('time')?.valid && eventForm.get('time')?.touched,
+          'border-gray-300': !eventForm.get('time')?.touched
+        }"
+        >
+        <span *ngIf="eventForm.get('title')?.invalid && eventForm.get('title')?.touched"
+            class="text-red-500 text-sm mt-1">
+          La duración es obligatoria
+        </span>
       </div>
 
       <!-- Ubicación -->
-      <div class="flex gap-2">
-        <div class="flex-1">
-          <label class="block mb-1 font-semibold select-none">Lugar:</label>
-          <input type="text" formControlName="location_name" class="w-full border rounded px-3 py-2 text-gray-400 select-none">
-        </div>
-        <div class="flex-1">
-          <label class="block mb-1 font-semibold select-none">URL ubicación</label>
-          <input type="url" formControlName="location_url" class="w-full border rounded px-3 py-2 text-gray-400 select-none">
-        </div>
+      <div class="flex flex-col">
+        <label class="mb-1 font-semibold select-none">Lugar</label>
+        <input type="text" formControlName="location_name" class="border rounded px-3 py-2 text-gray-700">
+      </div>
+      <div class="flex flex-col">
+        <label class="mb-1 font-semibold select-none">URL ubicación</label>
+        <input type="url" formControlName="location_url" class="border rounded px-3 py-2 text-gray-700">
       </div>
 
       <!-- Campos específicos según tipo -->
-
-      <!-- Campos para Entrenamiento -->
-      <div *ngIf="eventForm.get('type')?.value === 'training'">
-        <!-- Campo o gimnasio -->
-        <div>
-          <label class="block mb-1 font-semibold select-none">Tipo de entrenamiento</label>
-          
-          <select formControlName="training_type" class="w-full border rounded px-3 py-2 text-gray-400 select-none">
-            <option value="" disabled>Selecciona tipo </option>
-
+      <ng-container *ngIf="eventForm.get('type')?.value === 'training'">
+        <div class="flex flex-col">
+          <label class="mb-1 font-semibold select-none">Tipo de entrenamiento*</label>
+          <select formControlName="training_type" class="border rounded px-3 py-2 text-gray-700">
+            <option value="" disabled>Selecciona tipo</option>
             <option value="campo">Campo</option>
             <option value="gimnasio">Gimnasio</option>
           </select>
         </div>
 
-        <!-- Solo si es gimnasio -->
-          <div *ngIf="eventForm.get('training_type')?.value === 'gimnasio'">
-          <label class="block mb-1 font-semibold select-none ">Especialidad gimnasio</label>
-          <select formControlName="gym_focus" class="w-full border rounded px-3 py-2 text-gray-400 select-none"> 
+        <div *ngIf="eventForm.get('training_type')?.value === 'gimnasio'" class="flex flex-col">
+          <label class="mb-1 font-semibold select-none">Especialidad gimnasio*</label>
+          <select formControlName="gym_focus" class="border rounded px-3 py-2 text-gray-700">
             <option value="" disabled>Selecciona especialidad</option>
-
             <option value="fuerza">Fuerza</option>
             <option value="resistencia">Resistencia</option>
             <option value="preventivo">Preventivo</option>
@@ -91,67 +128,57 @@
           </select>
         </div>
 
-        <!-- Solo si es campo -->
-          <div *ngIf="eventForm.get('training_type')?.value === 'campo'">
-          <label class="block mb-1 font-semibold select-none">Área de enfoque</label>
-          <select formControlName="focus_area" class="w-full border rounded px-3 py-2 text-gray-400 select-none">
+        <div *ngIf="eventForm.get('training_type')?.value === 'campo'" class="flex flex-col">
+          <label class="mb-1 font-semibold select-none">Área de enfoque*</label>
+          <select formControlName="focus_area" class="border rounded px-3 py-2 text-gray-700">
             <option value="" disabled>Selecciona enfoque</option>
-
             <option value="tecnico">Técnico</option>
             <option value="tactico">Táctico</option>
             <option value="fisico">Físico</option>
             <option value="mixto">Mixto</option>
           </select>
         </div>
-      </div>
+      </ng-container>
 
-
-        <!-- Campos para Partido -->
-        <div *ngIf="eventForm.get('type')?.value === 'match'">
-          <div class="flex gap-2">
-            <div class="flex-1">
-              <label class="block mb-1 font-semibold select-none">Rival</label>
-              <input type="text" formControlName="opponent" class="w-full border rounded px-3 py-2 text-gray-400 select-none" placeholder="Nombre del equipo rival">
-            </div>
-            <div class="flex-1">
-              <label class="block mb-1 font-semibold select-none">Tipo de partido</label>
-              <select formControlName="match_type" class="w-full border rounded px-3 py-2 text-gray-400 select-none">
-                <option value="" disabled>Selecciona tipo</option>
-                <option value="amistoso">Amistoso</option>
-                <option value="liga">Liga</option>
-                <option value="torneo">Torneo</option>
-                <option value="copa">Copa</option>
-                <option value="otra">Otra</option>
-              </select>
-            </div>
-          </div>
+      <ng-container *ngIf="eventForm.get('type')?.value === 'match'">
+        <div class="flex flex-col">
+          <label class="mb-1 font-semibold select-none">Rival</label>
+          <input type="text" formControlName="opponent" placeholder="Nombre del equipo rival" class="border rounded px-3 py-2 text-gray-700">
         </div>
+        <div class="flex flex-col">
+          <label class="mb-1 font-semibold select-none">Tipo de partido*</label>
+          <select formControlName="match_type" class="border rounded px-3 py-2 text-gray-700">
+            <option value="" disabled>Selecciona tipo</option>
+            <option value="amistoso">Amistoso</option>
+            <option value="liga">Liga</option>
+            <option value="torneo">Torneo</option>
+            <option value="copa">Copa</option>
+            <option value="otra">Otra</option>
+          </select>
+        </div>
+      </ng-container>
 
-
-
-      <!-- ✅ Subir imágenes -->
-      <div>
-        <label class="block mb-1 font-semibold select-none">Imágenes del evento</label>
-        <input type="file" (change)="onFilesSelected($event)" multiple accept="image/*" class="w-full select-none">
-
-        <!-- Previsualización -->
+      <!-- Imágenes -->
+      <div class="flex flex-col col-span-2">
+        <label class="mb-1 font-semibold select-none">Imágenes del evento</label>
+        <input type="file" (change)="onFilesSelected($event)" multiple accept="image/*" class="border rounded px-3 py-2">
         <div class="flex flex-wrap gap-2 mt-2">
-          <div *ngFor="let file of selectedFiles; let i = index" class="w-20 h-20 border rounded overflow-hidden relative">
-            <img [src]="filePreviews[i]" class="w-20 h-20 object-cover rounded border select-none" *ngIf="filePreviews[i]">
+          <div *ngFor="let file of selectedFiles; let i = index" class="w-24 h-24 border rounded overflow-hidden relative">
+            <img [src]="filePreviews[i]" class="w-24 h-24 object-cover select-none" *ngIf="filePreviews[i]">
             <button type="button" (click)="removeFile(file)" class="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">×</button>
           </div>
         </div>
       </div>
 
+      <span class="col-span-2 text-sm text-gray-500 select-none">* Campos obligatorios</span>
 
-      <!-- Botones Cancelar/ Crear-->
-      <div class="flex justify-end gap-2 mt-4">
-        <button type="button" (click)="closeForm()" class="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded select-none">Cancelar</button>
-        <button type="submit" class="bg-primary hover:bg-primary/80 text-white px-4 py-2 rounded select-none">
+      <!-- Botones -->
+      <div class="flex justify-end gap-3 col-span-2 mt-4">
+        <button type="button" (click)="closeForm()" class="bg-gray-200 hover:bg-gray-300 px-6 py-2 rounded font-semibold">Cancelar</button>
+        <button type="submit" class="bg-primary hover:bg-primary/80 text-white px-6 py-2 rounded font-semibold">
           {{ eventToEdit ? 'Actualizar' : 'Crear' }}
         </button>
       </div>
-
     </form>
   </div>
 </div>
