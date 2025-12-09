@@ -35,10 +35,25 @@
   <div *ngIf="trainings.length === 0" class="text-gray-500">No hay entrenamientos disponibles.</div>
 
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-    <div *ngFor="let training of trainings" class="bg-white rounded-xl shadow p-6 flex flex-col max-w-full overflow-hidden">
-
+  <div
+    *ngFor="let training of trainings"
+    class="
+      bg-white/80 backdrop-blur-md
+      rounded-2xl
+      shadow-[0_4px_30px_rgba(0,0,0,0.1)]
+      border border-white/40
+      p-6
+      flex flex-col gap-3
+      transition-all duration-300
+      hover:shadow-[0_8px_40px_rgba(0,0,0,0.15)]
+      hover:bg-white/90
+      hover:-translate-y-1
+      md:hover:scale-[1.03]
+      hover:ring-4 hover:ring-primary
+    "
+  >
       <!-- Título -->
-      <h3 class="text-xl font-bold mb-2 truncate select-none">{{ training.title }}</h3>
+      <h3 class="text-2xl font-semibold text-gray-900 text-center leading-tight truncate select-none">{{ training.title }}</h3>
 
       <!-- Fecha y hora -->
       <p class="text-gray-700 mb-1 select-none">
