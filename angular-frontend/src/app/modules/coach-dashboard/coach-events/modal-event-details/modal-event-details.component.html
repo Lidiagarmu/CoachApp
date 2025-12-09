@@ -20,6 +20,14 @@
       {{ selectedEvent.title }}
     </h2>
 
+
+
+    <!-- Equipo asociado -->
+    <div class="flex items-center gap-3 mt-2 mb-2" *ngIf="selectedEvent.team?.shield">
+        <img [src]="getTeamShield(selectedEvent)" class="w-14 h-14 object-contain rounded-full border shadow" />
+        <p><strong>Equipo:</strong> {{ selectedEvent.team?.name }}</p>
+    </div>
+
     <!-- SEPARADOR -->
     <div class="w-full h-[1px] bg-gray-200 mb-4"></div>
 
@@ -95,7 +103,7 @@
       </p>
       </div>
 
-      
+
       <div *ngIf="selectedEvent.training_type === 'campo'" class="flex items-start gap-2">
         <svg class="w-6 h-6 text-secondary mt-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <circle cx="12" cy="12" r="10"/>
@@ -126,10 +134,7 @@
         <p><strong>Tipo de partido:</strong> {{ selectedEvent.match_type }}</p>
       </div>
 
-      <div class="flex items-center gap-3 mt-2" *ngIf="selectedEvent.team?.shield">
-        <img [src]="getTeamShield(selectedEvent)" class="w-14 h-14 object-contain rounded-full border shadow" />
-        <p><strong>Equipo:</strong> {{ selectedEvent.team?.name }}</p>
-      </div>
+
 
     </div>
 
