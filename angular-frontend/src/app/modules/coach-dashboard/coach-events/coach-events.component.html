@@ -35,21 +35,27 @@
 
   <div *ngIf="trainings.length === 0" class="text-gray-500">No hay entrenamientos disponibles.</div>
 
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
     <div
-      *ngFor="let training of trainings"
-      class="
-        bg-white/90 backdrop-blur-md
-        rounded-2xl
-        border border-gray-200
-        p-5 md:p-6
-        flex flex-col justify-between
-        gap-4
-        shadow-lg
-        transition-all duration-300
-        md:hover:scale-[1.03] md:hover:shadow-2xl md:hover:shadow-black/20 md:hover:ring-4 md:hover:ring-primary
-      "
-    >
+  *ngFor="let training of trainings"
+  class="
+    bg-white/90 backdrop-blur-md
+    rounded-2xl
+    border border-gray-200
+    p-4
+    flex flex-col justify-between
+    gap-2
+    shadow-md
+    transition-all duration-300
+
+    min-h-[360px] md:min-h-[380px] max-h-none
+
+
+    md:hover:scale-[1.01]
+    md:hover:shadow-xl md:hover:shadow-black/10 
+    md:hover:ring-2 md:hover:ring-primary
+  "
+>
       <!-- Título -->
       <h3 class="text-xl font-bold text-gray-900 truncate select-none">{{ training.title }}</h3>
 
@@ -90,7 +96,7 @@
           <path stroke-linecap="round" stroke-linejoin="round" d="M12 11c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3z"/>
           <path stroke-linecap="round" stroke-linejoin="round" d="M12 22s8-8 8-12a8 8 0 10-16 0c0 4 8 12 8 12z"/>
         </svg>
-        <span><strong>URL ubicación:</strong></span>
+        <span><strong>URL:</strong></span>
         <a [href]="training.location_url" target="_blank" class="text-blue-600 underline truncate block max-w-full">
           {{ training.location_url }}
         </a>
@@ -145,7 +151,7 @@
 
   <div *ngIf="games.length === 0" class="text-gray-500 select-none">No hay partidos disponibles.</div>
 
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
     
     <div
       *ngFor="let game of games"
@@ -153,15 +159,18 @@
         bg-white/90 backdrop-blur-md
         rounded-2xl
         border border-gray-200
-        p-5 md:p-6
+        p-4
         flex flex-col justify-between
-        gap-4
+        gap-2
         shadow-lg
         transition-all duration-300
-        md:hover:scale-[1.03] 
+        min-h-[360px] md:min-h-[380px]
+        md:hover:scale-[1.03]
         md:hover:shadow-2xl md:hover:shadow-black/20 
         md:hover:ring-4 md:hover:ring-primary
       "
+
+
     >
 
       <!-- Equipo -->
