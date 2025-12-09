@@ -3,7 +3,14 @@
 <div class="flex justify-end mb-6">
   <button
     (click)="openCreateEventModal()"
-    class="bg-primary hover:bg-hover/80 text-black font-bold py-2 px-4 rounded shadow transition select-none"
+    class="bg-app-gradient hover:bg-hover text-black font-bold py-2 px-4 rounded-lg 
+       shadow-xl shadow-black/30 
+       ring-1 ring-white/10 
+       hover:shadow-2xl hover:shadow-black/40 mr-16 mt-5
+       transition transform duration-200
+      hover:scale-105 
+       select-none 
+      "
   >
     + Crear Evento
   </button>
@@ -26,78 +33,100 @@
 
 <!-- Entrenamientos -->
 <section class="mb-12">
-  <h2 class="text-2xl font-semibold mb-4 text-black select-none">Entrenamientos</h2>
+  <h2 class="text-2xl font-semibold mb-6 text-gray-900 select-none">Entrenamientos</h2>
+
   <div *ngIf="trainings.length === 0" class="text-gray-500">No hay entrenamientos disponibles.</div>
 
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-    <div *ngFor="let training of trainings" class="bg-white rounded-xl shadow p-6 flex flex-col max-w-full overflow-hidden">
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3
+">
+    <div
+  *ngFor="let training of trainings"
+  class="
+    bg-white/90 backdrop-blur-md
+    rounded-2xl
+    border border-gray-200
+    p-4
+    flex flex-col justify-between
+    gap-2
+    shadow-md
+    transition-all duration-300
 
+    min-h-[360px] md:min-h-[380px]
+
+
+
+    md:hover:scale-[1.01]
+    md:hover:shadow-xl md:hover:shadow-black/10 
+    md:hover:ring-2 md:hover:ring-primary
+  "
+>
       <!-- Título -->
-      <h3 class="text-xl font-bold mb-2 truncate select-none">{{ training.title }}</h3>
+      <h3 class="text-xl font-bold text-gray-900 truncate select-none">{{ training.title }}</h3>
+
+      <!-- Separador -->
+      <div class="border-t border-gray-200 my-2"></div>
 
       <!-- Fecha y hora -->
-      <p class="text-gray-700 mb-1 select-none">
-        <svg class="inline w-5 h-5 mr-2 text-secondary" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <div class="flex items-center gap-2 text-gray-700 text-sm select-none">
+        <svg class="w-5 h-5 text-secondary flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3M3 8h18M5 8v13a2 2 0 002 2h10a2 2 0 002-2V8"/>
         </svg>
-        <strong>Fecha: </strong> {{ training.date }}
-        <strong>Hora: </strong> {{ training.time }}
-      </p>
+        <span><strong>Fecha:</strong> {{ training.date }}</span>
+        <span><strong>Hora:</strong> {{ training.time }}</span>
+      </div>
 
       <!-- Duración -->
-      <p class="text-gray-700 mb-1 select-none">
-        <svg class="inline w-5 h-5 mr-2 text-secondary" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <div class="flex items-center gap-2 text-gray-700 text-sm select-none">
+        <svg class="w-5 h-5 text-secondary flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2m-4-8a9 9 0 100 18 9 9 0 000-18z"/>
         </svg>
-        <strong>Duración: </strong> {{ training.duration }} min
-      </p>
+        <span><strong>Duración:</strong> {{ training.duration }} min</span>
+      </div>
 
       <!-- Lugar -->
-      <p class="text-gray-700 mb-1 truncate max-w-full overflow-hidden select-none">
-        <svg class="inline w-5 h-5 mr-2 text-secondary" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <div class="flex items-center gap-2 text-gray-700 text-sm select-none">
+        <svg class="w-5 h-5 text-secondary flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <rect x="4" y="3" width="16" height="18" rx="1" ry="1"/>
           <rect x="10" y="16" width="4" height="5" stroke-linecap="round" stroke-linejoin="round"/>
           <path stroke-linecap="round" stroke-linejoin="round" d="M6 6h2M6 9h2M6 12h2M6 15h2M16 6h2M16 9h2M16 12h2M16 15h2"/>
           <path stroke-linecap="round" stroke-linejoin="round" d="M11 6h2M11 9h2M11 12h2M11 15h2"/>
         </svg>
-        <strong>Lugar: </strong> {{ training.location_name }}
-      </p>
+        <span><strong>Lugar:</strong> {{ training.location_name }}</span>
+      </div>
 
       <!-- URL Ubicación -->
-      <p class="text-gray-700 mb-3 select-none" *ngIf="training.location_url">
-        <svg class="inline w-5 h-5 mr-2 text-secondary" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <div *ngIf="training.location_url" class="flex items-center gap-2 text-gray-700 text-sm mt-1 select-none">
+        <svg class="w-5 h-5 text-secondary flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M12 11c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3z"/>
           <path stroke-linecap="round" stroke-linejoin="round" d="M12 22s8-8 8-12a8 8 0 10-16 0c0 4 8 12 8 12z"/>
         </svg>
-        <strong>URL Ubicación: </strong>
+        <span><strong>URL:</strong></span>
         <a [href]="training.location_url" target="_blank" class="text-blue-600 underline truncate block max-w-full">
           {{ training.location_url }}
         </a>
-      </p>
-
-       <!-- Imágenes -->
-      <div *ngIf="training.images.length" class="mt-4">
-        <h3 class="font-semibold mb-2 text-gray-700 select-none">Imágenes del evento:</h3>
-        <div class="flex flex-wrap gap-2">
-          <img *ngFor="let img of training.images" [src]="img" class="w-24 h-24 object-cover rounded border select-none" />
-        </div>
       </div>
 
-      <!-- Botones -->
-      <div class="flex justify-between items-center w-full mt-5">
+      <!-- Separador -->
+      <div *ngIf="training.images.length" class="border-t border-gray-200 my-3"></div>
 
-        <!-- Izquierda: Editar y Eliminar -->
+      <!-- Imágenes -->
+      <div *ngIf="training.images.length" class="flex flex-wrap gap-2 mt-1">
+        <img *ngFor="let img of training.images" [src]="img" class="w-20 h-20 md:w-24 md:h-24 object-cover rounded-lg border select-none" />
+      </div>
+
+      <!-- Separador -->
+      <div class="border-t border-gray-200 my-3"></div>
+
+      <!-- Botones -->
+      <div class="flex justify-between items-center mt-2">
         <div class="flex gap-2">
-          <!-- Editar (lápiz) -->
-          <button (click)="editEvent(training)" class="bg-yellow-400 hover:bg-yellow-500 text-white p-2 rounded-full flex items-center justify-center select-none">
+          <button (click)="editEvent(training)" class="bg-yellow-400 hover:bg-yellow-500 text-white p-2 rounded-full flex items-center justify-center select-none transition">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 20h9"/>
               <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 3.5l4 4L7 21H3v-4L16.5 3.5z"/>
             </svg>
           </button>
-
-          <!-- Eliminar (papelera) -->
-          <button (click)="openDeleteConfirm(training.id)" class="bg-red-500 hover:bg-red-600 text-white p-2 rounded-full flex items-center justify-center select-none">
+          <button (click)="openDeleteConfirm(training.id)" class="bg-red-500 hover:bg-red-600 text-white p-2 rounded-full flex items-center justify-center select-none transition">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M19 7L5 7"/>
               <path stroke-linecap="round" stroke-linejoin="round" d="M6 7v12a2 2 0 002 2h8a2 2 0 002-2V7"/>
@@ -105,103 +134,143 @@
             </svg>
           </button>
         </div>
-
-        <!-- Derecha: Ver más -->
-        <button (click)="openModal(training)" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-1 rounded select-none">
-          Ver más
+        <button (click)="openModal(training)" 
+        class="hover:blue-100 bg-blue-300 text-black font-bold py-2 px-4 rounded-lg 
+       shadow shadow-black/30 
+       ring-1 ring-white/10 
+       hover:shadow-2xl hover:shadow-black/40
+       transition select-none ">
+          Más detalles
         </button>
-
       </div>
-
-
-
     </div>
   </div>
 </section>
 
+
+
 <!-- Partidos -->
-<section>
-  <h2 class="text-2xl font-semibold mb-4 text-black select-none">Partidos</h2>
+<section class="mb-12">
+  <h2 class="text-2xl font-semibold mb-6 text-gray-900 select-none">Partidos</h2>
+
   <div *ngIf="games.length === 0" class="text-gray-500 select-none">No hay partidos disponibles.</div>
 
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-    <div *ngFor="let game of games" class="bg-white rounded-xl shadow p-6 flex flex-col">
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+    
+    <div
+      *ngFor="let game of games"
+      class="
+        bg-white/90 backdrop-blur-md
+        rounded-2xl
+        border border-gray-200
+        p-4
+        flex flex-col justify-between
+        gap-2
+        shadow-lg
+        transition-all duration-300
+        min-h-[360px] md:min-h-[380px]
+        md:hover:scale-[1.03]
+        md:hover:shadow-2xl md:hover:shadow-black/20 
+        md:hover:ring-4 md:hover:ring-primary
+      "
+
+
+    >
 
       <!-- Equipo -->
-      <div class="flex items-center gap-4 mb-3">
-        <img *ngIf="getTeamShield(game)" [src]="getTeamShield(game)" class="w-12 h-12 object-contain rounded-full border select-none" />
+      <div class="flex flex-col items-center text-center gap-4 mb-3">
+        <img 
+          *ngIf="getTeamShield(game)" 
+          [src]="getTeamShield(game)" 
+          class="w-12 h-12 object-contain rounded-full border select-none" 
+        />
         <div>
-          <h3 class="text-xl font-bold truncate select-none">{{ game.team?.name }}</h3>
+          <h3 class="text-xl font-bold  text-gray-900 select-none">
+            {{ game.team?.name }}
+          </h3>
         </div>
       </div>
 
+      <!-- Separador -->
+      <div class="border-t border-gray-200 my-2"></div>
+
       <!-- Título -->
-      <h4 class="text-lg font-semibold mb-1 truncate select-none">{{ game.title }}</h4>
+      <h4 class="text-lg font-semibold truncate text-gray-900 select-none">
+        {{ game.title }}
+      </h4>
 
       <!-- Fecha y hora -->
-      <p class="text-gray-700 mb-1 select-none">
-        <svg class="inline w-5 h-5 mr-2 text-secondary" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <div class="flex items-center gap-2 text-gray-700 text-sm select-none">
+        <svg class="w-5 h-5 text-secondary flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3M3 8h18M5 8v13a2 2 0 002 2h10a2 2 0 002-2V8"/>
         </svg>
-        <strong>Fecha: </strong> {{ game.date }}
-        <strong>Hora: </strong> {{ game.time }}
-      </p>
+        <span><strong>Fecha:</strong> {{ game.date }}</span>
+        <span><strong>Hora:</strong> {{ game.time }}</span>
+      </div>
 
       <!-- Duración -->
-      <p class="text-gray-700 mb-1 select-none">
-        <svg class="inline w-5 h-5 mr-2 text-secondary" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <div class="flex items-center gap-2 text-gray-700 text-sm select-none">
+        <svg class="w-5 h-5 text-secondary flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2m-4-8a9 9 0 100 18 9 9 0 000-18z"/>
         </svg>
-        <strong>Duración: </strong> {{ game.duration }} min
-      </p>
+        <span><strong>Duración:</strong> {{ game.duration }} min</span>
+      </div>
 
       <!-- Lugar -->
-      <p class="text-gray-700 mb-1 truncate select-none">
-        <svg class="inline w-5 h-5 mr-2 text-secondary" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <div class="flex items-center gap-2 text-gray-700 text-sm truncate select-none">
+        <svg class="w-5 h-5 text-secondary flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <rect x="4" y="3" width="16" height="18" rx="1" ry="1"/>
           <rect x="10" y="16" width="4" height="5" stroke-linecap="round" stroke-linejoin="round"/>
           <path stroke-linecap="round" stroke-linejoin="round" d="M6 6h2M6 9h2M6 12h2M6 15h2M16 6h2M16 9h2M16 12h2M16 15h2"/>
           <path stroke-linecap="round" stroke-linejoin="round" d="M11 6h2M11 9h2M11 12h2M11 15h2"/>
         </svg>
-        <strong>Lugar: </strong> {{ game.location_name }}
-      </p>
+        <span><strong>Lugar:</strong> {{ game.location_name }}</span>
+      </div>
 
       <!-- URL Ubicación -->
-      <p class="text-gray-700 mb-3 select-none" *ngIf="game.location_url">
-        <svg class="inline w-5 h-5 mr-2 text-secondary" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <div *ngIf="game.location_url" class="flex items-center gap-2 text-gray-700 text-sm mt-1 select-none">
+        <svg class="w-5 h-5 text-secondary flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M12 11c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3z"/>
           <path stroke-linecap="round" stroke-linejoin="round" d="M12 22s8-8 8-12a8 8 0 10-16 0c0 4 8 12 8 12z"/>
         </svg>
-        <strong>URL Ubicación: </strong>
+        <span><strong>URL ubicación:</strong></span>
         <a [href]="game.location_url" target="_blank" class="text-blue-600 underline truncate block max-w-full">
           {{ game.location_url }}
         </a>
-      </p>
+      </div>
+
+      <!-- Separador -->
+      <div *ngIf="game.images.length" class="border-t border-gray-200 my-3"></div>
 
       <!-- Imágenes -->
-      <div *ngIf="game.images.length" class="mt-4">
-        <h3 class="font-semibold mb-2 text-gray-700 select-none">Imágenes del evento:</h3>
-        <div class="flex flex-wrap gap-2">
-          <img *ngFor="let img of game.images" [src]="img" class="w-24 h-24 object-cover rounded border select-none" />
-        </div>
+      <div *ngIf="game.images.length" class="flex flex-wrap gap-2 mt-1">
+        <img 
+          *ngFor="let img of game.images" 
+          [src]="img" 
+          class="w-20 h-20 md:w-24 md:h-24 object-cover rounded-lg border select-none" 
+        />
       </div>
-      
+
+      <!-- Separador -->
+      <div class="border-t border-gray-200 my-3"></div>
 
       <!-- Botones -->
-      <div class="mt-5 flex justify-between items-center w-full">
-
-        <!-- Izquierda: Editar y Eliminar -->
+      <div class="flex justify-between items-center mt-2">
+        
+        <!-- Botones izquierda -->
         <div class="flex gap-2">
-          <!-- Editar (lápiz) -->
-          <button (click)="editEvent(game)" class="bg-yellow-400 hover:bg-yellow-500 text-white p-2 rounded-full flex items-center justify-center select-none">
+          <!-- Editar -->
+          <button (click)="editEvent(game)" 
+            class="bg-yellow-400 hover:bg-yellow-500 text-white p-2 rounded-full flex items-center justify-center select-none transition">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 20h9"/>
               <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 3.5l4 4L7 21H3v-4L16.5 3.5z"/>
             </svg>
           </button>
 
-          <!-- Eliminar (papelera) -->
-          <button (click)="openDeleteConfirm(game.id)" class="bg-red-500 hover:bg-red-600 text-white p-2 rounded-full flex items-center justify-center select-none">
+          <!-- Eliminar -->
+          <button (click)="openDeleteConfirm(game.id)" 
+            class="bg-red-500 hover:bg-red-600 text-white p-2 rounded-full flex items-center justify-center select-none transition">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M19 7L5 7"/>
               <path stroke-linecap="round" stroke-linejoin="round" d="M6 7v12a2 2 0 002 2h8a2 2 0 002-2V7"/>
@@ -210,17 +279,27 @@
           </button>
         </div>
 
-        <!-- Derecha: Ver más -->
-        <button (click)="openModal(game)" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-1 rounded select-none">
-          Ver más
+        <!-- Botón derecha -->
+        <button 
+          (click)="openModal(game)" 
+          class="
+             bg-blue-300 hover:bg-blue-100
+            text-black font-bold 
+            py-2 px-4 rounded-lg 
+            shadow shadow-black/30 
+            ring-1 ring-white/10 
+            hover:shadow-2xl hover:shadow-black/40
+            transition select-none
+          ">
+          Más detalles
         </button>
 
       </div>
 
-
     </div>
   </div>
 </section>
+
 
 <!-- Modal de detalles -->
 <app-modal-event-details

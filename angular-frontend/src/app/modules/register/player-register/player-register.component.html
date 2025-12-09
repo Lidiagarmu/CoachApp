@@ -224,11 +224,11 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3l18 18"/>
               </svg>
             </button>
-            <p *ngIf="registerForm.errors?.['passwordMismatch']" class="text-red-500 text-sm text-center mt-2 select-none">
-              Las contraseñas no coinciden.
-            </p>
           </div>
 
+          <p *ngIf="registerForm.errors?.['passwordMismatch']" class="text-red-500 text-sm text-center mt-2 select-none">
+              Las contraseñas no coinciden.
+          </p>
 
           <!-- Botón de enviar -->
           <button type="submit"
