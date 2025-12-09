@@ -22,6 +22,9 @@ export class ModalEventDetailsComponent {
   // Modal interno para manejo del evento seleccionado
   selectedEvent?: AppEvent;
 
+  imageIndex = 0;
+  isImageViewerOpen = false;
+
   ngOnChanges(): void {
     if (this.event) {
       this.openModal(this.event);
@@ -65,4 +68,26 @@ export class ModalEventDetailsComponent {
     this.games = [];
     this.close.emit();
   }
+
+  openImageViewer(i: number) {
+    this.imageIndex = i;
+    this.isImageViewerOpen = true;
+  }
+
+  closeImageViewer() {
+    this.isImageViewerOpen = false;
+  }
+
+  nextImage() {
+  if (!this.selectedEvent?.images) return;
+  this.imageIndex = (this.imageIndex + 1) % this.selectedEvent.images.length;
+  }
+
+  prevImage() {
+    if (!this.selectedEvent?.images) return;
+    this.imageIndex =
+      (this.imageIndex - 1 + this.selectedEvent.images.length) %
+      this.selectedEvent.images.length;
+  }
+
 }
