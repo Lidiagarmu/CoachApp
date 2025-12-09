@@ -24,38 +24,38 @@
     
     <!-- Usuario -->
     <div class="flex items-center gap-4 mb-6 border-b border-gray-200 pb-4">
-      <div class="w-12 h-12 rounded-full bg-blue-500 text-black flex items-center justify-center text-lg font-bold shadow">
+      <div class="w-12 h-12 rounded-full bg-blue-500 text-black flex items-center justify-center text-lg font-bold shadow select-none">
         {{ nickname?.charAt(0)?.toUpperCase() || 'C' }}
       </div>
       <div>
-        <p class="text-lg font-semibold text-gray-800">{{ nickname }}</p>
-        <p class="text-sm text-gray-500">{{ role }}</p>
+        <p class="text-lg font-semibold text-gray-800 select-none">{{ nickname }}</p>
+        <p class="text-sm text-gray-500 select-none">{{ role }}</p>
       </div>
     </div>
 
     <!-- Navegación -->
     <nav class="flex flex-col gap-3">
-      <button (click)="openTab('team'); toggleMenu()" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 w-full">
+      <button (click)="openTab('team'); toggleMenu()" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 w-full select-none">
          <svg class="w-5 h-5 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
             d="M12 3l7 4v5c0 5-3.5 8-7 9-3.5-1-7-4-7-9V7l7-4z" />
         </svg>
         Equipo
       </button>
-      <button (click)="openTab('players'); toggleMenu()" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 w-full">
+      <button (click)="openTab('players'); toggleMenu()" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 w-full select-none">
         <svg class="w-5 h-5 text-black" fill="currentColor" viewBox="0 0 24 24">
           <path d="M16 11c1.7 0 3-1.3 3-3S17.7 5 16 5s-3 1.3-3 3 1.3 3 3 3zm-8 0c1.7 0 3-1.3 3-3S9.7 5 8 5 5 6.3 5 8s1.3 3 3 3zm0 2c-2.3 0-7 1.2-7 3.5V19h14v-2.5c0-2.3-4.7-3.5-7-3.5zm8 0c-.3 0-.6 0-.9.1 1.1.8 1.9 1.8 1.9 3.4V19h6v-2.5c0-2.3-4.7-3.5-7-3.5z"/>
         </svg>
         Jugadores
       </button>
-      <button (click)="openTab('events'); toggleMenu()" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 w-full">
+      <button (click)="openTab('events'); toggleMenu()" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 w-full select-none">
         <svg class="w-5 h-5 text-black" fill="currentColor" viewBox="0 0 24 24">
           <path stroke-width="2"
             d="M19 4h-1V2h-2v2H8V2H6v2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 16H5V10h14v10zM5 6h14v2H5V6z"/>
         </svg>
         Eventos
       </button>
-      <button (click)="openTab('settings'); toggleMenu()" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 w-full">
+      <button (click)="openTab('settings'); toggleMenu()" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 w-full select-none">
         <svg class="w-5 h-5 text-black" fill="currentColor" viewBox="0 0 24 24">
           <path d="M19.4 12.9c.04-.3.06-.6.06-.9s-.02-.6-.06-.9l2.11-1.65a.5.5 0 0 0 .12-.64l-2-3.46a.5.5 0 0 0-.61-.22l-2.49 1a6.97 6.97 0 0 0-1.56-.9l-.38-2.65a.5.5 0 0 0-.5-.42h-4a.5.5 0 0 0-.5.42l-.38 2.65c-.57.22-1.11.52-1.56.9l-2.49-1a.5.5 0 0 0-.61.22l-2 3.46a.5.5 0 0 0 .12.64l2.11 1.65c-.04.3-.06.6-.06.9s.02.6.06.9l-2.11 1.65a.5.5 0 0 0-.12.64l2 3.46c.14.24.44.34.69.22l2.49-1c.45.38.99.68 1.56.9l.38 2.65c.05.26.26.42.5.42h4c.24 0 .45-.16.5-.42l.38-2.65c.57-.22 1.11-.52 1.56-.9l2.49 1c.25.12.55.02.69-.22l2-3.46a.5.5 0 0 0-.12-.64l-2.11-1.65zM12 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7z"/>
         </svg>
@@ -84,16 +84,16 @@
     class="hidden md:flex fixed top-[5rem] left-0 bottom-0 w-64 bg-primary text-white shadow-xl z-40
          transform transition-transform duration-300
          md:translate-x-0
-         flex-col"
+         flex-col select-none"
   >
     <!-- Perfil Coach -->
     <div class="flex items-center gap-4 p-6 border-b border-primary/30">
-      <div class="w-12 h-12 rounded-full bg-blue-500 text-black flex items-center justify-center text-lg font-bold shadow">
+      <div class="w-12 h-12 rounded-full bg-blue-500 text-black flex items-center justify-center text-lg font-bold shadow select-none">
         {{ nickname?.charAt(0)?.toUpperCase() || 'C' }}
       </div>
       <div>
-        <p class="text-xl text-black font-semibold">{{ nickname }}</p>
-        <p class="text-sm text-gray-600">{{ role }}</p>
+        <p class="text-xl text-black font-semibold select-none">{{ nickname }}</p>
+        <p class="text-sm text-gray-600 select-none">{{ role }}</p>
       </div>
     </div>
 
@@ -103,7 +103,7 @@
       <!-- EQUIPO -->
       <button
         (click)="openTab('team'); isMenuOpen = false"
-        class="flex items-center gap-2 w-full px-4 py-2 rounded-lg transition font-medium"
+        class="flex items-center gap-2 w-full px-4 py-2 rounded-lg transition font-medium select-none"
         [ngClass]="{
           'bg-gray-100 text-black font-bold': activeTab === 'team',
           'text-white hover:bg-primary/70': activeTab !== 'team'
@@ -119,7 +119,7 @@
       <!-- JUGADORES -->
       <button
         (click)="openTab('players'); isMenuOpen = false"
-        class="flex items-center gap-2 w-full px-4 py-2 rounded-lg transition font-medium"
+        class="flex items-center gap-2 w-full px-4 py-2 rounded-lg transition font-medium select-none"
         [ngClass]="{
           'bg-gray-100 text-black font-bold': activeTab === 'players',
           'text-white hover:bg-primary/70': activeTab !== 'players'
@@ -134,7 +134,7 @@
       <!-- EVENTOS -->
       <button
         (click)="openTab('events'); isMenuOpen = false"
-        class="flex items-center gap-2 w-full px-4 py-2 rounded-lg transition font-medium"
+        class="flex items-center gap-2 w-full px-4 py-2 rounded-lg transition font-medium select-none"
         [ngClass]="{
           'bg-gray-100 text-black font-bold': activeTab === 'events',
           'text-white hover:bg-primary/70': activeTab !== 'events'
@@ -150,7 +150,7 @@
       <!-- AJUSTES -->
       <button
         (click)="openTab('settings'); isMenuOpen = false"
-        class="flex items-center gap-2 w-full px-4 py-2 rounded-lg transition font-medium"
+        class="flex items-center gap-2 w-full px-4 py-2 rounded-lg transition font-mediu select-none"
         [ngClass]="{
           'bg-gray-100 text-black font-bold': activeTab === 'settings',
           'text-white hover:bg-primary/70': activeTab !== 'settings'
