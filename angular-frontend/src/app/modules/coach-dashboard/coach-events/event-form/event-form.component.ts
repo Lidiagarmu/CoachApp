@@ -30,21 +30,25 @@ export class EventFormComponent {
     this.eventForm = new FormGroup({
       type: new FormControl('', Validators.required),
       title: new FormControl('', Validators.required),
-      description: new FormControl(''),
+      description: new FormControl('', Validators.required),
       date: new FormControl('', Validators.required),
       time: new FormControl('', Validators.required),
       duration: new FormControl(60, [Validators.required, Validators.min(1)]),
-      location_name: new FormControl(''),
-      location_url: new FormControl(''),
+      location_name: new FormControl('', Validators.required),
+      location_url: new FormControl('', Validators.required),
+
+
       training_type: new FormControl(''), // campo o gimnasio
       gym_focus: new FormControl(''), // fuerza, resistencia, preventivo, velocidad, pliometría
       focus_area: new FormControl(''), // tecnico, tactico, fisico o mixto
+
       opponent: new FormControl(''),
       match_type: new FormControl(''),
     });
 
     // Suscribirse a cambios en tipo de evento
     this.eventForm.get('type')?.valueChanges.subscribe(value => {
+
       if (value === 'training') {
         this.eventForm.patchValue({ opponent: '', match_type: '' });
       } else if (value === 'match') {
@@ -53,6 +57,7 @@ export class EventFormComponent {
     });
 
     // Suscribirse a cambios en tipo de entrenamiento (campo/gimnasio)
+
     this.eventForm.get('training_type')?.valueChanges.subscribe(value => {
       if (value === 'campo') {
         this.eventForm.patchValue({ gym_focus: '' });
@@ -60,6 +65,41 @@ export class EventFormComponent {
         this.eventForm.patchValue({ focus_area: '' });
       }
     });
+
+    // Añadir validators dinámicos según el tipo de evento
+    this.eventForm.get('type')?.valueChanges.subscribe(type => {
+      if (type === 'training') {
+        this.eventForm.get('training_type')?.setValidators(Validators.required);
+        this.eventForm.get('match_type')?.clearValidators();
+      }
+
+      if (type === 'match') {
+        this.eventForm.get('match_type')?.setValidators(Validators.required);
+        this.eventForm.get('training_type')?.clearValidators();
+        this.eventForm.get('gym_focus')?.clearValidators();
+        this.eventForm.get('focus_area')?.clearValidators();
+      }
+
+      this.eventForm.get('training_type')?.updateValueAndValidity();
+      this.eventForm.get('match_type')?.updateValueAndValidity();
+    });
+
+    // Añadir validators dinámicos según campo/gimnasio
+    this.eventForm.get('training_type')?.valueChanges.subscribe(training => {
+      if (training === 'campo') {
+        this.eventForm.get('focus_area')?.setValidators(Validators.required);
+        this.eventForm.get('gym_focus')?.clearValidators();
+      }
+
+      if (training === 'gimnasio') {
+        this.eventForm.get('gym_focus')?.setValidators(Validators.required);
+        this.eventForm.get('focus_area')?.clearValidators();
+      }
+
+      this.eventForm.get('gym_focus')?.updateValueAndValidity();
+      this.eventForm.get('focus_area')?.updateValueAndValidity();
+    });
+
   }
 
   ngOnChanges(): void {
@@ -74,7 +114,12 @@ export class EventFormComponent {
   }
 
   submit(): void {
-    if (this.eventForm.invalid) return;
+
+    // Si el formulario es inválido, marcar todos los campos como tocados y salir
+    if (this.eventForm.invalid) {
+      this.eventForm.markAllAsTouched(); // <-- esto fuerza a que se muestren los errores de los required
+      return;
+    }
 
     const formValue = this.eventForm.value;
     const eventData: Partial<AppEvent> = {
@@ -87,9 +132,6 @@ export class EventFormComponent {
         location_url: formValue.location_url || ''
     };
 
-    console.log('🟢 Enviando eventData:', eventData);
-    console.log('📸 Archivos seleccionados:', this.selectedFiles);
-    console.log('📊 Total de archivos:', this.selectedFiles.length);
 
     const handleAfterSave = (eventId: number) => {
       if (this.selectedFiles.length > 0) {

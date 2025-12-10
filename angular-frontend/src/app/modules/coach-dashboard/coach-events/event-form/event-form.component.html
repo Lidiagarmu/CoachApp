@@ -15,11 +15,12 @@
           'border-green-500': eventForm.get('type')?.valid && eventForm.get('type')?.touched,
           'border-gray-300': !eventForm.get('type')?.touched
        }">>
-          <option value="" disabled>Selecciona tipo</option>
+          <option value="" disabled>Selecciona
+             tipo</option>
           <option value="training">Entrenamiento</option>
           <option value="match">Partido</option>
         </select>
-      <span *ngIf="eventForm.get('title')?.invalid && eventForm.get('title')?.touched"
+      <span *ngIf="eventForm.get('type')?.invalid && eventForm.get('type')?.touched"
             class="text-red-500 text-sm mt-1">
         El tipo de evento es obligatorio
       </span>
@@ -58,7 +59,7 @@
           'border-gray-300': !eventForm.get('date')?.touched
         }"
       >
-      <span *ngIf="eventForm.get('title')?.invalid && eventForm.get('title')?.touched"
+      <span *ngIf="eventForm.get('date')?.invalid && eventForm.get('date')?.touched"
             class="text-red-500 text-sm mt-1">
         La fecha es obligatoria
       </span>
@@ -73,7 +74,7 @@
           'border-gray-300': !eventForm.get('time')?.touched
         }"
         >
-        <span *ngIf="eventForm.get('title')?.invalid && eventForm.get('title')?.touched"
+        <span *ngIf="eventForm.get('time')?.invalid && eventForm.get('time')?.touched"
             class="text-red-500 text-sm mt-1">
         La hora es obligatoria
         </span>
@@ -84,12 +85,12 @@
         <label class="mb-1 font-semibold select-none">Duración* (min)</label>
         <input type="number" formControlName="duration" class="border rounded px-3 py-2 text-gray-700"
         [ngClass]="{
-          'border-red-500': eventForm.get('time')?.invalid && eventForm.get('time')?.touched,
-          'border-green-500': eventForm.get('time')?.valid && eventForm.get('time')?.touched,
-          'border-gray-300': !eventForm.get('time')?.touched
+          'border-red-500': eventForm.get('duration')?.invalid && eventForm.get('duration')?.touched,
+          'border-green-500': eventForm.get('duration')?.valid && eventForm.get('duration')?.touched,
+          'border-gray-300': !eventForm.get('duration')?.touched
         }"
         >
-        <span *ngIf="eventForm.get('title')?.invalid && eventForm.get('title')?.touched"
+        <span *ngIf="eventForm.get('duration')?.invalid && eventForm.get('duration')?.touched"
             class="text-red-500 text-sm mt-1">
           La duración es obligatoria
         </span>
@@ -97,28 +98,65 @@
 
       <!-- Ubicación -->
       <div class="flex flex-col">
-        <label class="mb-1 font-semibold select-none">Lugar</label>
-        <input type="text" formControlName="location_name" class="border rounded px-3 py-2 text-gray-700">
+        <label class="mb-1 font-semibold select-none">Lugar*</label>
+        <input type="text" formControlName="location_name" class="border rounded px-3 py-2 text-gray-700"
+          [ngClass]="{
+          'border-red-500': eventForm.get('location_name')?.invalid && eventForm.get('location_name')?.touched,
+          'border-green-500': eventForm.get('location_name')?.valid && eventForm.get('location_name')?.touched,
+          'border-gray-300': !eventForm.get('location_name')?.touched
+        }"
+        >
+      <span *ngIf="eventForm.get('location_name')?.invalid && eventForm.get('location_name')?.touched"
+            class="text-red-500 text-sm mt-1">
+          El lugar es obligatorio
+        </span>
       </div>
       <div class="flex flex-col">
-        <label class="mb-1 font-semibold select-none">URL ubicación</label>
-        <input type="url" formControlName="location_url" class="border rounded px-3 py-2 text-gray-700">
+        <label class="mb-1 font-semibold select-none">URL ubicación*</label>
+        <input type="url" formControlName="location_url" class="border rounded px-3 py-2 text-gray-700"
+          [ngClass]="{
+          'border-red-500': eventForm.get('location_url')?.invalid && eventForm.get('location_url')?.touched,
+          'border-green-500': eventForm.get('location_url')?.valid && eventForm.get('location_url')?.touched,
+          'border-gray-300': !eventForm.get('location_url')?.touched
+        }"
+        >
+         <span *ngIf="eventForm.get('location_url')?.invalid && eventForm.get('location_url')?.touched"
+            class="text-red-500 text-sm mt-1">
+          La URL es obligatoria
+        </span>
       </div>
 
       <!-- Campos específicos según tipo -->
       <ng-container *ngIf="eventForm.get('type')?.value === 'training'">
         <div class="flex flex-col">
           <label class="mb-1 font-semibold select-none">Tipo de entrenamiento*</label>
-          <select formControlName="training_type" class="border rounded px-3 py-2 text-gray-700">
+          <select formControlName="training_type" class="border rounded px-3 py-2 text-gray-700"
+          [ngClass]="{
+              'border-red-500': eventForm.get('training_type')?.invalid && eventForm.get('training_type')?.touched,
+              'border-green-500': eventForm.get('training_type')?.valid && eventForm.get('training_type')?.touched,
+              'border-gray-300': !eventForm.get('training_type')?.touched
+            }"
+          >
             <option value="" disabled>Selecciona tipo</option>
             <option value="campo">Campo</option>
             <option value="gimnasio">Gimnasio</option>
           </select>
+
+         <span *ngIf="eventForm.get('training_type')?.invalid && eventForm.get('training_type')?.touched"
+            class="text-red-500 text-sm mt-1">
+          El tipo de entrenamiento es obligatorio
+        </span>
         </div>
 
         <div *ngIf="eventForm.get('training_type')?.value === 'gimnasio'" class="flex flex-col">
-          <label class="mb-1 font-semibold select-none">Especialidad gimnasio*</label>
-          <select formControlName="gym_focus" class="border rounded px-3 py-2 text-gray-700">
+          <label class="mb-1 font-semibold select-none">Especialidad*</label>
+          <select formControlName="gym_focus" class="border rounded px-3 py-2 text-gray-700"
+          [ngClass]="{
+              'border-red-500': eventForm.get('gym_focus')?.invalid && eventForm.get('gym_focus')?.touched,
+              'border-green-500': eventForm.get('gym_focus')?.valid && eventForm.get('gym_focus')?.touched,
+              'border-gray-300': !eventForm.get('gym_focus')?.touched
+            }"
+          >
             <option value="" disabled>Selecciona especialidad</option>
             <option value="fuerza">Fuerza</option>
             <option value="resistencia">Resistencia</option>
@@ -126,6 +164,12 @@
             <option value="velocidad">Velocidad</option>
             <option value="pliometría">Pliometría</option>
           </select>
+
+        <span *ngIf="eventForm.get('gym_focus')?.invalid && eventForm.get('gym_focus')?.touched"
+            class="text-red-500 text-sm mt-1">
+          La especialidad es obligatoria
+        </span>
+        
         </div>
 
         <div *ngIf="eventForm.get('training_type')?.value === 'campo'" class="flex flex-col">
@@ -142,7 +186,7 @@
 
       <ng-container *ngIf="eventForm.get('type')?.value === 'match'">
         <div class="flex flex-col">
-          <label class="mb-1 font-semibold select-none">Rival</label>
+          <label class="mb-1 font-semibold select-none">Rival*</label>
           <input type="text" formControlName="opponent" placeholder="Nombre del equipo rival" class="border rounded px-3 py-2 text-gray-700">
         </div>
         <div class="flex flex-col">
