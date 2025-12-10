@@ -33,7 +33,7 @@ export class EventService {
             description: event.description ?? '',
             date: event.date ?? '',
             time: event.time ?? '',
-            duration: event.duration ?? 60,
+            duration: event.duration ?? '',
             location_name: event.location_name ?? '',
             location_url: event.location_url ?? '',
             images: event.images?.map(img =>

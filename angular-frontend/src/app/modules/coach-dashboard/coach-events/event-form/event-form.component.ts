@@ -38,67 +38,68 @@ export class EventFormComponent {
       location_url: new FormControl('', Validators.required),
 
 
-      training_type: new FormControl(''), // campo o gimnasio
-      gym_focus: new FormControl(''), // fuerza, resistencia, preventivo, velocidad, pliometría
-      focus_area: new FormControl(''), // tecnico, tactico, fisico o mixto
+      training_type: new FormControl('', Validators.required),
+      gym_focus: new FormControl('', Validators.required),
+      focus_area: new FormControl('', Validators.required),
 
-      opponent: new FormControl(''),
-      match_type: new FormControl(''),
+      opponent: new FormControl('', Validators.required),
+      match_type: new FormControl('', Validators.required),
     });
 
-    // Suscribirse a cambios en tipo de evento
-    this.eventForm.get('type')?.valueChanges.subscribe(value => {
-
-      if (value === 'training') {
-        this.eventForm.patchValue({ opponent: '', match_type: '' });
-      } else if (value === 'match') {
-        this.eventForm.patchValue({ training_type: 'campo', gym_focus: '', focus_area: '' });
-      }
-    });
-
-    // Suscribirse a cambios en tipo de entrenamiento (campo/gimnasio)
-
-    this.eventForm.get('training_type')?.valueChanges.subscribe(value => {
-      if (value === 'campo') {
-        this.eventForm.patchValue({ gym_focus: '' });
-      } else if (value === 'gimnasio') {
-        this.eventForm.patchValue({ focus_area: '' });
-      }
-    });
-
-    // Añadir validators dinámicos según el tipo de evento
     this.eventForm.get('type')?.valueChanges.subscribe(type => {
-      if (type === 'training') {
-        this.eventForm.get('training_type')?.setValidators(Validators.required);
-        this.eventForm.get('match_type')?.clearValidators();
-      }
 
-      if (type === 'match') {
-        this.eventForm.get('match_type')?.setValidators(Validators.required);
-        this.eventForm.get('training_type')?.clearValidators();
-        this.eventForm.get('gym_focus')?.clearValidators();
-        this.eventForm.get('focus_area')?.clearValidators();
-      }
+    // Reset para evitar datos incoherentes
+    if (type === 'training') {
+      this.eventForm.patchValue({
+        opponent: '',
+        match_type: ''
+      });
 
-      this.eventForm.get('training_type')?.updateValueAndValidity();
-      this.eventForm.get('match_type')?.updateValueAndValidity();
-    });
+      this.eventForm.get('training_type')?.setValidators(Validators.required);
+      this.eventForm.get('match_type')?.clearValidators();
+      this.eventForm.get('opponent')?.clearValidators();
+    }
 
-    // Añadir validators dinámicos según campo/gimnasio
-    this.eventForm.get('training_type')?.valueChanges.subscribe(training => {
-      if (training === 'campo') {
-        this.eventForm.get('focus_area')?.setValidators(Validators.required);
-        this.eventForm.get('gym_focus')?.clearValidators();
-      }
+    if (type === 'match') {
+      this.eventForm.patchValue({
+        training_type: '',
+        gym_focus: '',
+        focus_area: ''
+      });
 
-      if (training === 'gimnasio') {
-        this.eventForm.get('gym_focus')?.setValidators(Validators.required);
-        this.eventForm.get('focus_area')?.clearValidators();
-      }
+      this.eventForm.get('match_type')?.setValidators(Validators.required);
+      this.eventForm.get('opponent')?.setValidators(Validators.required);
 
-      this.eventForm.get('gym_focus')?.updateValueAndValidity();
-      this.eventForm.get('focus_area')?.updateValueAndValidity();
-    });
+      this.eventForm.get('training_type')?.clearValidators();
+      this.eventForm.get('gym_focus')?.clearValidators();
+      this.eventForm.get('focus_area')?.clearValidators();
+    }
+
+    // Actualizar validadores
+    this.eventForm.get('training_type')?.updateValueAndValidity();
+    this.eventForm.get('gym_focus')?.updateValueAndValidity();
+    this.eventForm.get('focus_area')?.updateValueAndValidity();
+    this.eventForm.get('match_type')?.updateValueAndValidity();
+    this.eventForm.get('opponent')?.updateValueAndValidity();
+  });
+
+  this.eventForm.get('training_type')?.valueChanges.subscribe(training => {
+
+    if (training === 'campo') {
+      this.eventForm.get('focus_area')?.setValidators(Validators.required);
+      this.eventForm.get('gym_focus')?.clearValidators();
+    }
+
+    if (training === 'gimnasio') {
+      this.eventForm.get('gym_focus')?.setValidators(Validators.required);
+      this.eventForm.get('focus_area')?.clearValidators();
+    }
+
+    this.eventForm.get('gym_focus')?.updateValueAndValidity();
+    this.eventForm.get('focus_area')?.updateValueAndValidity();
+  });
+
+
 
   }
 

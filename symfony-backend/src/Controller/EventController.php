@@ -76,7 +76,7 @@ class EventController extends AbstractController
 
             $event->setDate($date);
             $event->setTime($time);
-            $event->setDuration($data['duration'] ?? 60);
+            $event->setDuration($data['duration']);
             $team = $this->teamRepo->find($teamId);
             $event->setTeam($team);
 
