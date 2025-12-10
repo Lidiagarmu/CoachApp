@@ -67,7 +67,7 @@ class EventService
         $event->setDescription($data['description'] ?? '');
         $event->setDate(new \DateTime($data['date']));
         $event->setTime(new \DateTime($data['time']));
-        $event->setDuration($data['duration'] ?? 60);
+        $event->setDuration($data['duration'] ?? '');
         $event->setLocationName($data['location_name'] ?? '');
         $event->setLocationUrl($data['location_url'] ?? '');
         $event->setType($data['type']);
