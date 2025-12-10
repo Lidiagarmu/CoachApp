@@ -33,7 +33,7 @@ export class EventFormComponent {
       description: new FormControl('', Validators.required),
       date: new FormControl('', Validators.required),
       time: new FormControl('', Validators.required),
-      duration: new FormControl(60, [Validators.required, Validators.min(1)]),
+      duration: new FormControl('', [Validators.required, Validators.min(1)]),
       location_name: new FormControl('', Validators.required),
       location_url: new FormControl('', Validators.required),
 
