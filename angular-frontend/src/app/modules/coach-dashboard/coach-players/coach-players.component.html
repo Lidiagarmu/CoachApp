@@ -13,94 +13,120 @@
 >
 
   <!-- PLAYER LIST -  TABLE FOR DESKTOP AND CARDS FOR MOBILE -->
-  <!-- DESKTOP TABLE -->
-  <div class="hidden sm:block overflow-x-auto">
-    <table class="min-w-full border rounded-lg overflow-hidden">
-      <thead>
-        <tr class="bg-gray-100 text-center">
-          <th class="p-3 border">Nombre completo</th>
-          <th class="p-3 border">Apodo</th>
-          <th class="p-3 border">Dorsal</th>
-          <th class="p-3 border">Acciones</th>
-        </tr>
-      </thead>
+  <div
+  *ngIf="!loading && players.length > 0"
+  class="bg-white/80 border border-gray-200 rounded-2xl shadow-md p-4 sm:p-6"
+>
 
-      <tbody>
-        <tr
-          *ngFor="let player of players"
-          class="hover:bg-gray-50 transition"
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+  <div
+    *ngFor="let player of players"
+    class="group bg-white border rounded-2xl p-5 shadow-sm
+           transition-all duration-300
+           hover:-translate-y-1 hover:shadow-xl hover:border-primary/40"
+  >
+
+    <!-- HEADER -->
+    <div class="flex items-start justify-between mb-4">
+
+      <!-- AVATAR + NAME -->
+      <div class="flex items-center gap-3">
+        <!-- Avatar -->
+        <div
+          class="w-12 h-12 rounded-full bg-primary/20 text-black
+                 flex items-center justify-center font-bold text-lg select-none"
         >
-          <td class="p-3 border font-medium">{{ player.fullName || 'Jugador sin nombre' }}</td>
-          <td class="p-3 border">{{ player.nickname || '—' }}</td>
-          <td class="p-3 border text-center">{{ player.number || '—' }}</td>
-          <td class="p-3 border text-center">
-            <ng-container *ngIf="player.invited; else inviteBtnDesktop">
-              <button disabled class="bg-gray-300 px-4 py-2 rounded-lg text-sm">
-                Esperando respuesta
-              </button>
-            </ng-container>
-
-            <ng-template #inviteBtnDesktop>
-              <button
-                (click)="openConfirmModal(player)"
-                class="bg-primary px-4 py-2 rounded-lg text-sm"
-              >
-                Invitar
-              </button>
-            </ng-template>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-  <!-- MOBILE CARDS -->
-  <div class="sm:hidden space-y-4">
-    <div
-      *ngFor="let player of players"
-      class="border rounded-xl p-4 shadow-sm bg-white space-y-2"
-    >
-      <div>
-        <p class="text-xs text-gray-500">Nombre</p>
-        <p class="font-medium">{{ player.fullName || 'Jugador sin nombre' }}</p>
-      </div>
-
-      <div class="flex justify-between gap-4">
-        <div>
-          <p class="text-xs text-gray-500">Apodo</p>
-          <p>{{ player.nickname || '—' }}</p>
+          {{ (player.fullName || 'J')[0] }}
         </div>
 
+        <!-- Name -->
         <div>
-          <p class="text-xs text-gray-500">Dorsal</p>
-          <p class="text-center">{{ player.number || '—' }}</p>
+          <h3 class="font-semibold text-gray-800 leading-tight">
+            {{ player.fullName || 'Jugador sin nombre' }}
+          </h3>
+          <p class="text-sm text-gray-500">
+            {{ player.nickname || 'Sin apodo' }}
+          </p>
         </div>
       </div>
 
-      <div class="pt-2">
-        <ng-container *ngIf="player.invited; else inviteBtnMobile">
-          <button
-            disabled
-            class="w-full bg-gray-300 py-2 rounded-lg text-sm"
-          >
-            Esperando respuesta
-          </button>
-        </ng-container>
-
-        <ng-template #inviteBtnMobile>
-          <button
-            (click)="openConfirmModal(player)"
-            class="w-full bg-primary py-2 rounded-lg text-sm"
-          >
-            Invitar
-          </button>
-        </ng-template>
+      <!-- DORSAL -->
+      <div
+        class="w-9 h-9 rounded-full bg-gray-100 text-gray-700
+               flex items-center justify-center font-semibold text-sm"
+      >
+        {{ player.number || '—' }}
       </div>
     </div>
+
+    <!-- INFO -->
+    <div class="flex justify-between items-center mb-5">
+
+      <!-- STATUS -->
+      <div class="flex items-center gap-2">
+        <span
+          class="relative flex h-2.5 w-2.5"
+          *ngIf="!player.invited"
+        >
+          <span
+            class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"
+          ></span>
+          <span
+            class="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"
+          ></span>
+        </span>
+
+        <span
+          class="relative flex h-2.5 w-2.5"
+          *ngIf="player.invited"
+        >
+          <span
+            class="animate-pulse inline-flex rounded-full h-2.5 w-2.5 bg-orange-400"
+          ></span>
+        </span>
+
+        <p
+          class="text-sm font-medium"
+          [ngClass]="player.invited ? 'text-orange-500' : 'text-green-600'"
+        >
+          {{ player.invited ? 'Invitado' : 'Disponible' }}
+        </p>
+      </div>
+
+    </div>
+
+    <!-- ACTION -->
+    <div class="flex justify-end">
+
+      <ng-container *ngIf="player.invited; else inviteBtn">
+        <button
+          disabled
+          class="px-4 py-2 rounded-xl text-sm bg-gray-200 text-gray-600 cursor-not-allowed"
+        >
+          Esperando
+        </button>
+      </ng-container>
+
+      <ng-template #inviteBtn>
+        <button
+          (click)="openConfirmModal(player)"
+          [disabled]="player.inviting"
+          class="px-5 py-2 rounded-xl text-sm font-medium
+                 bg-primary text-black
+                 transition-all duration-200
+                 hover:bg-primary/80 hover:shadow-md
+                 disabled:opacity-60 disabled:cursor-not-allowed"
+        >
+          {{ player.inviting ? 'Enviando...' : 'Invitar' }}
+        </button>
+      </ng-template>
+
+    </div>
+
   </div>
 
 </div>
-
 
 <!-- Mensaje si no hay jugadores -->
 <div *ngIf="!loading && players.length === 0" class="text-gray-500 text-center py-6 select-none">
