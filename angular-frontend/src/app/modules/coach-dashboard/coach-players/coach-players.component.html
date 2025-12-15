@@ -7,60 +7,100 @@
 
   <div *ngIf="error" class="text-red-500 mb-4 select-none">{{ error }}</div>
 
-  <!-- Lista jugadores -->
-  <div
-    *ngIf="!loading && players.length > 0"
-    class="bg-white/80 border border-gray-200 rounded-2xl shadow-md p-6 space-y-4 select-none"
-  >
-    <div class="overflow-x-auto">
-      <table class="min-w-full border rounded-lg overflow-hidden select-none">
-        <thead>
-          <tr class="bg-gray-100 text-center">
-            <th class="p-3 border font-medium text-gray-700">Nombre completo</th>
-            <th class="p-3 border font-medium text-gray-700">Apodo</th>
-            <th class="p-3 border font-medium text-gray-700">Dorsal</th>
-            <th class="p-3 border font-medium text-gray-700 text-center">Acciones</th>
-          </tr>
-        </thead>
+<div
+  *ngIf="!loading && players.length > 0"
+  class="bg-white/80 border border-gray-200 rounded-2xl shadow-md p-4 sm:p-6"
+>
 
-        <tbody>
-          <tr
-            *ngFor="let player of players"
-            class="hover:bg-gray-50 transition duration-150"
+  <!-- PLAYER LIST -  TABLE FOR DESKTOP AND CARDS FOR MOBILE -->
+  <!-- DESKTOP TABLE -->
+  <div class="hidden sm:block overflow-x-auto">
+    <table class="min-w-full border rounded-lg overflow-hidden">
+      <thead>
+        <tr class="bg-gray-100 text-center">
+          <th class="p-3 border">Nombre completo</th>
+          <th class="p-3 border">Apodo</th>
+          <th class="p-3 border">Dorsal</th>
+          <th class="p-3 border">Acciones</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr
+          *ngFor="let player of players"
+          class="hover:bg-gray-50 transition"
+        >
+          <td class="p-3 border font-medium">{{ player.fullName || 'Jugador sin nombre' }}</td>
+          <td class="p-3 border">{{ player.nickname || '—' }}</td>
+          <td class="p-3 border text-center">{{ player.number || '—' }}</td>
+          <td class="p-3 border text-center">
+            <ng-container *ngIf="player.invited; else inviteBtnDesktop">
+              <button disabled class="bg-gray-300 px-4 py-2 rounded-lg text-sm">
+                Esperando respuesta
+              </button>
+            </ng-container>
+
+            <ng-template #inviteBtnDesktop>
+              <button
+                (click)="openConfirmModal(player)"
+                class="bg-primary px-4 py-2 rounded-lg text-sm"
+              >
+                Invitar
+              </button>
+            </ng-template>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- MOBILE CARDS -->
+  <div class="sm:hidden space-y-4">
+    <div
+      *ngFor="let player of players"
+      class="border rounded-xl p-4 shadow-sm bg-white space-y-2"
+    >
+      <div>
+        <p class="text-xs text-gray-500">Nombre</p>
+        <p class="font-medium">{{ player.fullName || 'Jugador sin nombre' }}</p>
+      </div>
+
+      <div class="flex justify-between gap-4">
+        <div>
+          <p class="text-xs text-gray-500">Apodo</p>
+          <p>{{ player.nickname || '—' }}</p>
+        </div>
+
+        <div>
+          <p class="text-xs text-gray-500">Dorsal</p>
+          <p class="text-center">{{ player.number || '—' }}</p>
+        </div>
+      </div>
+
+      <div class="pt-2">
+        <ng-container *ngIf="player.invited; else inviteBtnMobile">
+          <button
+            disabled
+            class="w-full bg-gray-300 py-2 rounded-lg text-sm"
           >
-            <td class="p-3 border text-gray-800 font-medium">{{ player.fullName || 'Jugador sin nombre' }}</td>
-            <td class="p-3 border text-gray-600">{{ player.nickname || '—' }}</td>
-            <td class="p-3 border text-gray-600 text-center">{{ player.number || '—' }}</td>
-            <td class="p-3 border text-center">
-              <!-- Estado Invitación -->
-              <ng-container *ngIf="player.invited; else inviteBtn">
-                <div class="inline-flex gap-2 justify-center min-w-[180px]">
-                  <button
-                    disabled
-                    class="bg-gray-300 text-gray-600 px-4 py-2 rounded-lg text-sm cursor-not-allowed select-none"
-                  >
-                    Esperando respuesta
-                  </button>
-                </div>
-              </ng-container>
+            Esperando respuesta
+          </button>
+        </ng-container>
 
-              <!-- Botón Invitar -->
-              <ng-template #inviteBtn>
-                <button
-                  (click)="openConfirmModal(player)"
-                  [disabled]="player.inviting"
-                  class="bg-primary hover:bg-primary/80 text-black px-4 py-2 rounded-lg text-sm transition select-none"
-                >
-                  {{ player.inviting ? 'Enviando...' : 'Invitar' }}
-                </button>
-              </ng-template>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+        <ng-template #inviteBtnMobile>
+          <button
+            (click)="openConfirmModal(player)"
+            class="w-full bg-primary py-2 rounded-lg text-sm"
+          >
+            Invitar
+          </button>
+        </ng-template>
+      </div>
     </div>
   </div>
+
 </div>
+
 
 <!-- Mensaje si no hay jugadores -->
 <div *ngIf="!loading && players.length === 0" class="text-gray-500 text-center py-6 select-none">
