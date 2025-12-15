@@ -98,5 +98,29 @@ export class CoachPlayersComponent implements OnInit {
   }
 
 
+  currentPage = 1;
+
+  pageSizeMobile = 5;
+  pageSizeDesktop = 9;
+
+  get pageSize() {
+    return window.innerWidth < 640
+      ? this.pageSizeMobile
+      : this.pageSizeDesktop;
+  }
+
+  get totalPages(): number {
+    return Math.ceil(this.players.length / this.pageSize);
+  }
+
+  get paginatedPlayers() {
+    const start = (this.currentPage - 1) * this.pageSize;
+    return this.players.slice(start, start + this.pageSize);
+  }
+
+  changePage(page: number) {
+    this.currentPage = page;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
 
 }

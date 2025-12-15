@@ -21,7 +21,7 @@
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 
   <div
-    *ngFor="let player of players"
+  *ngFor="let player of paginatedPlayers"
     class="group bg-white border rounded-2xl p-5 shadow-sm
            transition-all duration-300
            hover:-translate-y-1 hover:shadow-xl hover:border-primary/40"
@@ -127,6 +127,51 @@
   </div>
 
 </div>
+
+<!-- PAGINATION -->
+<div
+  *ngIf="totalPages > 1"
+  class="flex justify-center items-center gap-2 mt-6 select-none"
+>
+
+  <!-- Prev -->
+  <button
+    (click)="changePage(currentPage - 1)"
+    [disabled]="currentPage === 1"
+    class="px-3 py-2 rounded-lg text-sm border
+           disabled:opacity-40 disabled:cursor-not-allowed
+           hover:bg-gray-100"
+  >
+    ‹
+  </button>
+
+  <!-- Pages -->
+  <button
+    *ngFor="let page of [].constructor(totalPages); let i = index"
+    (click)="changePage(i + 1)"
+    class="w-9 h-9 rounded-lg text-sm font-medium transition"
+    [ngClass]="
+      currentPage === i + 1
+        ? 'bg-primary text-black'
+        : 'bg-white border hover:bg-gray-100'
+    "
+  >
+    {{ i + 1 }}
+  </button>
+
+  <!-- Next -->
+  <button
+    (click)="changePage(currentPage + 1)"
+    [disabled]="currentPage === totalPages"
+    class="px-3 py-2 rounded-lg text-sm border
+           disabled:opacity-40 disabled:cursor-not-allowed
+           hover:bg-gray-100"
+  >
+    ›
+  </button>
+
+</div>
+
 
 <!-- Mensaje si no hay jugadores -->
 <div *ngIf="!loading && players.length === 0" class="text-gray-500 text-center py-6 select-none">
