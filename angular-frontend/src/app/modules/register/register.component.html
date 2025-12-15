@@ -16,34 +16,33 @@
       }"
       (mouseenter)="hovered = 'coach'"
       (mouseleave)="hovered = null"
-      (click)="goTo('coach')"
+     
     >
       <div class="absolute inset-0 bg-darkbg/70 hover:bg-darkbg/80 transition"></div>
       <img src="images/coach.webp" class="absolute inset-0 object-cover w-full h-full rounded-none" />
       <div class="relative z-10 text-white">
         <h2 class="text-4xl font-bold mb-4 select-none">¿Eres entrenador/a?</h2>
         <p class="max-w-xs mx-auto mb-6 text-white select-none">Crea tu perfil de entrenador/a, forma un equipo y gestiona tus entrenamientos fácilmente.</p>
-        <button class="bg-primary text-darkbg px-6 py-2 rounded-lg font-semibold hover:bg-hover transition select-none">Registrar como entrenador/a</button>
+        <button (click)="goTo('coach')" class="bg-primary text-darkbg px-6 py-2 rounded-lg font-semibold hover:bg-hover transition select-none">Registrar como entrenador/a</button>
       </div>
     </div>
 
     <!-- ⚽ PLAYER SIDE -->
     <div
-      class="relative w-full md:w-1/2 xl:basis flex flex-col items-center justify-center text-center transition-all duration-500 cursor-pointer"
+      class="relative w-full md:w-1/2 xl:basis flex flex-col items-center justify-center text-center transition-all duration-500 "
       [ngClass]="{
         'xl:w-[65%]': hovered === 'player',
         'xl:w-[35%]': hovered === 'coach'
       }"
       (mouseenter)="hovered = 'player'"
       (mouseleave)="hovered = null"
-      (click)="goTo('player')"
     >
       <div class="absolute inset-0 bg-darkbg/70 hover:bg-darkbg/80 transition"></div>
       <img src="images/player.webp" class="absolute inset-0 object-cover w-full h-full rounded-none" />
       <div class="relative z-10 text-white">
         <h2 class="text-4xl font-bold mb-4 select-none">¿Eres jugador/a?</h2>
         <p class="max-w-xs mx-auto mb-6 text-white select-none">Crea tu perfil y únete a tu equipo para estar al tanto de todos los eventos.</p>
-        <button class="bg-primary text-darkbg px-6 py-2 rounded-lg font-semibold hover:bg-hover transition select-none">Registrar como jugador/a</button>
+        <button (click)="goTo('player')" class="bg-primary text-darkbg px-6 py-2 rounded-lg font-semibold hover:bg-hover transition select-none">Registrar como jugador/a</button>
       </div>
     </div>
 
