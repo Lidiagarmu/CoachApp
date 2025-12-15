@@ -37,6 +37,8 @@ export class CoachPlayersComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.checkViewport();
+    window.addEventListener('resize', () => this.checkViewport());
     this.loadPlayers();
   }
 
@@ -98,10 +100,14 @@ export class CoachPlayersComponent implements OnInit {
   }
 
 
+
   currentPage = 1;
 
-  pageSizeMobile = 5;
+  isMobile = false;
+
+  pageSizeMobile = 4;
   pageSizeDesktop = 9;
+
 
   get pageSize() {
     return window.innerWidth < 640
@@ -122,5 +128,15 @@ export class CoachPlayersComponent implements OnInit {
     this.currentPage = page;
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
+
+  checkViewport(): void {
+  const wasMobile = this.isMobile;
+  this.isMobile = window.matchMedia('(max-width: 639px)').matches;
+
+  // Si cambia de desktop a móvil, reseteamos página
+  if (wasMobile !== this.isMobile) {
+    this.currentPage = 1;
+  }
+}
 
 }
