@@ -136,19 +136,16 @@ export class EventFormComponent {
 
     const handleAfterSave = (eventId: number) => {
       if (this.selectedFiles.length > 0) {
-        console.log('⬆️ Iniciando subida de imágenes para evento:', eventId);
-        console.log('📁 Archivos a subir:', this.selectedFiles.map(f => ({ name: f.name, size: f.size, type: f.type })));
+       
         
         this.eventService.uploadImages(eventId, this.selectedFiles).subscribe({
           next: (response) => {
-            console.log('✅ Imágenes subidas exitosamente:', response);
             this.selectedFiles = [];
             this.formSaved.emit();
             this.closeForm();
           },
            
           error: err => {
-              console.error('❌ Error subiendo imágenes', err);
 
               let rawMsg =
                 err?.error?.error ||
@@ -191,7 +188,6 @@ export class EventFormComponent {
 
         });
       } else {
-        console.log('ℹ️ Sin imágenes para subir');
         this.formSaved.emit();
         this.closeForm();
       }

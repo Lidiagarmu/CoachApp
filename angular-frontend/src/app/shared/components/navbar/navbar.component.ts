@@ -24,7 +24,6 @@ export class NavbarComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    console.log('✅ Navbar inicializado, showButton =', this.showButton, ' showHome =', this.showHome );
   }
 
 
