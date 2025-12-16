@@ -26,75 +26,69 @@
            transition-all duration-300
            hover:-translate-y-1 hover:shadow-xl hover:border-primary/40"
   >
-
-    <!-- HEADER -->
-    <div class="flex items-start justify-between mb-4">
-
-      <!-- AVATAR + NAME -->
-      <div class="flex items-center gap-3">
-        <!-- Avatar -->
-        <div
-          class="w-12 h-12 rounded-full bg-primary/20 text-black
-                 flex items-center justify-center font-bold text-lg select-none"
-        >
-          {{ (player.fullName || 'J')[0] }}
-        </div>
-
-        <!-- Name -->
-        <div>
-          <h3 class="font-semibold text-gray-800 leading-tight">
-            {{ player.fullName || 'Jugador sin nombre' }}
-          </h3>
-          <p class="text-sm text-gray-500">
-            {{ player.nickname || 'Sin apodo' }}
-          </p>
-        </div>
-      </div>
-
-      <!-- DORSAL -->
-      <div
-        class="w-9 h-9 rounded-full bg-gray-100 text-gray-700
-               flex items-center justify-center font-semibold text-sm"
-      >
-        {{ player.number || '—' }}
-      </div>
+<!-- HEADER -->
+<div class="flex items-start justify-between mb-2 relative">
+  <!-- AVATAR + NAME -->
+  <div class="flex items-center gap-3">
+    <div
+      class="w-12 h-12 rounded-full bg-primary/20 text-black
+             flex items-center justify-center font-bold text-lg select-none"
+    >
+      {{ (player.fullName || 'J')[0] }}
     </div>
 
-    <!-- INFO -->
-    <div class="flex justify-between items-center mb-5">
-
-      <!-- STATUS -->
-      <div class="flex items-center gap-2">
-        <span
-          class="relative flex h-2.5 w-2.5"
-          *ngIf="!player.invited"
-        >
-          <span
-            class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"
-          ></span>
-          <span
-            class="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"
-          ></span>
-        </span>
-
-        <span
-          class="relative flex h-2.5 w-2.5"
-          *ngIf="player.invited"
-        >
-          <span
-            class="animate-pulse inline-flex rounded-full h-2.5 w-2.5 bg-orange-400"
-          ></span>
-        </span>
-
-        <p
-          class="text-sm font-medium"
-          [ngClass]="player.invited ? 'text-orange-500' : 'text-green-600'"
-        >
-          {{ player.invited ? 'Invitado' : 'Disponible' }}
-        </p>
-      </div>
-
+    <div>
+      <h3 class="font-semibold text-gray-800 leading-tight">
+        {{ player.fullName || 'Jugador sin nombre' }}
+      </h3>
+      <p class="text-sm text-gray-500">
+        {{ player.nickname || 'Sin apodo' }}
+      </p>
     </div>
+  </div>
+
+  <!-- Badges solo en desktop -->
+  <div class="hidden sm:flex items-center gap-1">
+    <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2 py-1 rounded-full select-none">
+      {{ player.position || 'Posición' }}
+    </span>
+    <span
+      class="w-9 h-9 rounded-full bg-gray-100 text-gray-700
+             flex items-center justify-center font-semibold text-sm select-none"
+    >
+      {{ player.number || '—' }}
+    </span>
+  </div>
+</div>
+
+<!-- Badges en móvil, justo encima del status -->
+<div class="flex items-center gap-2 mt-2 mb-2 sm:hidden">
+  <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2 py-1 rounded-full select-none">
+    {{ player.position || 'Posición' }}
+  </span>
+  <span
+    class="w-8 h-8 rounded-full bg-gray-100 text-gray-700
+           flex items-center justify-center font-semibold text-sm select-none"
+  >
+    {{ player.number || '—' }}
+  </span>
+</div>
+
+<!-- STATUS -->
+<div class="flex justify-between items-center mb-5">
+  <div class="flex items-center gap-2">
+    <span class="relative flex h-2.5 w-2.5" *ngIf="!player.invited">
+      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+      <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
+    </span>
+    <span class="relative flex h-2.5 w-2.5" *ngIf="player.invited">
+      <span class="animate-pulse inline-flex rounded-full h-2.5 w-2.5 bg-orange-400"></span>
+    </span>
+    <p class="text-sm font-medium" [ngClass]="player.invited ? 'text-orange-500' : 'text-green-600'">
+      {{ player.invited ? 'Invitado' : 'Disponible' }}
+    </p>
+  </div>
+</div>
 
     <!-- ACTION -->
     <div class="flex justify-end">
