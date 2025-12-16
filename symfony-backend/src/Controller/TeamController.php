@@ -113,7 +113,9 @@ class TeamController extends AbstractController
             'players' => array_map(fn(PlayerProfile $p) => [
                 'id' => $p->getPlayerAccount()->getId(),
                 'fullName' => $p->getPlayerAccount()->getFullName(),
-                'nickname' => $p->getPlayerAccount()->getNickname()
+                'nickname' => $p->getPlayerAccount()->getNickname(),
+                'position' => $p->getPosition(), 
+                'number' => $p->getNumber()      
             ], $team->getPlayers()->toArray())
         ]);
     }
@@ -228,7 +230,10 @@ class TeamController extends AbstractController
                 'players' => array_map(fn($p) => [
                     'id' => $p->getPlayerAccount()->getId(),
                     'fullName' => $p->getPlayerAccount()->getFullName(),
-                    'nickname' => $p->getPlayerAccount()->getNickname()
+                    'nickname' => $p->getPlayerAccount()->getNickname(),
+                    'position' => $p->getPosition(),
+                    'number' => $p->getNumber()
+
                 ], $team->getPlayers()->toArray())
             ]
         ]);

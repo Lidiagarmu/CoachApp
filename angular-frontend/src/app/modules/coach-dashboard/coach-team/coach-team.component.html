@@ -113,6 +113,7 @@
 
       <div *ngIf="team.players?.length; else noPlayers">
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+          
           <div *ngFor="let player of paginatedPlayers"
               class="group bg-white border rounded-2xl p-5 shadow-sm
                       transition-all duration-300
@@ -129,6 +130,9 @@
                 <div>
                   <h3 class="font-semibold text-gray-800 leading-tight">{{ player.fullName }}</h3>
                   <p class="text-sm text-gray-500">{{ player.nickname || 'Sin apodo' }}</p>
+                   <p class="text-sm text-gray-600 font-medium mt-1">
+                   {{ player.position || 'Posición' }} #{{ player.number || '--' }}
+                    </p>
                  </div>
               </div>
             </div>

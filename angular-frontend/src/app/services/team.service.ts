@@ -6,6 +6,8 @@ export interface Player {
   id: number;
   fullName: string;
   nickname?: string;
+  position?: string;
+  number?: number;
 }
 
 export interface Team {
