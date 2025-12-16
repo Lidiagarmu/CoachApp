@@ -89,6 +89,8 @@
         <p><strong>Tipo de entrenamiento:</strong> {{ selectedEvent.training_type }}</p>
       </div>
 
+     <!-- COMENTADO PORQUE NO SE USA EN EL BACKEND, NO EXISTE
+      
       <div class="flex items-start gap-2">
       <svg xmlns="http://www.w3.org/2000/svg" 
       width="24" 
@@ -100,6 +102,8 @@
         <strong>Especialidad:</strong> {{ selectedEvent.focus_area }}
       </p>
       </div>
+
+      -->
 
       <div *ngIf="selectedEvent.training_type === 'campo'" class="flex items-start gap-2">
         <svg class="w-6 h-6 text-secondary mt-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">

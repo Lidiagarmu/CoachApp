@@ -162,6 +162,7 @@
         </span>
         </div>
 
+        <!-- CAMPO DE ESPECIALIDAD - COMENTADO PORQUE NO SE USA EN EL BACKEND
         <div *ngIf="eventForm.get('training_type')?.value === 'gimnasio'" class="flex flex-col">
           <label class="mb-1 font-semibold select-none">Especialidad</label>
           <select formControlName="focus_area" class="border rounded px-3 py-2 text-gray-700"
@@ -185,6 +186,8 @@
         </span>
         
         </div>
+
+        -->
 
         <div *ngIf="eventForm.get('training_type')?.value === 'campo'" class="flex flex-col">
           <label class="mb-1 font-semibold select-none">Área de enfoque</label>
