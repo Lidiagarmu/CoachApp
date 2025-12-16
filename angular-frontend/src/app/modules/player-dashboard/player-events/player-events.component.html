@@ -1,8 +1,33 @@
 <app-loading-spinner *ngIf="loading" text="Cargando eventos actuales..."></app-loading-spinner>
 <div *ngIf="errorMessage" class="text-red-500">{{ errorMessage }}</div>
 
+<!-- Selector de vista tipo navbar -->
+<div class="flex gap-8 justify-start mb-8 select-none border-b border-gray-200">
+  <span
+    (click)="activeView = 'trainings'"
+    class="cursor-pointer pb-2 text-lg font-semibold transition-colors"
+    [ngClass]="activeView === 'trainings'
+      ? 'text-gray-900 border-b-2 border-primary'
+      : 'text-gray-400 hover:text-gray-700'"
+  >
+    Entrenamientos
+  </span>
+
+  <span
+    (click)="activeView = 'games'"
+    class="cursor-pointer pb-2 text-lg font-semibold transition-colors"
+    [ngClass]="activeView === 'games'
+      ? 'text-gray-900 border-b-2 border-primary'
+      : 'text-gray-400 hover:text-gray-700'"
+  >
+    Partidos
+  </span>
+</div>
+
+
+
 <!-- Entrenamientos -->
-<section class="mb-12" *ngIf="trainings.length > 0">
+<section *ngIf="activeView === 'trainings'"  class="mb-12">
   <h2 class="text-2xl font-semibold mb-6 text-gray-900 select-none">Entrenamientos</h2>
 
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
@@ -94,7 +119,7 @@
 </section>
 
 <!-- Partidos -->
-<section *ngIf="games.length > 0" class="mb-12">
+<section *ngIf="activeView === 'games'"class="mb-12">
   <h2 class="text-2xl font-semibold mb-6 text-gray-900 select-none">Partidos</h2>
 
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">

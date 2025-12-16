@@ -24,6 +24,9 @@ export class PlayerEventsComponent implements OnInit, OnChanges {
 
   private _playerId?: number;
 
+  activeView: 'trainings' | 'games' = 'trainings';
+
+
   @Input()
   set playerId(value: number | undefined) {
     this._playerId = value;
