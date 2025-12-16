@@ -32,6 +32,8 @@ export class ModalEventDetailsComponent {
   }
 
   openModal(event: AppEvent): void {
+      console.log('Modal abierto con event:', event);
+
     // Construir URLs completas de imágenes
     if (event.images) {
       event.images = event.images.map(img =>
