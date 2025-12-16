@@ -38,73 +38,73 @@
       </button>
     </div>
 
-<!-- Modal editar info -->
-<div *ngIf="editMode"
-     class="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+    <!-- Modal editar info -->
+    <div *ngIf="editMode"
+        class="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
 
-  <!-- Modal container -->
-  <div class="bg-white w-full max-w-md rounded-xl shadow-lg p-6 space-y-4 relative">
+      <!-- Modal container -->
+      <div class="bg-white w-full max-w-md rounded-xl shadow-lg p-6 space-y-4 relative">
 
-    <!-- Título -->
-    <h4 class="text-lg font-semibold select-none">
-      Editar información
-    </h4>
+        <!-- Título -->
+        <h4 class="text-lg font-semibold select-none">
+          Editar información
+        </h4>
 
-    <!-- Nombre -->
-    <div>
-      <label class="block text-gray-700 mb-1 select-none">Nombre</label>
-      <input
+        <!-- Nombre -->
+        <div>
+          <label class="block text-gray-700 mb-1 select-none">Nombre</label>
+          <input
 
-        [(ngModel)]="team.name"
-        class="border rounded-lg p-2 w-full focus:ring focus:ring-primary/50"
-      />
+            [(ngModel)]="team.name"
+            class="border rounded-lg p-2 w-full focus:ring focus:ring-primary/50"
+          />
+        </div>
+
+        <!-- Imagen -->
+        <div>
+          <label class="block text-gray-700 mb-1 select-none">
+            Cambiar escudo (imagen)
+          </label>
+          <input
+            type="file"
+            (change)="onFileSelected($event)"
+            accept="image/*"
+            class="border rounded-lg p-2 w-full focus:ring focus:ring-primary/50"
+          />
+        </div>
+
+        <!-- Preview -->
+        <div *ngIf="previewUrl" class="relative w-24 h-24">
+          <img
+            [src]="previewUrl"
+            class="w-full h-full object-contain rounded-lg border"
+          />
+          <button
+            type="button"
+            (click)="removeSelectedImage()"
+            class="absolute -top-2 -right-2 bg-red-500 text-white w-6 h-6 rounded-full flex items-center justify-center hover:bg-red-700">
+            ×
+          </button>
+        </div>
+
+        <!-- Acciones -->
+        <div class="flex justify-end gap-2 pt-4">
+          <button
+            type="button"
+            (click)="editMode = false"
+            class="px-4 py-2 rounded-lg border hover:bg-gray-100">
+            Cancelar
+          </button>
+
+          <button
+            (click)="updateTeam()"
+            class="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700">
+            Guardar cambios
+          </button>
+        </div>
+
+      </div>
     </div>
-
-    <!-- Imagen -->
-    <div>
-      <label class="block text-gray-700 mb-1 select-none">
-        Cambiar escudo (imagen)
-      </label>
-      <input
-        type="file"
-        (change)="onFileSelected($event)"
-        accept="image/*"
-        class="border rounded-lg p-2 w-full focus:ring focus:ring-primary/50"
-      />
-    </div>
-
-    <!-- Preview -->
-    <div *ngIf="previewUrl" class="relative w-24 h-24">
-      <img
-        [src]="previewUrl"
-        class="w-full h-full object-contain rounded-lg border"
-      />
-      <button
-        type="button"
-        (click)="removeSelectedImage()"
-        class="absolute -top-2 -right-2 bg-red-500 text-white w-6 h-6 rounded-full flex items-center justify-center hover:bg-red-700">
-        ×
-      </button>
-    </div>
-
-    <!-- Acciones -->
-    <div class="flex justify-end gap-2 pt-4">
-      <button
-        type="button"
-        (click)="editMode = false"
-        class="px-4 py-2 rounded-lg border hover:bg-gray-100">
-        Cancelar
-      </button>
-
-      <button
-        (click)="updateTeam()"
-        class="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700">
-        Guardar cambios
-      </button>
-    </div>
-
-  </div>
-</div>
 
 
     <!-- Lista jugadores -->
@@ -114,28 +114,30 @@
       <div *ngIf="team.players?.length; else noPlayers">
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-4">
           
-       <div *ngFor="let player of paginatedPlayers"
-          class="group bg-white border rounded-2xl p-5 shadow-sm relative
-                  transition-all duration-300
-                  hover:-translate-y-1 hover:shadow-xl hover:border-primary/40">
+        <div *ngFor="let player of paginatedPlayers"
+            class="group bg-white border rounded-2xl p-5 shadow-sm relative
+                    transition-all duration-300
+                    hover:-translate-y-1 hover:shadow-xl hover:border-primary/40">
 
-        <!-- HEADER -->
-        <div class="flex items-start mb-4">
-          <!-- AVATAR + NAME -->
-          <div class="flex items-center gap-3">
-            <div class="w-12 h-12 rounded-full bg-primary/20 text-black
-                        flex items-center justify-center font-bold text-lg select-none">
-              {{ (player.fullName || 'J')[0] }}
-            </div>
+          <!-- HEADER -->
+          <div class="flex items-start mb-4">
+            <!-- AVATAR + NAME -->
+            <div class="flex items-center gap-3">
+              <div class="w-12 h-12 rounded-full bg-primary/20 text-black
+                          flex items-center justify-center font-bold text-lg select-none">
+                {{ (player.fullName || 'J')[0] }}
+              </div>
 
-            <div>
-              <h3 class="font-semibold text-gray-800 leading-tight">{{ player.fullName }}</h3>
-              <p class="text-sm text-gray-500">{{ player.nickname || 'Sin apodo' }}</p>
+              <div>
+                <h3 class="font-semibold text-gray-800 leading-tight">{{ player.fullName }}</h3>
+                <p class="text-sm text-gray-500">{{ player.nickname || 'Sin apodo' }}</p>
+              </div>
             </div>
           </div>
 
-          <!-- Badges desktop -->
-          <div class="hidden sm:flex items-center gap-1 absolute top-5 right-2">
+
+          <!-- Badges de posición y dorsal al final del card -->
+          <div class="flex items-center gap-2 mt-4 p-2 rounded-lg justify-center">
             <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2 py-1 rounded-full select-none">
               {{ player.position || 'Posición' }}
             </span>
@@ -146,31 +148,8 @@
               {{ player.number || '—' }}
             </span>
           </div>
-        </div>
 
-        <!-- Badges móvil, encima del status -->
-        <div class="flex items-center gap-2 mt-2 mb-2 sm:hidden">
-          <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2 py-1 rounded-full select-none">
-            {{ player.position || 'Posición' }}
-          </span>
-          <span
-            class="w-8 h-8 rounded-full bg-gray-100 text-gray-700
-                  flex items-center justify-center font-semibold text-sm select-none"
-          >
-            {{ player.number || '—' }}
-          </span>
-        </div>
 
-        <!-- STATUS -->
-        <div class="flex justify-between items-center mb-5">
-          <div class="flex items-center gap-2">
-            <span class="relative flex h-2.5 w-2.5">
-              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-              <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
-            </span>
-            <p class="text-sm font-medium text-green-600">Disponible</p>
-          </div>
-        </div>
 
       </div>
 
