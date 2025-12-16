@@ -46,6 +46,9 @@ export class CoachEventsComponent implements OnInit {
 
   loading = false;
 
+  activeView: 'trainings' | 'games' = 'trainings';
+
+
   constructor(private eventService: EventService) {}
 
   ngOnInit(): void {

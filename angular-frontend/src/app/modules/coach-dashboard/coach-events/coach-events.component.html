@@ -16,8 +16,11 @@
   </button>
 </div>
 
+
 <!-- Cargando -->
 <app-loading-spinner *ngIf="loading" text="Cargando eventos disponibles..."></app-loading-spinner>
+
+
 
 
 <!-- Modal de Formulario -->
@@ -31,8 +34,32 @@
 
 ></app-event-form>
 
+<!-- Selector de vista tipo navbar -->
+<div class="flex gap-8 justify-start mb-8 select-none border-b border-gray-200">
+  <span
+    (click)="activeView = 'trainings'"
+    class="cursor-pointer pb-2 text-lg font-semibold transition-colors"
+    [ngClass]="activeView === 'trainings'
+      ? 'text-gray-900 border-b-2 border-primary'
+      : 'text-gray-400 hover:text-gray-700'"
+  >
+    Entrenamientos
+  </span>
+
+  <span
+    (click)="activeView = 'games'"
+    class="cursor-pointer pb-2 text-lg font-semibold transition-colors"
+    [ngClass]="activeView === 'games'
+      ? 'text-gray-900 border-b-2 border-primary'
+      : 'text-gray-400 hover:text-gray-700'"
+  >
+    Partidos
+  </span>
+</div>
+
+
 <!-- Entrenamientos -->
-<section class="mb-12">
+<section *ngIf="activeView === 'trainings'"  class="mb-12">
   <h2 class="text-2xl font-semibold mb-6 text-gray-900 select-none">Entrenamientos</h2>
 
   <div *ngIf="trainings.length === 0" class="text-gray-500">No hay entrenamientos disponibles.</div>
@@ -150,7 +177,7 @@
 
 
 <!-- Partidos -->
-<section class="mb-12">
+<section  *ngIf="activeView === 'games'" class="mb-12">
   <h2 class="text-2xl font-semibold mb-6 text-gray-900 select-none">Partidos</h2>
 
   <div *ngIf="games.length === 0" class="text-gray-500 select-none">No hay partidos disponibles.</div>
