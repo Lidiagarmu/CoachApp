@@ -67,6 +67,7 @@ export class EventService {
             date: event.date ?? '',
             time: event.time ?? '',
             duration: event.duration ?? '',
+            description: event.description ?? '',
             location_name: event.location_name ?? '',
             location_url: event.location_url ?? '',
             images: event.images?.map(img =>
