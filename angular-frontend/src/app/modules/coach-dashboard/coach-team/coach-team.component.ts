@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TeamService, Team, Player } from '../../../services/team.service';
@@ -134,4 +134,48 @@ export class CoachTeamComponent implements OnInit {
       }
     });
   }
+
+  currentPage = 1;
+pageSizeMobile = 5;
+pageSizeDesktop = 9;
+isMobile = window.innerWidth < 640;
+
+@HostListener('window:resize', [])
+onResize() {
+  this.isMobile = window.innerWidth < 640;
+  this.currentPage = 1;
+}
+
+get pageSize(): number {
+  return this.isMobile ? this.pageSizeMobile : this.pageSizeDesktop;
+}
+
+get totalPages(): number {
+  if (!this.team?.players) return 0;
+  return Math.ceil(this.team.players.length / this.pageSize);
+}
+
+get paginatedPlayers(): Player[] {
+  if (!this.team?.players) return [];
+  const start = (this.currentPage - 1) * this.pageSize;
+  return this.team.players.slice(start, start + this.pageSize);
+}
+
+// Para mostrar máximo 5 páginas como Google
+get visiblePages(): number[] {
+  const total = this.totalPages;
+  if (total <= 5) return Array.from({ length: total }, (_, i) => i + 1);
+
+  let start = Math.max(this.currentPage - 2, 1);
+  let end = Math.min(start + 4, total);
+  if (end - start < 4) start = end - 4;
+  return Array.from({ length: end - start + 1 }, (_, i) => start + i);
+}
+
+changePage(page: number): void {
+  if (page < 1 || page > this.totalPages) return;
+  this.currentPage = page;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
 }
