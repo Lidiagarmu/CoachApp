@@ -164,11 +164,11 @@
 
         <div *ngIf="eventForm.get('training_type')?.value === 'gimnasio'" class="flex flex-col">
           <label class="mb-1 font-semibold select-none">Especialidad</label>
-          <select formControlName="gym_focus" class="border rounded px-3 py-2 text-gray-700"
+          <select formControlName="focus_area" class="border rounded px-3 py-2 text-gray-700"
           [ngClass]="{
-              'border-red-500': eventForm.get('gym_focus')?.invalid && eventForm.get('gym_focus')?.touched,
-              'border-green-500': eventForm.get('gym_focus')?.valid && eventForm.get('gym_focus')?.touched,
-              'border-gray-300': !eventForm.get('gym_focus')?.touched
+              'border-red-500': eventForm.get('focus_area')?.invalid && eventForm.get('focus_area')?.touched,
+              'border-green-500': eventForm.get('focus_area')?.valid && eventForm.get('focus_area')?.touched,
+              'border-gray-300': !eventForm.get('focus_area')?.touched
             }"
           >
             <option value="" disabled>Selecciona especialidad</option>
@@ -179,7 +179,7 @@
             <option value="pliometría">Pliometría</option>
           </select>
 
-        <span *ngIf="eventForm.get('gym_focus')?.invalid && eventForm.get('gym_focus')?.touched"
+        <span *ngIf="eventForm.get('focus_area')?.invalid && eventForm.get('focus_area')?.touched"
             class="text-red-500 text-sm mt-1">
           La especialidad es obligatoria
         </span>

@@ -23,7 +23,7 @@ export interface Event {
   // Entrenamiento
   training_type?: 'campo' | 'gimnasio';  
   focus_area?: string;                           
-  gym_focus?: string;   
+
 
   // Partido
   opponent?: string;

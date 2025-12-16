@@ -39,7 +39,6 @@ export class EventFormComponent {
 
 
       training_type: new FormControl('', Validators.required),
-      gym_focus: new FormControl('', Validators.required),
       focus_area: new FormControl('', Validators.required),
 
       opponent: new FormControl('', Validators.required),
@@ -63,7 +62,6 @@ export class EventFormComponent {
     if (type === 'match') {
       this.eventForm.patchValue({
         training_type: '',
-        gym_focus: '',
         focus_area: ''
       });
 
@@ -71,13 +69,11 @@ export class EventFormComponent {
       this.eventForm.get('opponent')?.setValidators(Validators.required);
 
       this.eventForm.get('training_type')?.clearValidators();
-      this.eventForm.get('gym_focus')?.clearValidators();
       this.eventForm.get('focus_area')?.clearValidators();
     }
 
     // Actualizar validadores
     this.eventForm.get('training_type')?.updateValueAndValidity();
-    this.eventForm.get('gym_focus')?.updateValueAndValidity();
     this.eventForm.get('focus_area')?.updateValueAndValidity();
     this.eventForm.get('match_type')?.updateValueAndValidity();
     this.eventForm.get('opponent')?.updateValueAndValidity();
@@ -87,15 +83,12 @@ export class EventFormComponent {
 
     if (training === 'campo') {
       this.eventForm.get('focus_area')?.setValidators(Validators.required);
-      this.eventForm.get('gym_focus')?.clearValidators();
     }
 
     if (training === 'gimnasio') {
-      this.eventForm.get('gym_focus')?.setValidators(Validators.required);
       this.eventForm.get('focus_area')?.clearValidators();
     }
 
-    this.eventForm.get('gym_focus')?.updateValueAndValidity();
     this.eventForm.get('focus_area')?.updateValueAndValidity();
   });
 
